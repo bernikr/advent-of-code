@@ -1,5 +1,7 @@
 import re
 
+from aocd import get_data
+
 
 def part1(a):
     return sum([all([k in i for k in ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']]) for i in a])
@@ -22,8 +24,7 @@ def part2(a):
 
 
 if __name__ == '__main__':
-    with open("4.input") as f:
-        input = [{k: v for k, v in [j.split(':') for j in i.replace('\n', ' ').split(' ')]} for i in
-                 f.read().split('\n\n')]
+    data = get_data(day=4, year=2020)
+    input = [{k: v for k, v in [j.split(':') for j in i.replace('\n', ' ').split(' ')]} for i in data.split('\n\n')]
     print(part1(input))
     print(part2(input))

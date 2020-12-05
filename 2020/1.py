@@ -1,5 +1,7 @@
 from itertools import product
 
+from aocd import get_data
+
 
 def part1(a):
     a = [int(i.strip()) for i in a]
@@ -18,7 +20,7 @@ def part2(a):
 
 
 if __name__ == '__main__':
-    with open("1.input") as f:
-        input = f.readlines()
+    data = get_data(day=1, year=2020)
+    input = data.splitlines()
     print(part1(input))
     print(part2(input))

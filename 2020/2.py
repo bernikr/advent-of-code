@@ -1,5 +1,7 @@
 import re
 
+from aocd import get_data
+
 
 def part1(a):
     return len([True for min, max, letter, string in [re.match(r"^(\d+)-(\d+) (\w): (.+)$", i).groups() for i in a]
@@ -12,7 +14,7 @@ def part2(a):
 
 
 if __name__ == '__main__':
-    with open("2.input") as f:
-        input = f.readlines()
+    data = get_data(day=2, year=2020)
+    input = data.splitlines()
     print(part1(input))
     print(part2(input))

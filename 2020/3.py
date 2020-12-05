@@ -1,5 +1,7 @@
 from functools import reduce
 
+from aocd import get_data
+
 
 def part1(a):
     return sum([l[i * 3 % len(l)] for i, l in enumerate(a)])
@@ -11,7 +13,7 @@ def part2(a):
 
 
 if __name__ == '__main__':
-    with open("3.input") as f:
-        input = [[c == '#' for c in l.strip()] for l in f.readlines()]
+    data = get_data(day=3, year=2020)
+    input = [[c == '#' for c in l.strip()] for l in data.splitlines()]
     print(part1(input))
     print(part2(input))
