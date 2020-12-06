@@ -4,19 +4,11 @@ from aocd import get_data
 
 
 def part1(a):
-    a = [int(i.strip()) for i in a]
-    a = product(a, a)
-    for i in a:
-        if i[0]+i[1] == 2020:
-            return i[0]*i[1]
+    return next(a * b for a, b in (product((int(l.strip()) for l in a), repeat=2)) if a + b == 2020)
 
 
 def part2(a):
-    a = [int(i.strip()) for i in a]
-    a = product(a, repeat=3)
-    for i in a:
-        if i[0]+i[1]+i[2] == 2020:
-            return i[0]*i[1]*i[2]
+    return next(a * b * c for a, b, c in (product((int(l.strip()) for l in a), repeat=3)) if a + b + c == 2020)
 
 
 if __name__ == '__main__':
