@@ -5,7 +5,7 @@ from aocd import get_data
 
 def part1(a):
     def contains(rules, outer, inner):
-        return outer == inner or any(contains(rules, i, inner) for i in (j[1] for j in rules[outer]))
+        return outer == inner or any(contains(rules, i, inner) for _, i in rules[outer])
     return sum(contains(a, i, 'shiny gold') for i in a.keys())-1
 
 
