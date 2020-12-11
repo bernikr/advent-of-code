@@ -16,9 +16,9 @@ def part2(a):
     a = sorted(a)
 
     next_indices = [[i for i, y in enumerate(a) if x < y <= x+3] for x in a]
-    possibilities = [0 for _ in range(101)]
-    for i in range(100, -1, -1):
-        if i == 100:
+    possibilities = [0 for _ in next_indices]
+    for i in range(len(next_indices)-1, -1, -1):
+        if i == len(next_indices)-1:
             possibilities[i] = 1
         else:
             possibilities[i] = sum(possibilities[j] for j in next_indices[i])
