@@ -8,14 +8,10 @@ def run(a, limit):
     lastnum = 0
     for i in range(1, limit+1):
         if i <= len(a):
-            d[a[i-1]].append(i)
             lastnum = a[i-1]
         else:
-            if len(d[lastnum]) < 2:
-                lastnum = 0
-            else:
-                lastnum = i-1-d[lastnum][-2]
-            d[lastnum].append(i)
+            lastnum = 0 if len(d[lastnum]) < 2 else i-1-d[lastnum][-2]
+        d[lastnum].append(i)
     return lastnum
 
 
