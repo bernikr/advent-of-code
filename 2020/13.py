@@ -29,7 +29,7 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=13, year=2020)
-    input = data.splitlines()
-    input = (int(input[0]), [int(i) for i in input[1].split(',') if i != 'x'], input[1].split(','))
-    print(part1(input))
-    print(part2(input))
+    inp = data.splitlines()
+    inp = (int(inp[0]), [int(i) for i in inp[1].split(',') if i != 'x'], inp[1].split(','))
+    print(part1(inp))
+    print(part2(inp))

@@ -14,6 +14,6 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=3, year=2020)
-    input = [[c == '#' for c in l.strip()] for l in data.splitlines()]
-    print(part1(input))
-    print(part2(input))
+    inp = [[c == '#' for c in l.strip()] for l in data.splitlines()]
+    print(part1(inp))
+    print(part2(inp))

@@ -30,10 +30,10 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=16, year=2020)
-    input = data.split('\n\n')
-    input[0] = {l.split(':')[0]: [(int(x), int(y)) for x, y in re.findall(r'(\d+)-(\d+)', l)] for l in
-                input[0].splitlines()}
-    input[1] = [int(x) for x in input[1].splitlines()[1].split(',')]
-    input[2] = [[int(x) for x in l.split(',')] for l in input[2].splitlines()[1:]]
-    print(part1(input))
-    print(part2(input))
+    inp = data.split('\n\n')
+    inp[0] = {l.split(':')[0]: [(int(x), int(y)) for x, y in re.findall(r'(\d+)-(\d+)', l)] for l in
+                inp[0].splitlines()}
+    inp[1] = [int(x) for x in inp[1].splitlines()[1].split(',')]
+    inp[2] = [[int(x) for x in l.split(',')] for l in inp[2].splitlines()[1:]]
+    print(part1(inp))
+    print(part2(inp))

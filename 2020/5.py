@@ -11,6 +11,6 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=5, year=2020)
-    input = [int(''.join({"F": "0", "B": "1", "L": "0", "R": "1"}[c] for c in l.strip()), 2) for l in data.splitlines()]
-    print(part1(input))
-    print(part2(input))
+    inp = [int(''.join({"F": "0", "B": "1", "L": "0", "R": "1"}[c] for c in l.strip()), 2) for l in data.splitlines()]
+    print(part1(inp))
+    print(part2(inp))

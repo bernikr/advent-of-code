@@ -17,7 +17,7 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=7, year=2020)
-    input = {l.split(' bags contain ')[0]: re.findall(r'(\d+) (\w+ \w+) bags?[,.]', l.split(' bags contain ')[1])
+    inp = {l.split(' bags contain ')[0]: re.findall(r'(\d+) (\w+ \w+) bags?[,.]', l.split(' bags contain ')[1])
              for l in data.splitlines()}
-    print(part1(input))
-    print(part2(input))
+    print(part1(inp))
+    print(part2(inp))

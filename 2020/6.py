@@ -11,6 +11,6 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=6, year=2020)
-    input = data.split('\n\n')
-    print(part1(input))
-    print(part2(input))
+    inp = data.split('\n\n')
+    print(part1(inp))
+    print(part2(inp))

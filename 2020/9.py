@@ -25,7 +25,7 @@ def part2efficient(a):
 
 if __name__ == '__main__':
     data = get_data(day=9, year=2020)
-    input = [int(l) for l in data.splitlines()]
-    print(part1(input))
-    print(part2efficient(input))
-    print(part2short(input))
+    inp = [int(l) for l in data.splitlines()]
+    print(part1(inp))
+    print(part2efficient(inp))
+    print(part2short(inp))

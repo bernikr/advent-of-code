@@ -28,6 +28,6 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=10, year=2020)
-    input = [int(l) for l in data.splitlines()]
-    print(part1(input))
-    print(part2(input))
+    inp = [int(l) for l in data.splitlines()]
+    print(part1(inp))
+    print(part2(inp))

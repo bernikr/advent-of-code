@@ -25,6 +25,6 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=4, year=2020)
-    input = [{k: v for k, v in (j.split(':') for j in i.replace('\n', ' ').split(' '))} for i in data.split('\n\n')]
-    print(part1(input))
-    print(part2(input))
+    inp = [{k: v for k, v in (j.split(':') for j in i.replace('\n', ' ').split(' '))} for i in data.split('\n\n')]
+    print(part1(inp))
+    print(part2(inp))

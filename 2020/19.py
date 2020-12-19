@@ -23,8 +23,8 @@ def part2(a):
 
 if __name__ == '__main__':
     data = get_data(day=19, year=2020)
-    input = data.split('\n\n')
-    input[0] = {int(l.split(':')[0]): l.split(': ')[1] for l in input[0].splitlines()}
-    input[1] = input[1].splitlines()
-    print(part1(input))
-    print(part2(input))
+    inp = data.split('\n\n')
+    inp[0] = {int(l.split(':')[0]): l.split(': ')[1] for l in inp[0].splitlines()}
+    inp[1] = inp[1].splitlines()
+    print(part1(inp))
+    print(part2(inp))
