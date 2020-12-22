@@ -14,12 +14,7 @@ def part1(a):
     return code
 
 
-def part2(a):
-    return None
-
-
 if __name__ == '__main__':
     data = get_data(day=25, year=2015)
     inp = tuple(map(int, re.findall(r"\d+", data)))
     print(part1(inp))
-    print(part2(inp))
