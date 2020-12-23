@@ -5,7 +5,7 @@ from aocd import get_data
 
 
 def contains_abba(s):
-    return any(s[i] == s[i+3] and s[i+1] == s[i+2] and s[i] != s[i+1] for i in range(len(s)-3))
+    return any(s[i] == s[i + 3] and s[i + 1] == s[i + 2] and s[i] != s[i + 1] for i in range(len(s) - 3))
 
 
 def supports_tls(addr):
@@ -18,13 +18,14 @@ def part1(a):
 
 
 def find_abas(s):
-    return [(s[i], s[i+1]) for i in range(len(s)-2) if s[i] == s[i+2] and s[i] != s[i+1]]
+    return [(s[i], s[i + 1]) for i in range(len(s) - 2) if s[i] == s[i + 2] and s[i] != s[i + 1]]
 
 
 def supports_ssl(addr):
     abas = set(itertools.chain.from_iterable(find_abas(b) for i, b in addr if i % 2 == 0))
     babs = set(itertools.chain.from_iterable(find_abas(b) for i, b in addr if i % 2 == 1))
     return len(abas.intersection({(b, a) for a, b in babs})) > 0
+
 
 def part2(a):
     return sum(supports_ssl(l) for l in a)
