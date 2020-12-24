@@ -14,12 +14,16 @@ def resolve_steps(s):
     return reduce(lambda x, y: tuple(map(operator.add, x, y)), map(neighbors.get, s))
 
 
-def part1(a):
+def initial_black_tiles(instructions):
     tiles = defaultdict(lambda: False)
-    for s in a:
+    for s in instructions:
         t = resolve_steps(s)
         tiles[t] = not tiles[t]
-    return sum(tiles.values())
+    return set(k for k, v in tiles.items() if v)
+
+
+def part1(a):
+    return len(initial_black_tiles(a))
 
 
 def get_neighbors(c):
@@ -31,11 +35,7 @@ def count_neighbors(c, tiles):
 
 
 def part2(a):
-    tiles = defaultdict(lambda: False)
-    for s in a:
-        t = resolve_steps(s)
-        tiles[t] = not tiles[t]
-    black_tiles = set(k for k, v in tiles.items() if v)
+    black_tiles = initial_black_tiles(a)
     for _ in range(100):
         new_black_tiles = set()
         relevant_tiles = set(itertools.chain.from_iterable(map(get_neighbors, black_tiles)))
@@ -46,7 +46,6 @@ def part2(a):
                 new_black_tiles.add(t)
         black_tiles = new_black_tiles
     return len(black_tiles)
-
 
 
 if __name__ == '__main__':
