@@ -1,3 +1,4 @@
+import itertools
 from collections import Counter
 
 from aocd import get_data
@@ -9,7 +10,8 @@ def part1(a):
 
 
 def part2(a):
-    return None
+    return next(''.join(x for x, y in zip(*c) if x == y)
+                for c in itertools.combinations(a, 2) if sum(x != y for x, y in zip(*c)) == 1)
 
 
 if __name__ == '__main__':
