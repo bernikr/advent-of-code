@@ -1,5 +1,5 @@
 import math
-from itertools import groupby
+from itertools import groupby, chain
 from operator import itemgetter
 
 from aocd import get_data
@@ -18,11 +18,24 @@ def part1(a):
     return max(len(set(simplify(x - base[0], y - base[1]) for x, y in a if (x, y) != base)) for base in a)
 
 
+def angle(x, y):
+    deg = math.degrees(math.atan2(y, x))
+    deg -= 270
+    while deg < 0:
+        deg += 360
+    return deg
+
+
 def part2(a):
     base = max(a, key=lambda b: len(set(simplify(x - b[0], y - b[1]) for x, y in a if (x, y) != b)))
     astroids = groupby(sorted((simplify(x - base[0], y - base[1]), (x - base[0], y - base[1]))
                               for x, y in a if (x, y) != base), key=itemgetter(0))
-    return [(s, sorted((c[1] for c in cs), key=lambda x: abs(x[0]))) for s, cs in astroids]
+    ast = list(map(lambda x: (x[1][0] + base[0], x[1][1] + base[1]),
+                   sorted(chain.from_iterable(
+                       enumerate(sorted((c[1] for c in cs), key=lambda x: (abs(x[0]), abs(x[1]))))
+                       for s, cs in astroids), key=lambda x: (x[0], angle(*x[1])))))
+    ast = ast[199]
+    return ast[0] * 100 + ast[1]
 
 
 if __name__ == '__main__':
