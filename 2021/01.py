@@ -4,11 +4,11 @@ from aocd import get_data
 
 
 def part1(inp):
-    return sum(1 if b > a else 0 for a, b in pairwise(inp))
+    return sum(b > a for a, b in pairwise(inp))
 
 
 def part2(inp):
-    return sum(1 if b > a else 0 for a, b in zip(inp, inp[3:]))
+    return sum(b > a for a, b in zip(inp, inp[3:]))
 
 
 if __name__ == '__main__':
