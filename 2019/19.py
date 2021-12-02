@@ -86,7 +86,14 @@ def part1(a):
 
 def part2(a):
     p = a.copy()
-    return None
+    pos = (0, 100)
+    while True:
+        if not next(execute(p, pos)):
+            pos = (pos[0] + 1, pos[1])
+        elif next(execute(p, (pos[0] + 99, pos[1] - 99))):
+            return pos[0] * 10000 + pos[1] - 99
+        else:
+            pos = (pos[0], pos[1] + 1)
 
 
 if __name__ == '__main__':
