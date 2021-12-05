@@ -3,6 +3,13 @@ from collections import defaultdict
 from aocd import get_data
 
 
+def resolve(regs, x):
+    try:
+        return int(x)
+    except ValueError:
+        return regs[x]
+
+
 def toggle_ins(ins, toggled):
     if not toggled:
         return ins
@@ -17,31 +24,42 @@ def toggle_ins(ins, toggled):
             return 'jnz', x, y
 
 
-def execute(p, regs={}):
-    regs = defaultdict(lambda: 0, regs)
+def optimize(p, regs):
+    match p:
+        case [('cpy', b, c), ('inc', a), ('dec', c1), ('jnz', c2, '-2'), ('dec', d), ('jnz', d1, '-5'), *_] \
+             if c == c1 == c2 and d == d1:  # multiplication
+            regs[a] += resolve(regs, b) * resolve(regs, d)
+            regs[c] = 0
+            regs[d] = 0
+            return 6
+        case [('inc', a), ('dec', b), ('jnz', b1, '-2'), *_] if b == b1:  # addition
+            regs[a] += resolve(regs, b)
+            regs[b] = 0
+            return 3
 
-    def resolve(x):
-        try:
-            return int(x)
-        except ValueError:
-            return regs[x]
+
+def execute(p, regs={}, opt=False):
+    regs = defaultdict(lambda: 0, regs)
 
     toggled = defaultdict(lambda: False)
     ip = 0
     while ip < len(p):
+        if skip := optimize([toggle_ins(ins, toggled[i]) for i, ins in enumerate(p)][ip:], regs):
+            ip += skip
+            continue
         match toggle_ins(p[ip], toggled[ip]):
             case ('cpy', x, y):
-                regs[y] = resolve(x)
+                regs[y] = resolve(regs, x)
             case ('inc', x):
                 regs[x] += 1
             case ('dec', x):
                 regs[x] -= 1
             case ('jnz', x, y):
-                if resolve(x) != 0:
-                    ip += resolve(y)
+                if resolve(regs, x) != 0:
+                    ip += resolve(regs, y)
                     continue
             case ('tgl', x):
-                toggled[ip + resolve(x)] = not toggled[ip + resolve(x)]
+                toggled[ip + resolve(regs, x)] = not toggled[ip + resolve(regs, x)]
             case x:
                 raise NotImplementedError(x)
         ip += 1
