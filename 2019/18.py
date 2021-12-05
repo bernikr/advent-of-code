@@ -1,4 +1,3 @@
-import math
 import operator
 from enum import Enum
 from functools import cache
@@ -23,8 +22,9 @@ def find(letter):
     return cs[0]
 
 
+@cache
 def steps_to_available_keys(start_pos, current_keys):
-    boundary = {start_pos}
+    boundary = {find(start_pos)}
     visited = boundary.copy()
     res = {}
     steps = 1
@@ -49,18 +49,16 @@ def steps_to_available_keys(start_pos, current_keys):
     return res
 
 
+@cache
+def min_steps(pos, keys):
+    key_distances = steps_to_available_keys(pos, keys)
+    if not key_distances:
+        return 0
+    return min(d + min_steps(k, keys.union({k})) for k, d in key_distances.items())
+
+
 def part1():
-    bound = math.inf
-    partials = [(find('@'), set(), 0)]
-    while partials:
-        pos, keys, distance = partials.pop()
-        key_distances = steps_to_available_keys(pos, keys)
-        if not key_distances:
-            bound = distance
-        for k, d in key_distances.items():
-            if distance + d < bound:
-                partials.append((find(k), keys.union({k}), distance + d))
-    return bound
+    return min_steps('@', frozenset())
 
 
 def part2():
