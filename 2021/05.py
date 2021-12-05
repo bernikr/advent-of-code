@@ -1,0 +1,64 @@
+import math
+import operator
+import re
+from collections import defaultdict
+
+from aocd import get_data
+
+
+class Vec(tuple):
+    def __new__(cls, *args):
+        return super().__new__(cls, args)
+
+    def __add__(self, other):
+        return Vec(*map(operator.add, self, other))
+
+    def __sub__(self, other):
+        return Vec(*map(operator.sub, self, other))
+
+    def __mul__(self, other):
+        if isinstance(other, int | float):
+            return Vec(*map(lambda x: x * other, self))
+        else:
+            raise NotImplemented
+
+    def __truediv__(self, other):
+        if isinstance(other, int | float):
+            return Vec(*map(lambda x: x // other if x % other == 0 else x / other, self))
+        else:
+            raise NotImplemented
+
+
+def simplify(c):
+    return c / math.gcd(*c)
+
+
+def count_overlaps(inp, include_diagonals):
+    lines_per_point = defaultdict(lambda: 0)
+    for start, end in inp:
+        d = simplify(end - start)
+        if all(c != 0 for c in d) and not include_diagonals:
+            continue
+        lines_per_point[start] += 1
+        pos = start
+        while pos != end:
+            pos += d
+            lines_per_point[pos] += 1
+    return sum(n >= 2 for n in lines_per_point.values())
+
+
+def part1(inp):
+    return count_overlaps(inp, False)
+
+
+def part2(inp):
+    return count_overlaps(inp, True)
+
+
+if __name__ == '__main__':
+    data = get_data(day=5, year=2021)
+    inp = [(Vec(a, b), Vec(c, d)) for a, b, c, d in
+           ((tuple(map(int, a))) for a in
+            (re.match(r'(\d+),(\d+) -> (\d+),(\d+)', l).groups() for l in data.splitlines()))]
+    print(part1(inp))
+    print(part2(inp))
