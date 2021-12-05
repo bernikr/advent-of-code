@@ -2,6 +2,7 @@ import operator
 from collections import defaultdict
 from enum import Enum
 from functools import cache
+from itertools import chain
 
 from aocd import get_data
 from frozendict import frozendict
@@ -37,7 +38,7 @@ def steps_and_requirements_to_keys(mapp, start_pos):
                 if nc in visited and any(reqs.issubset(keys) for reqs in visited[nc]):
                     continue
                 match mapp[nc]:
-                    case "." | "@":
+                    case "." | "@" | "1" | "2" | "3" | "4":
                         nb.add((nc, keys))
                         visited[nc].append(keys)
                     case k if k.islower():
@@ -71,9 +72,27 @@ def part1(inp):
     return min_steps(frozendict(inp), '@', frozenset())
 
 
+@cache
+def min_steps_multi(mapp, poss, keys):
+    key_distances = list(chain.from_iterable(
+        ((start, k, d) for k, d in steps_to_available_keys(mapp, start, keys).items()) for start in poss))
+    if not key_distances:
+        return 0
+    return min(d + min_steps_multi(mapp, poss.difference({start}).union({k}), keys.union({k})) for start, k, d in
+               key_distances)
 
-def part2():
-    return None
+
+def part2(inp):
+    new_mapp = inp.copy()
+    new_middle = {
+        (0, 0): '#', (0, 1): '#', (0, -1): '#', (1, 0): '#', (-1, 0): '#',
+        (-1, -1): '1', (1, -1): '2', (-1, 1): '3', (1, 1): '4'
+    }
+    mx, my = find(new_mapp, '@')
+    for (x, y), c in new_middle.items():
+        new_mapp[(mx + x, my + y)] = c
+
+    return min_steps_multi(frozendict(new_mapp), frozenset('1234'), frozenset())
 
 
 if __name__ == '__main__':
