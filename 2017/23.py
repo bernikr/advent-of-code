@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from aocd import get_data
+from sympy import isprime
 
 
 def execute(p, regs={}):
@@ -37,8 +38,22 @@ def part1(inp):
     return execute(inp)[1]['mul']
 
 
+# see 23.txt for steps
+def manually_decompiled_code(a=0):
+    b = 99
+    c = b
+
+    if a != 0:
+        b *= 100
+        b += 100000
+        c = b
+        c += 17000
+
+    return sum(not isprime(n) for n in range(b, c+1, 17))
+
+
 def part2(inp):
-    pass
+    return manually_decompiled_code(1)
 
 
 if __name__ == '__main__':
