@@ -1,3 +1,4 @@
+from functools import cache
 from itertools import chain
 from operator import itemgetter
 
@@ -8,6 +9,7 @@ def part1(inp):
     return sum(len(d) in [2, 3, 4, 7] for d in chain.from_iterable(map(itemgetter(1), inp)))
 
 
+@cache
 def compute_mapping(digits):
     m = {
         1: next(d for d in digits if len(d) == 2),
@@ -25,11 +27,8 @@ def compute_mapping(digits):
 
 
 def part2(inp):
-    out = 0
-    for all_digits, output in inp:
-        m = compute_mapping(all_digits)
-        out += int(''.join(map(str, map(m.__getitem__, output))))
-    return out
+    return sum(int(''.join(map(str, map(compute_mapping(frozenset(digits)).__getitem__, output))))
+               for digits, output in inp)
 
 
 if __name__ == '__main__':
