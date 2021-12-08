@@ -21,19 +21,19 @@ def compute_mapping(digits):
     m[5] = next(d for d in digits if len(d) == 5 and d.union(m[6]) == m[6])
     m[3] = next(d for d in digits if len(d) == 5 and d not in m.values() and d.union(m[9]) == m[9])
     m[2] = next(d for d in digits if d not in m.values())
-    return {frozenset(v): k for k, v in m.items()}
+    return {v: k for k, v in m.items()}
 
 
 def part2(inp):
     out = 0
     for all_digits, output in inp:
         m = compute_mapping(all_digits)
-        out += int(''.join(map(str, map(m.__getitem__, map(frozenset, output)))))
+        out += int(''.join(map(str, map(m.__getitem__, output))))
     return out
 
 
 if __name__ == '__main__':
     data = get_data(day=8, year=2021)
-    inp = [tuple(map(lambda x: list(map(set, x.split(' '))), l.split(' | '))) for l in data.splitlines()]
+    inp = [tuple(map(lambda x: list(map(frozenset, x.split(' '))), l.split(' | '))) for l in data.splitlines()]
     print(part1(inp))
     print(part2(inp))
