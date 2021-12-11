@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import operator
+from itertools import product
 
 
 class Vec(tuple[int, ...]):
@@ -24,3 +25,7 @@ class Vec(tuple[int, ...]):
             return Vec(*map(lambda x: x // other if x % other == 0 else x / other, self))
         else:
             raise NotImplemented
+
+
+dirs4 = [Vec(0, -1), Vec(0, 1), Vec(1, 0), Vec(-1, 0)]
+dirs8 = [Vec(*c) for c in product([-1, 0, 1], repeat=2) if c != (0, 0)]

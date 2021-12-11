@@ -2,14 +2,12 @@ import math
 import operator
 from functools import reduce
 
-from aoc_utils import Vec
+from aoc_utils import Vec, dirs4
 from aocd import get_data
-
-dirs = [Vec(0, -1), Vec(0, 1), Vec(1, 0), Vec(-1, 0)]
 
 
 def part1(inp):
-    return sum(v + 1 for p, v in inp.items() if v < min(inp.get(p + d, math.inf) for d in dirs))
+    return sum(v + 1 for p, v in inp.items() if v < min(inp.get(p + d, math.inf) for d in dirs4))
 
 
 def calculate_basin_size(mapp, lowpoint):
@@ -18,7 +16,7 @@ def calculate_basin_size(mapp, lowpoint):
     while boundary:
         nb = set()
         for p in boundary:
-            for d in dirs:
+            for d in dirs4:
                 if (p + d) not in basin and mapp.get(p + d, 9) < 9:
                     basin.add(p + d)
                     nb.add(p + d)
@@ -29,7 +27,7 @@ def calculate_basin_size(mapp, lowpoint):
 def part2(inp):
     return reduce(operator.mul,
                   sorted((calculate_basin_size(inp, p)
-                          for p in (p for p, v in inp.items() if v < min(inp.get(p + d, math.inf) for d in dirs))),
+                          for p in (p for p, v in inp.items() if v < min(inp.get(p + d, math.inf) for d in dirs4))),
                          reverse=True)[:3])
 
 
