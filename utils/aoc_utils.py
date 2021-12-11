@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import operator
-from itertools import product
+from itertools import product, islice
 
 
 class Vec(tuple[int, ...]):
@@ -29,3 +29,7 @@ class Vec(tuple[int, ...]):
 
 dirs4 = [Vec(0, -1), Vec(0, 1), Vec(1, 0), Vec(-1, 0)]
 dirs8 = [Vec(*c) for c in product([-1, 0, 1], repeat=2) if c != (0, 0)]
+
+
+def nth(iterable, n):
+    return next(islice(iterable, n, None))
