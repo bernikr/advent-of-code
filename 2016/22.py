@@ -1,5 +1,5 @@
 import re
-from itertools import product, chain
+from itertools import product, count
 
 from aoc_utils import Vec, dirs4
 from aocd import get_data
@@ -11,9 +11,24 @@ def part1(inp):
 
 def part2(inp):
     mapp = inp.copy()
-    available_moves = list(chain.from_iterable(((c, c+d) for d in dirs4 if mapp.get(c + d, (0, -1))[1] >= u > 0)
-                                               for c, (u, a) in mapp.items()))
-    return available_moves
+    hole, holecap = next((c, a) for c, (u, a) in mapp.items() if u == 0)
+    boundary = {(hole, Vec(max(x for x, y in mapp if y == 0), 0))}
+    visited = boundary.copy()
+    for i in count(1):
+        nb = set()
+        for h, t in boundary:
+            for d in dirs4:
+                if h == (0, 0) and t == h + d:
+                    return i
+                if mapp.get(h + d, (holecap + 1, 0))[0] <= holecap:
+                    if h + d == t:
+                        ns = (h + d, h)
+                    else:
+                        ns = (h + d, t)
+                    if ns not in visited:
+                        nb.add(ns)
+                        visited.add(ns)
+        boundary = nb
 
 
 if __name__ == '__main__':
