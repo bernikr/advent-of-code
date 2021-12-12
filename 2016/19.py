@@ -26,14 +26,26 @@ def naive_simulation2(n):
     elfs = list(range(1, n + 1))
     i = 0
     while len(elfs) > 1:
-        del elfs[(i + len(elfs)//2) % len(elfs)]
-        i = (i + (0 if (i + len(elfs)//2) % len(elfs) < i else 1)) % len(elfs)
+        deli = (i + len(elfs) // 2) % len(elfs)
+        del elfs[deli]
+        i = (i + (0 if deli < i else 1)) % len(elfs)
     return elfs[0]
 
 
+def calculate2(n):
+    last3pot = 3 ** math.floor(math.log(n) / math.log(3))
+    if last3pot == n:
+        return n
+    if n - last3pot <= last3pot:
+        return n - last3pot
+    else:
+        return 2 * n - 3 * last3pot
+
+
 def part2(inp):
-    for i in range(1, 100):
-        print(f"{i}: {naive_simulation2(i)}")
+    #for i in range(1, 100):
+    #    print(f"{i}: {naive_simulation2(i)} {calculate2(i)}")
+    return calculate2(inp)
 
 
 if __name__ == '__main__':
