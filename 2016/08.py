@@ -1,5 +1,6 @@
 import re
 
+from aoc_utils import ocr
 from aocd import get_data
 
 
@@ -53,7 +54,7 @@ def part1(a):
 def part2(a):
     d = Display(6, 50)
     run_instructions(d, a)
-    return str(d)
+    return ocr({(x, y) for y, l in enumerate(str(d).splitlines()) for x, c in enumerate(l) if c == '#'})
 
 
 if __name__ == '__main__':

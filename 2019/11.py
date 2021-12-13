@@ -1,8 +1,8 @@
 from collections import defaultdict
 from enum import Enum
 from itertools import chain
-from operator import itemgetter
 
+from aoc_utils import ocr
 from aocd import get_data
 
 
@@ -149,12 +149,7 @@ def part2(a):
         else:
             dir = dir.turn_right()
         pos = (pos[0] + dir.value[0], pos[1] + dir.value[1])
-    xmin = min(panels.keys(), key=itemgetter(0))[0]
-    xmax = max(panels.keys(), key=itemgetter(0))[0]
-    ymin = min(panels.keys(), key=itemgetter(1))[1]
-    ymax = max(panels.keys(), key=itemgetter(1))[1]
-    return '\n'.join(''.join("#" if panels[(x, y)] else ' ' for x in range(xmin, xmax+1))
-                     for y in range(ymin, ymax+1))
+    return ocr({(x - 1, y) for (x, y), v in panels.items() if v})
 
 
 if __name__ == '__main__':
