@@ -1,5 +1,4 @@
 import re
-from operator import itemgetter
 
 from aoc_utils import ocr
 from aocd import get_data
