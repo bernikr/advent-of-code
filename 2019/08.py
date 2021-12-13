@@ -2,6 +2,7 @@ from collections import Counter
 from functools import reduce
 from operator import itemgetter
 
+from aoc_utils import ocr
 from aocd import get_data
 
 
@@ -27,7 +28,7 @@ def overlay_px(x, y):
 
 def part2(a):
     res = reduce(overlay_img, reversed(a))
-    return '\n'.join(''.join('x' if x == '1' else ' ' for x in l) for l in split_by_length(res, 25))
+    return ocr({(x, y) for y, l in enumerate(split_by_length(res, 25)) for x, c in enumerate(l) if c == '1'})
 
 
 if __name__ == '__main__':

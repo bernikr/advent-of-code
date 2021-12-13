@@ -1,6 +1,7 @@
 import re
 from operator import itemgetter
 
+from aoc_utils import ocr
 from aocd import get_data
 
 
@@ -25,8 +26,7 @@ def part2(inp):
     coords, ins = inp
     for i in ins:
         coords = fold(i, coords)
-    return '\n'.join(''.join('#' if (x, y) in coords else ' ' for x in range(max(map(itemgetter(0), coords))+1))
-                     for y in range(max(map(itemgetter(1), coords))+1))
+    return ocr(coords)
 
 
 if __name__ == '__main__':
