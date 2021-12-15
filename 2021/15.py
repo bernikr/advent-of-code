@@ -1,9 +1,8 @@
 import math
 from collections import defaultdict
 from itertools import product
-from queue import PriorityQueue
 
-from aoc_utils import Vec, dirs4
+from aoc_utils import Vec, dirs4, PriorityQueue
 from aocd import get_data
 
 
@@ -12,11 +11,11 @@ def find_shortest_path(mapp):
     goal = max(mapp, key=sum)
 
     open_set = PriorityQueue()
-    open_set.put((0, start))
+    open_set.put(start, 0)
     g_score = defaultdict(lambda: math.inf, {start: 0})
 
     while open_set:
-        _, current = open_set.get()
+        current = open_set.get()
         if current == goal:
             return g_score[current]
         for neighbor in (current + d for d in dirs4 if (current + d) in mapp):
@@ -24,7 +23,7 @@ def find_shortest_path(mapp):
             if tentative_g_score < g_score[neighbor]:
                 g_score[neighbor] = tentative_g_score
                 f_score = tentative_g_score + (neighbor - goal).manhatten()
-                open_set.put((f_score, neighbor))
+                open_set.put(neighbor, f_score)
 
 
 def part1(inp):
