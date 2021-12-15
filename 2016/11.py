@@ -30,24 +30,29 @@ def is_done(state):
     return lv == 4 and all(not mapp[i] for i in [1, 2, 3])
 
 
-def regress(move, old_state):
-    old_low_lv = next(i for i in range(1, 5) if old_state[1][i])
-    new_low_lv = next(i for i in range(1, 5) if move[1][i])
-    return old_low_lv > new_low_lv
-
-
-def prune(moves, old_state):
-    for move in moves:
-        if not regress(move, old_state):
-            yield move
+def simplify_state(state):
+    elevator, stuff = state
+    current_mapping = {}
+    next_letter = 'A'
+    res = {}
+    for f, items in stuff.items():
+        tmp = []
+        for i in items:
+            if i not in current_mapping:
+                current_mapping[i.lower()] = next_letter.lower()
+                current_mapping[i.upper()] = next_letter.upper()
+                next_letter = chr(ord(next_letter) + 1)
+            tmp.append(current_mapping[i])
+        res[f] = frozenset(tmp)
+    return elevator, frozendict(res)
 
 
 def h(state):
     return 4 - state[0] + sum((4 - f) * len(v) for f, v in state[1].items())
 
 
-def part1(inp):
-    start = (1, frozendict(inp))
+def solve(inp):
+    start = simplify_state((1, frozendict(inp)))
     open_set = PriorityQueue()
     open_set.put(start, 0)
     g_score = defaultdict(lambda: math.inf, {start: 0})
@@ -56,7 +61,8 @@ def part1(inp):
         current = open_set.get()
         if is_done(current):
             return g_score[current]
-        for neighbor in prune(possible_moves(current), current):
+        for neighbor in possible_moves(current):
+            neighbor = simplify_state(neighbor)
             tentative_g_score = g_score[current] + 1
             if tentative_g_score < g_score[neighbor]:
                 g_score[neighbor] = tentative_g_score
@@ -64,8 +70,14 @@ def part1(inp):
                 open_set.put(neighbor, f_score)
 
 
+def part1(inp):
+    return solve(inp)
+
+
 def part2(inp):
-    return None
+    new_inp = inp.copy()
+    new_inp[1] = new_inp[1].union({'EL', 'el', 'DI', 'di'})
+    return solve(new_inp)
 
 
 if __name__ == '__main__':
@@ -75,4 +87,4 @@ if __name__ == '__main__':
                           for e in re.findall(r'\w+ generator|\w+-compatible microchip', c)})
            for f, c in (re.match(r'^The (.+) floor contains (.+)\.$', l).groups() for l in data.splitlines())}
     print(part1(inp))
-    # print(part2(inp))
+    print(part2(inp))
