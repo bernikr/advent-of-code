@@ -23,7 +23,7 @@ def find_shortest_path(mapp):
             tentative_g_score = g_score[current] + mapp[neighbor]
             if tentative_g_score < g_score[neighbor]:
                 g_score[neighbor] = tentative_g_score
-                f_score = tentative_g_score + (neighbor - start).manhatten()
+                f_score = tentative_g_score + (neighbor - goal).manhatten()
                 open_set.put((f_score, neighbor))
 
 
