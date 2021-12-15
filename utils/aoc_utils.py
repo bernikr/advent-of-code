@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import operator
 from collections import defaultdict
+from heapq import heappush, heappop
 from itertools import product, islice
 
 
@@ -55,3 +56,19 @@ def ocr(m: set[tuple[int, int]]):
             print(f"Unknown Letter with id {v}:\n\n{letter}")
             raise KeyError
     return s
+
+
+class PriorityQueue:
+    def __init__(self):
+        self.items = []
+        self.queue = []
+
+    def __len__(self):
+        return len(self.queue)
+
+    def put(self, item, priority):
+        self.items.append(item)
+        heappush(self.queue, (priority, len(self.items) - 1))
+
+    def get(self):
+        return self.items[heappop(self.queue)[1]]

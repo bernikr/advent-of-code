@@ -1,6 +1,9 @@
+import math
 import re
-from itertools import chain, combinations, count
+from collections import defaultdict
+from itertools import chain, combinations
 
+from aoc_utils import PriorityQueue
 from aocd import get_data
 from frozendict import frozendict
 
@@ -39,19 +42,26 @@ def prune(moves, old_state):
             yield move
 
 
+def h(state):
+    return 4 - state[0] + sum((4 - f) * len(v) for f, v in state[1].items())
+
+
 def part1(inp):
-    boundary = {(1, frozendict(inp))}
-    visited = boundary.copy()
-    for i in count(1):
-        nb = set()
-        for b in boundary:
-            for move in prune(possible_moves(b), b):
-                if is_done(move):
-                    return i
-                if move not in visited:
-                    nb.add(move)
-                    visited.add(move)
-        boundary = nb
+    start = (1, frozendict(inp))
+    open_set = PriorityQueue()
+    open_set.put(start, 0)
+    g_score = defaultdict(lambda: math.inf, {start: 0})
+
+    while open_set:
+        current = open_set.get()
+        if is_done(current):
+            return g_score[current]
+        for neighbor in prune(possible_moves(current), current):
+            tentative_g_score = g_score[current] + 1
+            if tentative_g_score < g_score[neighbor]:
+                g_score[neighbor] = tentative_g_score
+                f_score = tentative_g_score + h(current)
+                open_set.put(neighbor, f_score)
 
 
 def part2(inp):
