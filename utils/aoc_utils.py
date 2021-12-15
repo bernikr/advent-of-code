@@ -72,3 +72,34 @@ class PriorityQueue:
 
     def get(self):
         return self.items[heappop(self.queue)[1]]
+
+
+class CircularList(list):
+    def __getitem__(self, item):
+        if isinstance(item, int):
+            return super(CircularList, self).__getitem__(item % len(self))
+        elif isinstance(item, slice):
+            return list(self[i] for i in range(
+                item.start if item.start is not None else 0,
+                item.stop if item.stop is not None else len(self),
+                item.step if item.step is not None else 1
+            ))
+        else:
+            raise NotImplementedError()
+
+    def __setitem__(self, key, value):
+        if isinstance(key, int):
+            return super(CircularList, self).__setitem__(key % len(self), value)
+        elif isinstance(key, slice):
+            keys = list(range(
+                key.start if key.start is not None else 0,
+                key.stop if key.stop is not None else len(self),
+                key.step if key.step is not None else 1
+            ))
+            if len(keys) != len(value):
+                raise NotImplementedError(
+                    "CircularList: Replacing slices of different length is currently not implemented")
+            for k, v in zip(keys, value):
+                self[k] = v
+        else:
+            raise NotImplementedError()
