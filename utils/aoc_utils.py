@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import operator
 from collections import defaultdict
+from enum import Enum
 from heapq import heappush, heappop
 from itertools import product, islice
 
@@ -34,6 +35,19 @@ class Vec(tuple[int, ...]):
 
 dirs4 = [Vec(0, -1), Vec(0, 1), Vec(1, 0), Vec(-1, 0)]
 dirs8 = [Vec(*c) for c in product([-1, 0, 1], repeat=2) if c != (0, 0)]
+
+
+class Dir(Enum):
+    UP = Vec(0, -1)
+    DOWN = Vec(0, 1)
+    LEFT = Vec(-1, 0)
+    RIGHT = Vec(1, 0)
+
+    def turn_left(self):
+        return Dir((self.value[1], -self.value[0]))
+
+    def turn_right(self):
+        return Dir((-self.value[1], self.value[0]))
 
 
 def nth(iterable, n):
