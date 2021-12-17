@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import operator
-from collections import defaultdict
 from enum import Enum
 from heapq import heappush, heappop
 from itertools import product, islice
@@ -48,6 +47,22 @@ class Dir(Enum):
 
     def turn_right(self):
         return Dir((-self.value[1], self.value[0]))
+
+
+class Rect:
+    def __init__(self, *corners):
+        self.lower = Vec(*(min(a[i] for a in corners) for i in range(len(corners[0]))))
+        self.upper = Vec(*(max(a[i] for a in corners) for i in range(len(corners[0]))))
+
+    def __contains__(self, item):
+        return all(mi <= i <= ma for mi, ma, i in zip(self.lower, self.upper, item))
+
+    def __repr__(self):
+        return f"Rect{{{self.lower}...{self.upper}}}"
+
+    @property
+    def center(self):
+        return Vec(*((mi + ma) / 2 for mi, ma in zip(self.lower, self.upper)))
 
 
 def nth(iterable, n):
@@ -117,3 +132,7 @@ class CircularList(list):
                 self[k] = v
         else:
             raise NotImplementedError()
+
+
+def sign(x):
+    return x and (1, -1)[x < 0]
