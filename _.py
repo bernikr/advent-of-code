@@ -1,8 +1,9 @@
-from aocd import get_data
+from aocd import data, submit, AocdError
 
 
 def part1(inp):
-    return inp
+    print(inp)
+    return None
 
 
 def part2(inp):
@@ -10,7 +11,9 @@ def part2(inp):
 
 
 if __name__ == '__main__':
-    data = get_data(day=0, year=2021)
-    inp = data.splitlines()
-    print(part1(inp))
-    print(part2(inp))
+    inp = [[int(x) for x in l.splitlines()] for l in data.split('\n\n')]
+    try:
+        submit(part1(inp), part="a")
+        submit(part2(inp), part="b")
+    except AocdError as e:
+        print(e)
