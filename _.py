@@ -11,7 +11,7 @@ def part2(inp):
 
 
 if __name__ == '__main__':
-    inp = [[int(x) for x in l.splitlines()] for l in data.split('\n\n')]
+    inp = data.splitlines()
     try:
         submit(part1(inp), part="a")
         submit(part2(inp), part="b")
