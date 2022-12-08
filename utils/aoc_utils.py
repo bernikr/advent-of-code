@@ -22,6 +22,12 @@ class Vec(tuple[int, ...]):
         else:
             raise NotImplemented
 
+    def __rmul__(self, other):
+        if isinstance(other, int | float):
+            return Vec(*map(lambda x: x * other, self))
+        else:
+            raise NotImplemented
+
     def __truediv__(self, other):
         if isinstance(other, int | float):
             return Vec(*map(lambda x: x // other if x % other == 0 else x / other, self))
