@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import operator
+from math import sqrt
 from enum import Enum
 from heapq import heappush, heappop
 from itertools import product, islice
@@ -33,6 +34,9 @@ class Vec(tuple[int, ...]):
             return Vec(*map(lambda x: x // other if x % other == 0 else x / other, self))
         else:
             raise NotImplemented
+
+    def __abs__(self):
+        return sqrt(sum(x*x for x in self))
 
     def manhatten(self):
         return sum(abs(x) for x in self)
