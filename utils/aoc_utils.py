@@ -82,7 +82,7 @@ def nth(iterable, n):
 # Adapted from https://www.reddit.com/r/adventofcode/comments/rf7onx/2021_day_13_solutions/hocy115/
 def ocr(m: set[tuple[int, int]]):
     mx, my = max(x for x, y in m), max(y for x, y in m)
-    assert my == 5, "Letters need to be 5 rows high"
+    assert my == 5, "Letters need to be 6 rows high"
     s = ""
     for i in range(0, mx + 1, 5):
         v = int("".join('1' if (i + x, y) in m else '0' for y in range(6) for x in range(4)), 2)
