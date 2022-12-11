@@ -1,19 +1,18 @@
 from aocd import data, submit, AocdError
 
 
-def part1(inp):
+def solve(inp, part1):
+    inp = inp.splitlines()
     print(inp)
-    return None
-
-
-def part2(inp):
-    return None
+    if part1:
+        return None  # Part1
+    else:
+        return None  # Part2
 
 
 if __name__ == '__main__':
-    inp = data.splitlines()
     try:
-        submit(part1(inp), part="a")
-        submit(part2(inp), part="b")
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
     except AocdError as e:
         print(e)
