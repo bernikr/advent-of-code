@@ -1,9 +1,8 @@
 import re
-from functools import lru_cache
 
 from aocd import data, submit, AocdError
-from cpmpy import Model, intvar
 from frozendict import frozendict
+import sympy as sp
 
 exp = re.compile(r"[a-z]{4}")
 
@@ -11,23 +10,17 @@ exp = re.compile(r"[a-z]{4}")
 def evaluate(var, formulas, humn=None):
     if var == "humn" and humn is not None:
         return humn
-    vars = {v: evaluate(v, formulas, humn) for v in exp.findall(formulas[var])}
-    f = formulas[var]
-    if all(isinstance(v, int) for v in vars.values()):
-        f = f.replace('/', '//')
-    return eval(f, vars)
+    return eval(formulas[var], {v: evaluate(v, formulas, humn) for v in exp.findall(formulas[var])})
 
 
 def solve(inp, part1):
     inp = {l[:4]: l[6:] for l in inp.splitlines()}
     if part1:
-        return evaluate('root', frozendict(inp))
+        return int(evaluate('root', frozendict(inp)))
     else:
-        humn = intvar(0, 10 ** 15)
+        humn = sp.symbols('humn')
         a, b = map(lambda x: evaluate(x, frozendict(inp), humn), exp.findall(inp['root']))
-        m = Model(a == b)
-        m.solve()
-        return humn.value()
+        return int(sp.solve(sp.Eq(a, b), humn)[0])
 
 
 if __name__ == '__main__':
