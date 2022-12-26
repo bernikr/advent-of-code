@@ -5,20 +5,11 @@ snafu_digits_rev = {v: k for k, v in snafu_digits.items()}
 
 
 def snafu_to_int(s):
-    n = 0
-    for c in s:
-        n *= 5
-        n += snafu_digits[c]
-    return n
+    return sum(5 ** i * snafu_digits[c] for i, c in enumerate(reversed(s)))
 
 
 def int_to_snafu(n):
-    if n == 0:
-        return ""
-    last_digit = n % 5
-    if last_digit > 2:
-        last_digit -= 5
-    return int_to_snafu((n - last_digit) // 5) + snafu_digits_rev[last_digit]
+    return "" if n == 0 else int_to_snafu((n + 2) // 5) + snafu_digits_rev[(n + 2) % 5 - 2]
 
 
 def solve(inp):
