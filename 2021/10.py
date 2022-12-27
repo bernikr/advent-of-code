@@ -1,7 +1,5 @@
 from functools import reduce
 
-from aocd import get_data
-
 open_to_close = {'(': ')', '[': ']', '{': '}', '<': '>'}
 
 
@@ -27,8 +25,16 @@ def part2(inp):
     return scores[len(scores) // 2]
 
 
+def solve(inp, ispart1):
+    inp = inp.splitlines()
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=10, year=2021)
-    inp = data.splitlines()
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

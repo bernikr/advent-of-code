@@ -3,7 +3,6 @@ from collections import defaultdict
 from itertools import product
 
 from aoc_utils import Vec, dirs4, PriorityQueue
-from aocd import get_data
 
 
 def find_shortest_path(mapp):
@@ -40,8 +39,16 @@ def part2(inp):
     return find_shortest_path(mapp)
 
 
+def solve(inp, ispart1):
+    inp = {Vec(x, y): int(v) for y, l in enumerate(inp.splitlines()) for x, v in enumerate(l)}
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=15, year=2021)
-    inp = {Vec(x, y): int(v) for y, l in enumerate(data.splitlines()) for x, v in enumerate(l)}
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

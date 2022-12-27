@@ -1,7 +1,6 @@
 import re
 
 from aoc_utils import ocr
-from aocd import get_data
 
 
 def fold(ins, coords):
@@ -28,11 +27,19 @@ def part2(inp):
     return ocr(coords)
 
 
-if __name__ == '__main__':
-    data = get_data(day=13, year=2021)
-    coords, ins = data.split('\n\n')
+def solve(inp, ispart1):
+    coords, ins = inp.split('\n\n')
     coords = [tuple(map(int, l.split(','))) for l in coords.splitlines()]
     ins = [(a, int(b)) for a, b in (re.match(r'^fold along ([xy])=(\d+)$', l).groups() for l in ins.splitlines())]
     inp = (coords, ins)
-    print(part1(inp))
-    print(part2(inp))
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -1,7 +1,5 @@
 from itertools import pairwise
 
-from aocd import get_data
-
 
 def part1(inp):
     return sum(b > a for a, b in pairwise(inp))
@@ -11,8 +9,16 @@ def part2(inp):
     return sum(b > a for a, b in zip(inp, inp[3:]))
 
 
+def solve(inp, ispart1):
+    inp = list(map(int, inp.splitlines()))
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=1, year=2021)
-    inp = list(map(int, data.splitlines()))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

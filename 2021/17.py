@@ -1,7 +1,6 @@
 import re
 
 from aoc_utils import Vec, sign, Rect
-from aocd import get_data
 
 
 def step(pos, vel):
@@ -67,9 +66,17 @@ def part2(inp):
     return sum(check_hit(Vec(x, y), inp) for x in x_candidates for y in y_candidates)
 
 
-if __name__ == '__main__':
-    data = get_data(day=17, year=2021)
-    inp = tuple(map(int, re.match(r'^target area: x=(-?\d+)..(-?\d+), y=(-?\d+)..(-?\d+)$', data).groups()))
+def solve(inp, ispart1):
+    inp = tuple(map(int, re.match(r'^target area: x=(-?\d+)..(-?\d+), y=(-?\d+)..(-?\d+)$', inp).groups()))
     inp = Rect(Vec(inp[0], inp[2]), Vec(inp[1], inp[3]))
-    print(part1(inp))
-    print(part2(inp))
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

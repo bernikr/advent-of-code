@@ -2,7 +2,6 @@ import math
 from collections import defaultdict
 
 from aoc_utils import Vec
-from aocd import get_data
 
 square = [
     Vec(-1, -1), Vec(0, -1), Vec(1, -1),
@@ -39,12 +38,20 @@ def part2(inp):
     return sum(img.values()) if not img.default_factory() else math.inf
 
 
-if __name__ == '__main__':
-    data = get_data(day=20, year=2021)
-    inp1, inp2 = data.split('\n\n')
+def solve(inp, ispart1):
+    inp1, inp2 = inp.split('\n\n')
     inp1 = [c == '#' for c in inp1.replace('\n', '')]
     inp2 = defaultdict(lambda: False,
                        {Vec(x, y): c == '#' for y, l in enumerate(inp2.splitlines()) for x, c in enumerate(l)})
     inp = (inp1, inp2)
-    print(part1(inp))
-    print(part2(inp))
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

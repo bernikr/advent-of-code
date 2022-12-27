@@ -3,8 +3,6 @@ from dataclasses import dataclass, field
 from functools import reduce
 from typing import Optional, List
 
-from aocd import get_data
-
 
 @dataclass
 class Packet:
@@ -74,8 +72,16 @@ def part2(inp):
     return evaluate(inp)
 
 
+def solve(inp, ispart1):
+    inp = parse(''.join(format(int(d, 16), '04b') for d in inp), 0)[0]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=16, year=2021)
-    inp = parse(''.join(format(int(d, 16), '04b') for d in data), 0)[0]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

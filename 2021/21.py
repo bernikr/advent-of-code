@@ -2,8 +2,6 @@ from collections import Counter
 from functools import cache
 from itertools import product
 
-from aocd import get_data
-
 
 def deterministic_die():
     d = 1
@@ -60,8 +58,16 @@ def part2(inp):
     return max(calculate_wins(*inp))
 
 
+def solve(inp, ispart1):
+    inp = [int(l.split(' ')[-1]) for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=21, year=2021)
-    inp = [int(l.split(' ')[-1]) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

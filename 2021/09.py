@@ -3,7 +3,6 @@ import operator
 from functools import reduce
 
 from aoc_utils import Vec, dirs4
-from aocd import get_data
 
 
 def part1(inp):
@@ -31,8 +30,16 @@ def part2(inp):
                          reverse=True)[:3])
 
 
+def solve(inp, ispart1):
+    inp = {Vec(x, y): int(n) for y, l in enumerate(inp.splitlines()) for x, n in enumerate(l)}
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=9, year=2021)
-    inp = {Vec(x, y): int(n) for y, l in enumerate(data.splitlines()) for x, n in enumerate(l)}
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

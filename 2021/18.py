@@ -8,7 +8,6 @@ from functools import reduce
 from itertools import permutations
 from typing import Optional
 
-from aocd import get_data
 from tqdm import tqdm
 
 
@@ -155,11 +154,19 @@ def part1(inp):
 
 
 def part2(inp):
-    return max((magnitude(x + y) for x, y in tqdm(permutations(inp, 2), total=len(inp)**2-len(inp))))
+    return max((magnitude(x + y) for x, y in tqdm(permutations(inp, 2), total=len(inp) ** 2 - len(inp))))
+
+
+def solve(inp, ispart1):
+    inp = [parse(l)[0] for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
 
 
 if __name__ == '__main__':
-    data = get_data(day=18, year=2021)
-    inp = [parse(l)[0] for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -1,8 +1,6 @@
 from itertools import chain, groupby
 from operator import itemgetter
 
-from aocd import get_data
-
 
 def part1(inp):
     paths = [['start']]
@@ -49,11 +47,19 @@ def part2(inp):
     return found
 
 
-if __name__ == '__main__':
-    data = get_data(day=12, year=2021)
+def solve(inp, ispart1):
     inp = {k: list(map(itemgetter(1), v))
            for k, v in groupby(
             sorted(chain.from_iterable([(a, b), (b, a)]
-                                       for a, b in map(lambda x: x.split('-'), data.splitlines()))), itemgetter(0))}
-    print(part1(inp))
-    print(part2(inp))
+                                       for a, b in map(lambda x: x.split('-'), inp.splitlines()))), itemgetter(0))}
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)
