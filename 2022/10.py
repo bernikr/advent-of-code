@@ -1,7 +1,4 @@
-from itertools import count
-
 from aoc_utils import ocr
-from aocd import data, submit, AocdError
 
 
 def run(prog):
@@ -16,12 +13,12 @@ def run(prog):
                 x += int(i)
 
 
-def part1(inp):
+def solve1(inp):
     outputs = list(run(inp))
     return sum(i * outputs[i - 1] for i in [20, 60, 100, 140, 180, 220])
 
 
-def part2(inp):
+def solve2(inp):
     outputs = list(run(inp))
     disp = set()
     for i, x in enumerate(outputs):
@@ -30,10 +27,16 @@ def part2(inp):
     return ocr(disp)
 
 
+def solve(inp, part1):
+    inp = [tuple(l.split(' ')) for l in inp.splitlines()]
+    return solve1(inp) if part1 else solve2(inp)
+
+
 if __name__ == '__main__':
-    inp = [tuple(l.split(' ')) for l in data.splitlines()]
+    from aocd import data, submit, AocdError
+
     try:
-        submit(part1(inp), part="a")
-        submit(part2(inp), part="b")
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
     except AocdError as e:
         print(e)

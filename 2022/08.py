@@ -4,7 +4,6 @@ from functools import reduce
 from itertools import count
 
 from aoc_utils import Vec, dirs4
-from aocd import data, submit, AocdError
 
 
 def is_visible_dir(tree, mapp, dir):
@@ -17,7 +16,7 @@ def is_visible_dir(tree, mapp, dir):
     return True
 
 
-def part1(inp):
+def solve1(inp):
     return sum(1 for t in inp if any(is_visible_dir(t, inp, d) for d in dirs4))
 
 
@@ -31,14 +30,20 @@ def viewing_distance(tree, mapp, d):
             return i
 
 
-def part2(inp):
+def solve2(inp):
     return max(reduce(operator.mul, (viewing_distance(t, inp, d) for d in dirs4)) for t in inp)
 
 
+def solve(inp, part1):
+    inp = {Vec(x, y): int(c) for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+    return solve1(inp) if part1 else solve2(inp)
+
+
 if __name__ == '__main__':
-    inp = {Vec(x, y): int(c) for y, l in enumerate(data.splitlines()) for x, c in enumerate(l)}
+    from aocd import data, submit, AocdError
+
     try:
-        submit(part1(inp), part="a")
-        submit(part2(inp), part="b")
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
     except AocdError as e:
         print(e)

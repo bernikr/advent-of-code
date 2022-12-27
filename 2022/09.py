@@ -1,7 +1,6 @@
 from itertools import chain
 
 from aoc_utils import Vec, sign
-from aocd import data, submit, AocdError
 
 
 def move_rope(inp, rope_length):
@@ -16,18 +15,16 @@ def move_rope(inp, rope_length):
     return len(tail_pos)
 
 
-def part1(inp):
-    return move_rope(inp, 2)
-
-
-def part2(inp):
-    return move_rope(inp, 10)
+def solve(inp, part1):
+    inp = [(l[0], int(l[2:])) for l in inp.splitlines()]
+    return move_rope(inp, 2 if part1 else 10)
 
 
 if __name__ == '__main__':
-    inp = [(l[0], int(l[2:])) for l in data.splitlines()]
+    from aocd import data, submit, AocdError
+
     try:
-        submit(part1(inp), part="a")
-        submit(part2(inp), part="b")
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
     except AocdError as e:
         print(e)

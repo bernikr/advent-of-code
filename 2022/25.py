@@ -12,13 +12,12 @@ def int_to_snafu(n):
     return "" if n == 0 else int_to_snafu((n + 2) // 5) + snafu_digits_rev[(n + 2) % 5 - 2]
 
 
-def solve(inp):
-    inp = inp.splitlines()
-    return int_to_snafu(sum(map(snafu_to_int, inp)))
+def solve(inp, part1):
+    return int_to_snafu(sum(map(snafu_to_int, inp.splitlines())))
 
 
 if __name__ == '__main__':
     try:
-        submit(solve(data), part="a")
+        submit(solve(data, True), part="a")
     except AocdError as e:
         print(e)
