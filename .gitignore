@@ -1,3 +1,3 @@
 .idea/
-utils/aoc_utils.egg-info/
+**/*.egg-info/
 __pycache__/
