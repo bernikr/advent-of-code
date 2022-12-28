@@ -1,8 +1,6 @@
 import re
 from itertools import count
 
-from aocd import get_data
-
 
 def do_dance(dance, l):
     for ins in dance:
@@ -45,8 +43,16 @@ def parse_maybe(x):
         return x
 
 
+def solve(inp, ispart1):
+    inp = [tuple(map(parse_maybe, re.match(r'^([sxp])(\w|\d+)(?:/(\w|\d+))?$', l).groups())) for l in inp.split(',')]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=16, year=2017)
-    inp = [tuple(map(parse_maybe, re.match(r'^([sxp])(\w|\d+)(?:/(\w|\d+))?$', l).groups())) for l in data.split(',')]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

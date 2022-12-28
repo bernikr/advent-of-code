@@ -1,7 +1,6 @@
 from functools import cache
 
 from aoc_utils import CircularList, Vec, dirs4
-from aocd import get_data
 
 
 @cache
@@ -40,8 +39,15 @@ def part2(inp):
     return regions
 
 
+def solve(inp, ispart1):
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=14, year=2017)
-    inp = data
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -1,8 +1,6 @@
 from collections import defaultdict
 from itertools import chain
 
-from aocd import get_data
-
 
 def execute(p, regs={}):
     regs = defaultdict(lambda: 0, regs)
@@ -46,16 +44,17 @@ def execute(p, regs={}):
     return regs, maxv
 
 
-def part1(inp):
-    return max(execute(inp)[0].values())
-
-
-def part2(inp):
-    return execute(inp)[1]
+def solve(inp, ispart1):
+    inp = [(tuple(l.split(' ')[0:3]), tuple(l.split(' ')[4:])) for l in inp.splitlines()]
+    res = execute(inp)
+    return max(res[0].values()) if ispart1 else res[1]
 
 
 if __name__ == '__main__':
-    data = get_data(day=8, year=2017)
-    inp = [(tuple(l.split(' ')[0:3]), tuple(l.split(' ')[4:])) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

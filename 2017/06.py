@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 def reallocate(a):
     count = 0
     seen = dict()
@@ -17,17 +14,17 @@ def reallocate(a):
             mem[i % len(mem)] += 1
 
 
-def part1(a):
-    return reallocate(a)[0]
-
-
-def part2(a):
-    x, y = reallocate(a)
-    return x - y
+def solve(inp, ispart1):
+    inp = list(map(int, inp.split('\t')))
+    x, y = reallocate(inp)
+    return x if ispart1 else x - y
 
 
 if __name__ == '__main__':
-    data = get_data(day=6, year=2017)
-    inp = list(map(int, data.split('\t')))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

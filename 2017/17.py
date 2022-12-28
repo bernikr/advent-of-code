@@ -1,4 +1,3 @@
-from aocd import get_data
 from tqdm import tqdm
 
 
@@ -23,8 +22,16 @@ def part2(inp):
     return last
 
 
+def solve(inp, ispart1):
+    inp = int(inp)
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=17, year=2017)
-    inp = int(data)
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

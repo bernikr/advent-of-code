@@ -1,7 +1,6 @@
 from itertools import accumulate
 
 from aoc_utils import Vec
-from aocd import get_data
 
 # Use Hexagonal Cube Coordinates: https://www.redblobgames.com/grids/hexagons/
 dirs = {
@@ -22,8 +21,16 @@ def part2(inp):
     return max(map(lambda x: max(abs(i) for i in x), accumulate(map(dirs.get, inp))))
 
 
+def solve(inp, ispart1):
+    inp = inp.split(',')
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=11, year=2017)
-    inp = data.split(',')
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)
