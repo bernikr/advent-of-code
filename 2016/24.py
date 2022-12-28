@@ -2,7 +2,6 @@ from functools import cache
 from itertools import count
 
 from aoc_utils import Vec, dirs4
-from aocd import get_data
 
 
 @cache
@@ -55,8 +54,17 @@ def part2():
     return shortest_distance_return('0', frozenset())
 
 
+def solve(inp, ispart1):
+    global mapp
+    mapp = {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+    return part1() if ispart1 else part2()
+
+
 if __name__ == '__main__':
-    data = get_data(day=24, year=2016)
-    mapp = {Vec(x, y): c for y, l in enumerate(data.splitlines()) for x, c in enumerate(l)}
-    print(part1())
-    print(part2())
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

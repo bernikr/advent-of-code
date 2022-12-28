@@ -1,7 +1,5 @@
 from collections import defaultdict
 
-from aocd import get_data
-
 
 def resolve(regs, x):
     try:
@@ -27,7 +25,7 @@ def toggle_ins(ins, toggled):
 def optimize(p, regs):
     match p:
         case [('cpy', b, c), ('inc', a), ('dec', c1), ('jnz', c2, '-2'), ('dec', d), ('jnz', d1, '-5'), *_] \
-             if c == c1 == c2 and d == d1:  # multiplication
+          if c == c1 == c2 and d == d1:  # multiplication
             regs[a] += resolve(regs, b) * resolve(regs, d)
             regs[c] = 0
             regs[d] = 0
@@ -74,8 +72,16 @@ def part2(inp):
     return execute(inp, {'a': 12})['a']
 
 
+def solve(inp, ispart1):
+    inp = [tuple(l.split(' ')) for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=23, year=2016)
-    inp = [tuple(l.split(' ')) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

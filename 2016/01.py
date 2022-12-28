@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 def part1(a):
     dir = 0
     x, y = 0, 0
@@ -43,8 +40,16 @@ def part2(a):
             visited.add((x, y))
 
 
+def solve(inp, ispart1):
+    inp = [(l[0], int(l[1:])) for l in inp.split(', ')]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=1, year=2016)
-    inp = [(l[0], int(l[1:])) for l in data.split(', ')]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -1,7 +1,6 @@
 from itertools import count
 
 from aoc_utils import Vec, dirs4
-from aocd import get_data
 
 
 def is_non_negative(c):
@@ -44,8 +43,16 @@ def part2(inp):
     return len(visited)
 
 
+def solve(inp, ispart1):
+    inp = int(inp)
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=13, year=2016)
-    inp = int(data)
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

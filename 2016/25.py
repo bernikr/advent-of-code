@@ -1,8 +1,6 @@
 from collections import defaultdict
 from itertools import count, cycle
 
-from aocd import get_data
-
 
 def resolve(regs, x):
     try:
@@ -43,7 +41,15 @@ def part1(inp):
                 return i
 
 
+def solve(inp, ispart1):
+    inp = [tuple(l.split(' ')) for l in inp.splitlines()]
+    return part1(inp) if ispart1 else None
+
+
 if __name__ == '__main__':
-    data = get_data(day=25, year=2016)
-    inp = [tuple(l.split(' ')) for l in data.splitlines()]
-    print(part1(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+    except AocdError as e:
+        print(e)

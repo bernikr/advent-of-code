@@ -1,7 +1,6 @@
 import re
 
 from aoc_utils import ocr
-from aocd import get_data
 
 
 class Display:
@@ -22,18 +21,19 @@ class Display:
     def rotate_row(self, row_num, n):
         for _ in range(n):
             last = self.pixels[row_num][-1]
-            for i in range(len(self.pixels[row_num])-1, 0, -1):
-                self.pixels[row_num][i] = self.pixels[row_num][i-1]
+            for i in range(len(self.pixels[row_num]) - 1, 0, -1):
+                self.pixels[row_num][i] = self.pixels[row_num][i - 1]
             self.pixels[row_num][0] = last
 
     def rotate_column(self, col_num, n):
         temp = list(map(list, zip(*self.pixels)))
         for _ in range(n):
             last = temp[col_num][-1]
-            for i in range(len(temp[col_num])-1, 0, -1):
-                temp[col_num][i] = temp[col_num][i-1]
+            for i in range(len(temp[col_num]) - 1, 0, -1):
+                temp[col_num][i] = temp[col_num][i - 1]
             temp[col_num][0] = last
         self.pixels = list(map(list, zip(*temp)))
+
 
 def run_instructions(display, instructions):
     for l in instructions:
@@ -57,10 +57,18 @@ def part2(a):
     return ocr({(x, y) for y, l in enumerate(str(d).splitlines()) for x, c in enumerate(l) if c == '#'})
 
 
-if __name__ == '__main__':
-    data = get_data(day=8, year=2016)
+def solve(inp, ispart1):
     inp = [tuple(int(x) if x is not None and x.isnumeric() else x
                  for x in re.match(r"(?:rect (\d+)x(\d+)|rotate \w+ ([xy])=(\d+) by (\d+))", l).groups())
-           for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+           for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -1,8 +1,6 @@
 import itertools
 import re
 
-from aocd import get_data
-
 
 def contains_abba(s):
     return any(s[i] == s[i + 3] and s[i + 1] == s[i + 2] and s[i] != s[i + 1] for i in range(len(s) - 3))
@@ -31,8 +29,16 @@ def part2(a):
     return sum(supports_ssl(l) for l in a)
 
 
+def solve(inp, ispart1):
+    inp = [list(enumerate(re.split(r"[\[\]]", l))) for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=7, year=2016)
-    inp = [list(enumerate(re.split(r"[\[\]]", l))) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

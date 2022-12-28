@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 def get_code(keypad, start, moves):
     move_map = {'U': (-1, 0), 'D': (1, 0), 'L': (0, -1), 'R': (0, 1)}
     x, y = start
@@ -23,8 +20,16 @@ def part2(a):
     return get_code(['  1  ', ' 234 ', '56789', ' ABC ', '  D  '], (2, 0), a)
 
 
+def solve(inp, ispart1):
+    inp = inp.splitlines()
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=2, year=2016)
-    inp = data.splitlines()
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -4,7 +4,6 @@ from collections import defaultdict
 from itertools import chain, combinations
 
 from aoc_utils import PriorityQueue
-from aocd import get_data
 from frozendict import frozendict
 
 
@@ -51,7 +50,15 @@ def h(state):
     return 4 - state[0] + sum((4 - f) * len(v) for f, v in state[1].items())
 
 
-def solve(inp):
+def solve(inp, part1):
+    inp = {{'first': 1, 'second': 2, 'third': 3, 'fourth': 4}[f]:
+               frozenset({e[:2] if e.endswith('microchip') else e[:2].upper()
+                          for e in re.findall(r'\w+ generator|\w+-compatible microchip', c)})
+           for f, c in (re.match(r'^The (.+) floor contains (.+)\.$', l).groups() for l in inp.splitlines())}
+
+    if not part1:
+        inp[1] = inp[1].union({'EL', 'el', 'DI', 'di'})
+
     start = simplify_state((1, frozendict(inp)))
     open_set = PriorityQueue()
     open_set.put(start, 0)
@@ -70,21 +77,11 @@ def solve(inp):
                 open_set.put(neighbor, f_score)
 
 
-def part1(inp):
-    return solve(inp)
-
-
-def part2(inp):
-    new_inp = inp.copy()
-    new_inp[1] = new_inp[1].union({'EL', 'el', 'DI', 'di'})
-    return solve(new_inp)
-
-
 if __name__ == '__main__':
-    data = get_data(day=11, year=2016)
-    inp = {{'first': 1, 'second': 2, 'third': 3, 'fourth': 4}[f]:
-               frozenset({e[:2] if e.endswith('microchip') else e[:2].upper()
-                          for e in re.findall(r'\w+ generator|\w+-compatible microchip', c)})
-           for f, c in (re.match(r'^The (.+) floor contains (.+)\.$', l).groups() for l in data.splitlines())}
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

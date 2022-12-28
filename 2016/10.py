@@ -3,7 +3,7 @@ import re
 from collections import defaultdict
 from functools import reduce
 
-from aocd import get_data
+p1 = ""
 
 
 class Bot:
@@ -24,9 +24,10 @@ class Bot:
             high = max(self.saved_num, i)
             low = min(self.saved_num, i)
 
-            #part1
+            # part1
             if (high, low) == (61, 17):
-                print(self.id)
+                global p1
+                p1 = self.id
 
             self.bots[self.low].append(low)
             self.bots[self.high].append(high)
@@ -39,16 +40,26 @@ def simulate(a):
     for v, id in a['input']:
         bots[id].append(int(v))
 
-    #part2
-    print(reduce(operator.mul, [bots['output {}'.format(i)][0] for i in range(3)]))
+    # part2
+    return reduce(operator.mul, [bots['output {}'.format(i)][0] for i in range(3)])
 
 
-def part2(a):
-    return None
+def solve(inp, part1):
+    inp = {"rules": re.findall(r"^(\w+ \d+) gives low to (\w+ \d+) and high to (\w+ \d+)$", inp, re.MULTILINE),
+           "input": re.findall(r"^value (\d+) goes to (\w+ \d+)$", inp, re.MULTILINE)}
+    p2 = simulate(inp)
+    if part1:
+        global p1
+        return p1[4:]
+    else:
+        return p2
 
 
 if __name__ == '__main__':
-    data = get_data(day=10, year=2016)
-    inp = {"rules": re.findall(r"^(\w+ \d+) gives low to (\w+ \d+) and high to (\w+ \d+)$", data, re.MULTILINE),
-           "input": re.findall(r"^value (\d+) goes to (\w+ \d+)$", data, re.MULTILINE)}
-    simulate(inp)
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

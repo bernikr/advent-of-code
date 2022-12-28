@@ -2,7 +2,6 @@ import re
 from itertools import product, count
 
 from aoc_utils import Vec, dirs4
-from aocd import get_data
 
 
 def part1(inp):
@@ -31,10 +30,18 @@ def part2(inp):
         boundary = nb
 
 
-if __name__ == '__main__':
-    data = get_data(day=22, year=2016)
+def solve(inp, ispart1):
     inp = {Vec(x, y): (u, a) for x, y, u, a in
            (tuple(map(int, re.match(r'^/dev/grid/node-x(\d+)-y(\d+)\s+\d+T\s+(\d+)T\s+(\d+)T\s+\d+%$', l).groups()))
-            for l in data.splitlines()[2:])}
-    print(part1(inp))
-    print(part2(inp))
+            for l in inp.splitlines()[2:])}
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

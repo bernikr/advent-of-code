@@ -1,7 +1,5 @@
 from collections import defaultdict
 
-from aocd import get_data
-
 
 def execute(p, regs={}):
     regs = defaultdict(lambda: 0, regs)
@@ -29,16 +27,16 @@ def execute(p, regs={}):
     return regs
 
 
-def part1(inp):
-    return execute(inp)['a']
-
-
-def part2(inp):
-    return execute(inp, {'c': 1})['a']
+def solve(inp, part1):
+    inp = [tuple(l.split(' ')) for l in inp.splitlines()]
+    return execute(inp, {} if part1 else {'c': 1})['a']
 
 
 if __name__ == '__main__':
-    data = get_data(day=12, year=2016)
-    inp = [tuple(l.split(' ')) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

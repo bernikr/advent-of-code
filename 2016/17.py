@@ -2,7 +2,6 @@ from functools import cache
 from hashlib import md5
 
 from aoc_utils import Vec
-from aocd import get_data
 
 
 def open_doors(salt, path):
@@ -23,11 +22,11 @@ def part1(inp):
         np = set()
         for p in paths:
             for d in open_doors(inp, p):
-                x, y = path_to_coords(p+d)
+                x, y = path_to_coords(p + d)
                 if (x, y) == (3, 3):
                     return p + d
                 if 0 <= x <= 3 and 0 <= y <= 3:
-                    np.add(p+d)
+                    np.add(p + d)
         paths = np
 
 
@@ -38,17 +37,25 @@ def part2(inp):
         np = set()
         for p in paths:
             for d in open_doors(inp, p):
-                x, y = path_to_coords(p+d)
+                x, y = path_to_coords(p + d)
                 if (x, y) == (3, 3):
-                    if len(p+d) > longest:
-                        longest = len(p+d)
+                    if len(p + d) > longest:
+                        longest = len(p + d)
                 elif 0 <= x <= 3 and 0 <= y <= 3:
-                    np.add(p+d)
+                    np.add(p + d)
         paths = np
     return longest
 
 
+def solve(inp, ispart1):
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    inp = get_data(day=17, year=2016)
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

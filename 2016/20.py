@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 def part1(inp):
     i = 0
     while any(a <= i <= b for a, b in inp):
@@ -24,8 +21,16 @@ def part2(inp):
     return valid
 
 
+def solve(inp, ispart1):
+    inp = [tuple(map(int, l.split('-'))) for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=20, year=2016)
-    inp = [tuple(map(int, l.split('-'))) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

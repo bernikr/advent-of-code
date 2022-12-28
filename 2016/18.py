@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 def is_trap(s):
     return s in ['^^.', '.^^', '^..', '..^']
 
@@ -11,19 +8,27 @@ def next_line(s):
 
 def part1(inp):
     lines = [inp]
-    for _ in range(40-1):
+    for _ in range(40 - 1):
         lines.append(next_line(lines[-1]))
     return sum(c == '.' for l in lines for c in l)
 
 
 def part2(inp):
     lines = [inp]
-    for _ in range(400000-1):
+    for _ in range(400000 - 1):
         lines.append(next_line(lines[-1]))
     return sum(c == '.' for l in lines for c in l)
 
 
+def solve(inp, ispart1):
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    inp = get_data(day=18, year=2016)
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

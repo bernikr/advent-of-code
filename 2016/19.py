@@ -1,7 +1,5 @@
 import math
 
-from aocd import get_data
-
 
 def naive_simulation1(n):
     elfs = list(range(1, n + 1))
@@ -43,13 +41,21 @@ def calculate2(n):
 
 
 def part2(inp):
-    #for i in range(1, 100):
+    # for i in range(1, 100):
     #    print(f"{i}: {naive_simulation2(i)} {calculate2(i)}")
     return calculate2(inp)
 
 
+def solve(inp, ispart1):
+    inp = int(inp)
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=19, year=2016)
-    inp = int(data)
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)
