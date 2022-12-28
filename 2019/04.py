@@ -1,7 +1,5 @@
 from itertools import pairwise, groupby
 
-from aocd import get_data
-
 
 def part1(a):
     return len([i for i in range(*a) if
@@ -15,8 +13,16 @@ def part2(a):
                 all(a <= b for a, b in pairwise(str(i)))])
 
 
+def solve(inp, ispart1):
+    inp = tuple(map(int, inp.split('-')))
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=4, year=2019)
-    inp = tuple(map(int, data.split('-')))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

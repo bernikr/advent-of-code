@@ -1,8 +1,6 @@
-import sys
+import re
 from collections import defaultdict
 from itertools import chain, combinations
-
-from aocd import get_data
 
 
 def get_parameter_address(p, ip, base, n):
@@ -75,6 +73,7 @@ def execute(p, inp):
                 break
             case i:
                 assert False, f"Instruction {i} not implemented yet"
+
 
 output_buffer = ""
 
@@ -174,10 +173,10 @@ class CheckpointSolver:
             case "inv":
                 inv = {l[2:] for l in res.splitlines() if l.startswith("- ")}
                 if self.comb_iter is None:
-                    self.comb_iter = chain.from_iterable(combinations(inv, i+1) for i in range(len(inv)))
+                    self.comb_iter = chain.from_iterable(combinations(inv, i + 1) for i in range(len(inv)))
                 target = set(next(self.comb_iter))
-                to_del = inv-target
-                to_add = target-inv
+                to_del = inv - target
+                to_add = target - inv
                 for i in to_del:
                     self.send_command(f"drop {i}")
                 for i in to_add:
@@ -198,11 +197,20 @@ def part1(a):
     p = a.copy()
     ascii_execute(p, chain(path, CheckpointSolver()), print_output=False)
     global output_buffer
-    print(output_buffer)
+    return re.findall(r"\d+", output_buffer.splitlines()[-1])[0]
+
+
+def solve(inp, ispart1):
+    inp = list(map(int, inp.split(',')))
+    # interactive(inp)
+    return part1(inp)
 
 
 if __name__ == '__main__':
-    data = get_data(day=25, year=2019)
-    inp = list(map(int, data.split(',')))
-    # interactive(inp)
-    part1(inp)
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -2,8 +2,6 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass
 
-from aocd import get_data
-
 
 @dataclass
 class Reaction:
@@ -23,10 +21,10 @@ def calculate_ore_cost_for_fuel(reacts: list[Reaction], fuel_amount: int) -> int
         del required[reqs]
 
         for n, e in react.input:
-            if n*reactnum <= surplus[e]:
-                surplus[e] -= n*reactnum
+            if n * reactnum <= surplus[e]:
+                surplus[e] -= n * reactnum
             else:
-                required[e] += n*reactnum - surplus[e]
+                required[e] += n * reactnum - surplus[e]
                 del surplus[e]
         pass
     return required["ORE"]
@@ -39,7 +37,7 @@ def part1(a):
 def part2(a):
     ore_inventory = 1000000000000
     lower, upper = 1, ore_inventory
-    while upper-lower > 1:
+    while upper - lower > 1:
         mid = (upper + lower) // 2
         cost = calculate_ore_cost_for_fuel(a, mid)
         if cost > ore_inventory:
@@ -56,8 +54,16 @@ def parse_reaction(s: str) -> Reaction:
     return Reaction(output=(int(outn), outs), input=inp)
 
 
+def solve(inp, ispart1):
+    inp = [parse_reaction(l) for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=14, year=2019)
-    inp = [parse_reaction(l) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

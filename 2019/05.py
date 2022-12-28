@@ -1,14 +1,11 @@
-from aocd import get_data
-
-
 def get_parameter(p, ip, n):
     flags = p[ip] // 100
-    flag = (flags // 10**(n-1)) % 10
+    flag = (flags // 10 ** (n - 1)) % 10
     match flag:
         case 0:
-            return p[p[ip+n]]
+            return p[p[ip + n]]
         case 1:
-            return p[ip+n]
+            return p[ip + n]
         case i:
             assert False, f"Unknown Parameter Flag {i}"
 
@@ -54,18 +51,16 @@ def execute(p, inp):
                 assert False, f"Instruction {i} not implemented yet"
 
 
-def part1(a):
-    p = a.copy()
-    return execute(p, [1])
-
-
-def part2(a):
-    p = a.copy()
-    return execute(p, [5])
+def solve(inp, ispart1):
+    inp = list(map(int, inp.split(',')))
+    return execute(inp, [1] if ispart1 else [5])[-1]
 
 
 if __name__ == '__main__':
-    data = get_data(day=5, year=2019)
-    inp = list(map(int, data.split(',')))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

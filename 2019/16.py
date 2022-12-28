@@ -2,7 +2,6 @@ from functools import reduce
 from itertools import chain, repeat, cycle
 
 from tqdm import tqdm
-from aocd import get_data
 
 base_pattern = [0, 1, 0, -1]
 
@@ -26,7 +25,7 @@ def part1(inp):
 def part2(inp):
     start = int(''.join(map(str, inp[:7])))
     a = inp * 10000
-    assert start >= len(a)/2, "This method only works for special cases"
+    assert start >= len(a) / 2, "This method only works for special cases"
     a = a[start:]
     for _ in tqdm(range(100)):
         out = []
@@ -38,8 +37,16 @@ def part2(inp):
     return ''.join(map(str, a[:8]))
 
 
+def solve(inp, ispart1):
+    inp = list(map(int, inp))
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=16, year=2019)
-    inp = list(map(int, data))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

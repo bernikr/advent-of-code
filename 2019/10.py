@@ -2,8 +2,6 @@ import math
 from itertools import groupby, chain
 from operator import itemgetter
 
-from aocd import get_data
-
 
 def simplify(a, b):
     if b == 0:
@@ -38,8 +36,16 @@ def part2(a):
     return ast[0] * 100 + ast[1]
 
 
+def solve(inp, ispart1):
+    inp = [(x, y) for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l) if c == '#']
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=10, year=2019)
-    inp = [(x, y) for y, l in enumerate(data.splitlines()) for x, c in enumerate(l) if c == '#']
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

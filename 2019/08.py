@@ -3,11 +3,10 @@ from functools import reduce
 from operator import itemgetter
 
 from aoc_utils import ocr
-from aocd import get_data
 
 
 def split_by_length(s, l):
-    return (s[y-l:y] for y in range(l, len(s)+l, l))
+    return (s[y - l:y] for y in range(l, len(s) + l, l))
 
 
 def part1(a):
@@ -31,8 +30,16 @@ def part2(a):
     return ocr({(x, y) for y, l in enumerate(split_by_length(res, 25)) for x, c in enumerate(l) if c == '1'})
 
 
+def solve(inp, ispart1):
+    inp = list(split_by_length(inp, 25 * 6))
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=8, year=2019)
-    inp = list(split_by_length(data, 25*6))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

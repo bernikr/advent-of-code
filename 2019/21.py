@@ -2,8 +2,6 @@ import sys
 from collections import defaultdict
 from itertools import chain
 
-from aocd import get_data
-
 
 def get_parameter_address(p, ip, base, n):
     flags = p[ip] // 100
@@ -118,8 +116,16 @@ def part2(a):
     return ascii_execute(p, prog)
 
 
+def solve(inp, ispart1):
+    inp = list(map(int, inp.split(',')))
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=21, year=2019)
-    inp = list(map(int, data.split(',')))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

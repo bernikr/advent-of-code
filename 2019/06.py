@@ -1,8 +1,6 @@
 from itertools import groupby, zip_longest, takewhile
 from operator import itemgetter
 
-from aocd import get_data
-
 
 def build_tree(inp, root):
     if root not in inp:
@@ -15,6 +13,7 @@ def part1(a):
     a = {"COM": build_tree(a, "COM")}
 
     counts = {"COM": 0}
+
     def count_recursivly(root, name):
         for k, v in root.items():
             counts[k] = counts[name] + 1
@@ -32,13 +31,20 @@ def part2(a):
             return ["COM"]
         return [*get_path(p, p[t]), t]
 
-    return len(get_path(a, "YOU")) + len(get_path(a, "SAN")) - 2 - 2*len(list(takewhile(lambda x: x[0] == x[1], zip_longest(get_path(a, "YOU"), get_path(a, "SAN")))))
+    return len(get_path(a, "YOU")) + len(get_path(a, "SAN")) - 2 - 2 * len(
+        list(takewhile(lambda x: x[0] == x[1], zip_longest(get_path(a, "YOU"), get_path(a, "SAN")))))
 
 
+def solve(inp, ispart1):
+    inp = list(map(lambda x: tuple(x.split(')')), inp.splitlines()))
+    return part1(inp) if ispart1 else part2(inp)
 
 
 if __name__ == '__main__':
-    data = get_data(day=6, year=2019)
-    inp = list(map(lambda x: tuple(x.split(')')), data.splitlines()))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -1,31 +1,29 @@
 from collections import defaultdict
 from itertools import chain, cycle
 
-from aocd import get_data
-
 
 def get_parameter_address(p, ip, base, n):
     flags = p[ip] // 100
-    flag = (flags // 10**(n-1)) % 10
+    flag = (flags // 10 ** (n - 1)) % 10
     match flag:
         case 0:
-            return p[ip+n]
+            return p[ip + n]
         case 1:
             assert False, "Invalid use of immediate flag"
         case 2:
-            return p[ip+n]+base
+            return p[ip + n] + base
         case i:
             assert False, f"Unknown Parameter Flag {i}"
 
 
 def get_parameter(p, ip, base, n):
     flags = p[ip] // 100
-    flag = (flags // 10**(n-1)) % 10
+    flag = (flags // 10 ** (n - 1)) % 10
     match flag:
         case 0 | 2:
             return p[get_parameter_address(p, ip, base, n)]
         case 1:
-            return p[ip+n]
+            return p[ip + n]
         case i:
             assert False, f"Unknown Parameter Flag {i}"
 
@@ -137,8 +135,16 @@ def part2(a):
             qs[addr].append(y)
 
 
+def solve(inp, ispart1):
+    inp = list(map(int, inp.split(',')))
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=23, year=2019)
-    inp = list(map(int, data.split(',')))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

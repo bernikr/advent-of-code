@@ -1,7 +1,4 @@
-import math
 from itertools import chain
-
-from aocd import get_data
 
 
 def parse_line(l):
@@ -95,8 +92,16 @@ def part2(inp):
     return f"Wolfram Alpha this: `(x * {ops[0][1]}) - {ops[1][1]} = 2020 mod {deck_size}`"
 
 
+def solve(inp, ispart1):
+    inp = [parse_line(l) for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=22, year=2019)
-    inp = [parse_line(l) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

@@ -4,8 +4,6 @@ from functools import cache
 from itertools import count
 from operator import itemgetter
 
-from aocd import get_data
-
 
 # https://stackoverflow.com/a/49778990
 class DefaultDict(dict):
@@ -115,8 +113,16 @@ def part2(inp):
         visited = visited.union(nb)
 
 
+def solve(inp, ispart1):
+    inp = {(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=20, year=2019)
-    inp = {(x, y): c for y, l in enumerate(data.splitlines()) for x, c in enumerate(l)}
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

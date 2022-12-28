@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 def part1(a):
     return sum(m // 3 - 2 for m in a)
 
@@ -16,8 +13,16 @@ def part2(a):
     return sum(calculate_recursive_fuel(m) for m in a)
 
 
+def solve(inp, ispart1):
+    inp = list(map(int, inp.splitlines()))
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=1, year=2019)
-    inp = list(map(int, data.splitlines()))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

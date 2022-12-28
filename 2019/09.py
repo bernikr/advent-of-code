@@ -1,31 +1,29 @@
 from collections import defaultdict
 from itertools import chain
 
-from aocd import get_data
-
 
 def get_parameter_address(p, ip, base, n):
     flags = p[ip] // 100
-    flag = (flags // 10**(n-1)) % 10
+    flag = (flags // 10 ** (n - 1)) % 10
     match flag:
         case 0:
-            return p[ip+n]
+            return p[ip + n]
         case 1:
             assert False, "Invalid use of immediate flag"
         case 2:
-            return p[ip+n]+base
+            return p[ip + n] + base
         case i:
             assert False, f"Unknown Parameter Flag {i}"
 
 
 def get_parameter(p, ip, base, n):
     flags = p[ip] // 100
-    flag = (flags // 10**(n-1)) % 10
+    flag = (flags // 10 ** (n - 1)) % 10
     match flag:
         case 0 | 2:
             return p[get_parameter_address(p, ip, base, n)]
         case 1:
-            return p[ip+n]
+            return p[ip + n]
         case i:
             assert False, f"Unknown Parameter Flag {i}"
 
@@ -60,10 +58,12 @@ def execute(p, inp):
                 else:
                     ip += 3
             case 7:
-                p[get_parameter_address(p, ip, base, 3)] = 1 if get_parameter(p, ip, base, 1) < get_parameter(p, ip, base, 2) else 0
+                p[get_parameter_address(p, ip, base, 3)] = \
+                    1 if get_parameter(p, ip, base, 1) < get_parameter(p, ip, base, 2) else 0
                 ip += 4
             case 8:
-                p[get_parameter_address(p, ip, base, 3)] = 1 if get_parameter(p, ip, base, 1) == get_parameter(p, ip, base, 2) else 0
+                p[get_parameter_address(p, ip, base, 3)] = \
+                    1 if get_parameter(p, ip, base, 1) == get_parameter(p, ip, base, 2) else 0
                 ip += 4
             case 9:
                 base += get_parameter(p, ip, base, 1)
@@ -74,18 +74,16 @@ def execute(p, inp):
                 assert False, f"Instruction {i} not implemented yet"
 
 
-def part1(a):
-    p = a.copy()
-    return list(execute(p, [1]))
-
-
-def part2(a):
-    p = a.copy()
-    return list(execute(p, [2]))
+def solve(inp, ispart1):
+    inp = list(map(int, inp.split(',')))
+    return next(execute(inp, [1 if ispart1 else 2]))
 
 
 if __name__ == '__main__':
-    data = get_data(day=9, year=2019)
-    inp = list(map(int, data.split(',')))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)
