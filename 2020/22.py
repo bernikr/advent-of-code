@@ -1,8 +1,6 @@
 from collections import deque
 from functools import lru_cache
 
-from aocd import get_data
-
 
 def part1(a):
     deck1 = deque(a[0])
@@ -15,7 +13,7 @@ def part1(a):
         else:
             deck2.extend([card2, card1])
     deck = list(deck1) + list(deck2)
-    return sum((i+1)*n for i, n in enumerate(reversed(deck)))
+    return sum((i + 1) * n for i, n in enumerate(reversed(deck)))
 
 
 @lru_cache(maxsize=None)
@@ -42,15 +40,23 @@ def play_recursive(p1, p2):
         else:
             deck2.extend([card2, card1])
     deck = list(deck1) + list(deck2)
-    return 1 if len(deck1) > 0 else 2, sum((i+1)*n for i, n in enumerate(reversed(deck)))
+    return 1 if len(deck1) > 0 else 2, sum((i + 1) * n for i, n in enumerate(reversed(deck)))
 
 
 def part2(a):
     return play_recursive(tuple(a[0]), tuple(a[1]))[1]
 
 
+def solve(inp, ispart1):
+    inp = [[int(l) for l in p.splitlines()[1:]] for p in inp.split('\n\n')]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=22, year=2020)
-    inp = [[int(l) for l in p.splitlines()[1:]] for p in data.split('\n\n')]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

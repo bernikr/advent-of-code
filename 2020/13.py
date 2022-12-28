@@ -1,8 +1,6 @@
 import itertools
 import math
 
-from aocd import get_data
-
 
 def part1(a):
     first = next(
@@ -19,17 +17,25 @@ def part2(a):
     number = 0
     current_lcm = 1
     for i, n in a:
-        for j in range(1, n+1):
-            if (number + current_lcm*j + i) % n == 0:
-                number += current_lcm*j
+        for j in range(1, n + 1):
+            if (number + current_lcm * j + i) % n == 0:
+                number += current_lcm * j
                 break
         current_lcm = lcm(current_lcm, n)
     return number
 
 
-if __name__ == '__main__':
-    data = get_data(day=13, year=2020)
-    inp = data.splitlines()
+def solve(inp, ispart1):
+    inp = inp.splitlines()
     inp = (int(inp[0]), [int(i) for i in inp[1].split(',') if i != 'x'], inp[1].split(','))
-    print(part1(inp))
-    print(part2(inp))
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

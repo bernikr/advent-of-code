@@ -1,8 +1,6 @@
 import itertools
 import operator
 
-from aocd import get_data
-
 
 def simulate(start_set, neighbor_function, rule_function, rounds):
     active = start_set
@@ -56,8 +54,16 @@ def part2(a):
     return len(simulate(start, neighbors4d, rules, 6))
 
 
+def solve(inp, ispart1):
+    inp = inp.splitlines()
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=17, year=2020)
-    inp = data.splitlines()
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

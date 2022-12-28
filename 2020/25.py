@@ -1,7 +1,5 @@
 import itertools
 
-from aocd import get_data
-
 
 def get_loop_size(subject_num, goal):
     n = 1
@@ -23,7 +21,15 @@ def part1(a):
     return transform(a[1], l0)
 
 
+def solve(inp, ispart1):
+    inp = tuple(map(int, inp.splitlines()))
+    return part1(inp) if ispart1 else None
+
+
 if __name__ == '__main__':
-    data = get_data(day=25, year=2020)
-    inp = tuple(map(int, data.splitlines()))
-    print(part1(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+    except AocdError as e:
+        print(e)

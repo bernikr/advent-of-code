@@ -2,8 +2,6 @@ import operator
 import re
 from functools import reduce
 
-from aocd import get_data
-
 
 def rotate_once(data):
     return [''.join(r) for r in zip(*data[::-1])]
@@ -118,19 +116,27 @@ def part2(a):
 
     def count_sea_monsters(picture):
         count = 0
-        for r in range(len(picture)-len(sea_monster)+1):
-            for c in range(len(picture[0])-len(sea_monster[0])+1):
-                if all(sea_monster[i][j] == ' ' or picture[r+i][c+j] == '#'
+        for r in range(len(picture) - len(sea_monster) + 1):
+            for c in range(len(picture[0]) - len(sea_monster[0]) + 1):
+                if all(sea_monster[i][j] == ' ' or picture[r + i][c + j] == '#'
                        for i in range(len(sea_monster)) for j in range(len(sea_monster[0]))):
                     count += 1
         return count
 
     sea_monsters = max(count_sea_monsters(rotate(picture, r)) for r in range(8))
-    return sum(r.count('#') for r in picture) - sea_monsters*sum(r.count('#') for r in sea_monster)
+    return sum(r.count('#') for r in picture) - sea_monsters * sum(r.count('#') for r in sea_monster)
+
+
+def solve(inp, ispart1):
+    inp = [Tile.parse_input(s) for s in inp.split('\n\n')]
+    return part1(inp) if ispart1 else part2(inp)
 
 
 if __name__ == '__main__':
-    data = get_data(day=20, year=2020)
-    inp = [Tile.parse_input(s) for s in data.split('\n\n')]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

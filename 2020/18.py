@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 # https://code.activestate.com/recipes/384122-infix-operators/
 class Infix:
     def __init__(self, function):
@@ -31,8 +28,16 @@ def part2(a):
     return sum(eval(l.replace('+', '&plus&').replace('*', '|times|')) for l in a)
 
 
+def solve(inp, ispart1):
+    inp = inp.splitlines()
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=18, year=2020)
-    inp = data.splitlines()
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

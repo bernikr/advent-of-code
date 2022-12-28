@@ -3,8 +3,6 @@ import re
 from collections import defaultdict
 from functools import reduce
 
-from aocd import get_data
-
 
 def part1(a):
     return sum(x for x in itertools.chain(*a[2]) if
@@ -28,12 +26,20 @@ def part2(a):
     return reduce(lambda x, y: x * y, (a[1][v] for k, v in key_to_column.items() if k.startswith('departure')))
 
 
-if __name__ == '__main__':
-    data = get_data(day=16, year=2020)
-    inp = data.split('\n\n')
+def solve(inp, ispart1):
+    inp = inp.split('\n\n')
     inp[0] = {l.split(':')[0]: [(int(x), int(y)) for x, y in re.findall(r'(\d+)-(\d+)', l)] for l in
-                inp[0].splitlines()}
+              inp[0].splitlines()}
     inp[1] = [int(x) for x in inp[1].splitlines()[1].split(',')]
     inp[2] = [[int(x) for x in l.split(',')] for l in inp[2].splitlines()[1:]]
-    print(part1(inp))
-    print(part2(inp))
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

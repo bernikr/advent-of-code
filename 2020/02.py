@@ -1,7 +1,5 @@
 import re
 
-from aocd import get_data
-
 
 def part1(a):
     return len([True for min, max, letter, string in (re.match(r"^(\d+)-(\d+) (\w): (.+)$", i).groups() for i in a)
@@ -13,8 +11,16 @@ def part2(a):
                 if (string[int(pos1) - 1] == letter) ^ (string[int(pos2) - 1] == letter)])
 
 
+def solve(inp, ispart1):
+    inp = inp.splitlines()
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=2, year=2020)
-    inp = data.splitlines()
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

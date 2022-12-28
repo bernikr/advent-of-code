@@ -1,7 +1,5 @@
 import re
 
-from aocd import get_data
-
 
 def part1(a):
     return sum(all(k in i for k in ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']) for i in a)
@@ -23,8 +21,16 @@ def part2(a):
                for i in a)
 
 
+def solve(inp, ispart1):
+    inp = [{k: v for k, v in (j.split(':') for j in i.replace('\n', ' ').split(' '))} for i in inp.split('\n\n')]
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=4, year=2020)
-    inp = [{k: v for k, v in (j.split(':') for j in i.replace('\n', ' ').split(' '))} for i in data.split('\n\n')]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)
