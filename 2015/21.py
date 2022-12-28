@@ -3,8 +3,6 @@ import operator
 import re
 from functools import reduce
 
-from aocd import get_data
-
 shop = """Weapons:    Cost  Damage  Armor
 Dagger        8     4       0
 Shortsword   10     5       0
@@ -26,6 +24,11 @@ Damage +3   100     3       0
 Defense +1   20     0       1
 Defense +2   40     0       2
 Defense +3   80     0       3"""
+shop = {x.split(':')[0]: [tuple(map(int, re.findall(r" \d+", l))) for l in x.splitlines()[1:]] for x in
+        shop.split('\n\n')}
+shop['Armor'].append((0, 0, 0))
+shop['Rings'].append((0, 0, 0))
+shop['Rings'].append((0, 0, 0))
 
 
 def fight(player_stats, boss_stats):
@@ -41,27 +44,25 @@ def fight(player_stats, boss_stats):
             return False
 
 
-def part1(inp):
-    return min(g for g, d, a in (reduce(lambda x, y: tuple(map(operator.add, x, y)), e) for e in inp[1])
-               if fight((100, d, a), inp[0]))
-
-
-def part2(inp):
-    return max(g for g, d, a in (reduce(lambda x, y: tuple(map(operator.add, x, y)), e) for e in inp[1])
-               if not fight((100, d, a), inp[0]))
-
-
-if __name__ == '__main__':
-    data = get_data(day=21, year=2015)
-    boss_stats = tuple(map(int, re.findall(r"\d+", data)))
-    shop = {x.split(':')[0]: [tuple(map(int, re.findall(r" \d+", l))) for l in x.splitlines()[1:]] for x in
-            shop.split('\n\n')}
-    shop['Armor'].append((0, 0, 0))
-    shop['Rings'].append((0, 0, 0))
-    shop['Rings'].append((0, 0, 0))
+def solve(inp, part1):
+    boss_stats = tuple(map(int, re.findall(r"\d+", inp)))
     equips = [(w, a, r1, r2) for w, a, r1, r2
               in itertools.product(shop['Weapons'], shop['Armor'], shop['Rings'], shop['Rings'])
               if r1 != r2 or r1 == (0, 0, 0)]
-    inp = (boss_stats, equips)
-    print(part1(inp))
-    print(part2(inp))
+
+    if part1:
+        return min(g for g, d, a in (reduce(lambda x, y: tuple(map(operator.add, x, y)), e) for e in equips)
+                   if fight((100, d, a), boss_stats))
+    else:
+        return max(g for g, d, a in (reduce(lambda x, y: tuple(map(operator.add, x, y)), e) for e in equips)
+                   if not fight((100, d, a), boss_stats))
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

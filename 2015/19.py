@@ -1,8 +1,6 @@
 import itertools
 import re
 
-from aocd import get_data
-
 
 def part1(a):
     def custom_replace(s, rule):
@@ -24,9 +22,17 @@ def part2(a):
     return c
 
 
-if __name__ == '__main__':
-    data = get_data(day=19, year=2015)
-    inp = data.split('\n\n')
+def solve(inp, ispart1):
+    inp = inp.split('\n\n')
     inp[0] = [(l.split(' =>')[0], l.split('=> ')[1]) for l in inp[0].splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

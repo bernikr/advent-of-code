@@ -1,8 +1,6 @@
 import re
 from collections import deque
 
-from aocd import get_data
-
 
 class Spell:
     def __init__(self, name, cost, duration, damage=0, heal=0, armor=0, mana=0):
@@ -43,7 +41,7 @@ def fight(boss_stats, actions, hard_mode=False):
     total_cost = 0
     actions = deque(actions)
 
-    for i in range(2*len(actions)+2):
+    for i in range(2 * len(actions) + 2):
         p_armor = 0
 
         if hard_mode and i % 2 == 0:
@@ -75,7 +73,7 @@ def fight(boss_stats, actions, hard_mode=False):
             total_cost += spell.cost
             p_mana -= spell.cost
         else:
-            p_hp -= max(1, b_damage-p_armor)
+            p_hp -= max(1, b_damage - p_armor)
             if p_hp <= 0:
                 return 'b', total_cost
 
@@ -95,16 +93,16 @@ def find_least_mana_win(boss_stats, hard_mode=False):
     return min_mana
 
 
-def part1(a):
-    return find_least_mana_win(a)
-
-
-def part2(a):
-    return find_least_mana_win(a, hard_mode=True)
+def solve(inp, part1):
+    inp = tuple(map(int, re.findall(r"\d+", inp)))
+    return find_least_mana_win(inp, hard_mode=not part1)
 
 
 if __name__ == '__main__':
-    data = get_data(day=22, year=2015)
-    inp = tuple(map(int, re.findall(r"\d+", data)))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

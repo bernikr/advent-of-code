@@ -1,7 +1,5 @@
 import re
 
-from aocd import get_data
-
 
 def evaluate(var, rules, cache):
     if var.isdigit():
@@ -32,18 +30,18 @@ def evaluate(var, rules, cache):
     return cache[var]
 
 
-def part1(a):
-    return evaluate('a', a, {})
-
-
-def part2(a):
-    rules = a.copy()
-    rules['b'] = str(evaluate('a', rules, {}))
+def solve(inp, part1):
+    rules = {l.split('-> ')[1]: l.split(' ->')[0] for l in inp.splitlines()}
+    if not part1:
+        rules['b'] = str(evaluate('a', rules, {}))
     return evaluate('a', rules, {})
 
 
 if __name__ == '__main__':
-    data = get_data(day=7, year=2015)
-    inp = {l.split('-> ')[1]: l.split(' ->')[0] for l in data.splitlines()}
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

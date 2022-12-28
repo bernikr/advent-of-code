@@ -1,7 +1,5 @@
 import re
 
-from aocd import get_data
-
 
 def part1(a):
     lights = [[False for _ in range(1000)] for _ in range(1000)]
@@ -31,9 +29,17 @@ def part2(a):
     return sum(sum(row) for row in lights)
 
 
-if __name__ == '__main__':
-    data = get_data(day=6, year=2015)
+def solve(inp, ispart1):
     inp = [(re.match(r'turn on|turn off|toggle', l).group(0),
-            tuple(map(int, re.findall(r'\d+', l)))) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+            tuple(map(int, re.findall(r'\d+', l)))) for l in inp.splitlines()]
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

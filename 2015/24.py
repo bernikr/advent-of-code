@@ -2,25 +2,20 @@ import itertools
 import operator
 from functools import reduce
 
-from aocd import get_data
 
-
-def part1(a):
-    group_size = sum(a)//3
+def solve(inp, part1):
+    inp = list(map(int, inp.splitlines()))
+    group_size = sum(inp) // (3 if part1 else 4)
     return next(reduce(operator.mul, x)
-                for x in itertools.chain.from_iterable(itertools.combinations(a, i)
-                                                       for i in range(len(a))) if sum(x) == group_size)
-
-
-def part2(a):
-    group_size = sum(a)//4
-    return next(reduce(operator.mul, x)
-                for x in itertools.chain.from_iterable(itertools.combinations(a, i)
-                                                       for i in range(len(a))) if sum(x) == group_size)
+                for x in itertools.chain.from_iterable(itertools.combinations(inp, i)
+                                                       for i in range(len(inp))) if sum(x) == group_size)
 
 
 if __name__ == '__main__':
-    data = get_data(day=24, year=2015)
-    inp = list(map(int, data.splitlines()))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

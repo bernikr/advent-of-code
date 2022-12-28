@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 def part1(a):
     visited_houses = {(0, 0)}
     x, y = 0, 0
@@ -41,8 +38,15 @@ def part2(a):
     return len(visited_houses)
 
 
+def solve(inp, ispart1):
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=3, year=2015)
-    inp = data
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

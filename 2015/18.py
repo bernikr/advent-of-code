@@ -1,7 +1,5 @@
 import itertools
 
-from aocd import get_data
-
 directions = [(1, 1), (1, 0), (1, -1), (0, 1), (0, -1), (-1, 1), (-1, 0), (-1, -1)]
 
 
@@ -24,16 +22,16 @@ def simulate(m, rounds, stuck_corners=False):
     return new
 
 
-def part1(a):
-    return sum(row.count('#') for row in simulate(a, 100))
-
-
-def part2(a):
-    return sum(row.count('#') for row in simulate(a, 100, True))
+def solve(inp, part1):
+    inp = inp.splitlines()
+    return sum(row.count('#') for row in simulate(inp, 100, not part1))
 
 
 if __name__ == '__main__':
-    data = get_data(day=18, year=2015)
-    inp = data.splitlines()
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

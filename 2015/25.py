@@ -1,20 +1,22 @@
 import re
 
-from aocd import get_data
-
 
 def coord_to_ord(x, y):
-    return (x+y-1)*(x+y)//2-y+1
+    return (x + y - 1) * (x + y) // 2 - y + 1
 
 
-def part1(a):
+def solve(inp, _):
+    inp = tuple(map(int, re.findall(r"\d+", inp)))
     code = 20151125
-    for _ in range(coord_to_ord(a[1], a[0])-1):
+    for _ in range(coord_to_ord(inp[1], inp[0]) - 1):
         code = (code * 252533) % 33554393
     return code
 
 
 if __name__ == '__main__':
-    data = get_data(day=25, year=2015)
-    inp = tuple(map(int, re.findall(r"\d+", data)))
-    print(part1(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+    except AocdError as e:
+        print(e)

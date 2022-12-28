@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 def execute(program, a_start=0):
     pc = 0
     reg = {"a": a_start, "b": 0}
@@ -13,27 +10,27 @@ def execute(program, a_start=0):
         elif ins == 'inc':
             reg[arg[0]] += 1
         elif ins == 'jmp':
-            pc += int(arg[0])-1
+            pc += int(arg[0]) - 1
         elif ins == 'jie':
             if reg[arg[0]] % 2 == 0:
-                pc += int(arg[1])-1
+                pc += int(arg[1]) - 1
         elif ins == 'jio':
             if reg[arg[0]] == 1:
-                pc += int(arg[1])-1
+                pc += int(arg[1]) - 1
         pc += 1
     return reg['b']
 
 
-def part1(a):
-    return execute(a)
-
-
-def part2(a):
-    return execute(a, 1)
+def solve(inp, part1):
+    inp = [tuple(l.replace(',', '').split(' ')) for l in inp.splitlines()]
+    return execute(inp, 0 if part1 else 1)
 
 
 if __name__ == '__main__':
-    data = get_data(day=23, year=2015)
-    inp = [tuple(l.replace(',', '').split(' ')) for l in data.splitlines()]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)
