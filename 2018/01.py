@@ -1,7 +1,4 @@
 import itertools
-from itertools import accumulate
-
-from aocd import get_data
 
 
 def part1(a):
@@ -18,8 +15,16 @@ def part2(a):
         f += i
 
 
+def solve(inp, ispart1):
+    inp = list(map(int, inp.splitlines()))
+    return part1(inp) if ispart1 else part2(inp)
+
+
 if __name__ == '__main__':
-    data = get_data(day=1, year=2018)
-    inp = list(map(int, data.splitlines()))
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

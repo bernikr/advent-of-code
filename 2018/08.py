@@ -1,6 +1,3 @@
-from aocd import get_data
-
-
 class Node:
     def __init__(self):
         self.children = []
@@ -30,16 +27,16 @@ def value(node):
         return sum(value(node.children[i - 1]) for i in node.metadata if 1 <= i <= len(node.children))
 
 
-def part1(a):
-    return metadata_sum(a)
-
-
-def part2(a):
-    return value(a)
+def solve(inp, ispart1):
+    inp = parse(list(map(int, inp.split(' '))))[0]
+    return metadata_sum(inp) if ispart1 else value(inp)
 
 
 if __name__ == '__main__':
-    data = get_data(day=8, year=2018)
-    inp = parse(list(map(int, data.split(' '))))[0]
-    print(part1(inp))
-    print(part2(inp))
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)

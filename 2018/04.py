@@ -4,8 +4,6 @@ import re
 from collections import defaultdict
 from functools import reduce
 
-from aocd import get_data
-
 
 def parse_log(log):
     guards = defaultdict(list)
@@ -39,11 +37,19 @@ def part2(a):
                       key=lambda x: -x[2])[0][:2])
 
 
-if __name__ == '__main__':
-    data = get_data(day=4, year=2018)
+def solve(inp, ispart1):
     inp = parse_log(tuple(map(lambda x: int(x) if x is not None and x.isnumeric() else x,
                               re.match(r'^\[1518-\d+-\d+ \d+:(\d+)] (Guard #(\d+) begins shift|falls asleep|wakes up)',
                                        l).groups()))
-                    for l in sorted(data.splitlines()))
-    print(part1(inp))
-    print(part2(inp))
+                    for l in sorted(inp.splitlines()))
+    return part1(inp) if ispart1 else part2(inp)
+
+
+if __name__ == '__main__':
+    from aocd import data, submit, AocdError
+
+    try:
+        submit(solve(data, True), part="a")
+        submit(solve(data, False), part="b")
+    except AocdError as e:
+        print(e)
