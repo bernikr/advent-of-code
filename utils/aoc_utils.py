@@ -97,6 +97,23 @@ def ocr(m: set[tuple[int, int]]):
     return s
 
 
+# 2018 10 uses 10-pixel high letters
+def ocr10(m: set[tuple[int, int]]):
+    mx, my = max(x for x, y in m), max(y for x, y in m)
+    assert my == 9, "Letters need to be 10 rows high"
+    s = ""
+    for i in range(0, mx + 1, 8):
+        v = int("".join('1' if (i + x, y) in m else '0' for y in range(10) for x in range(6)), 2)
+        try:
+            s += {1144057308981102655: "E", 549863601050360029: "G", 603911296530126945: "H", 126672675233474716: "J",
+                  604206430830086305: "K", 1135193120993052735: "Z"}[v]
+        except KeyError:
+            letter = '\n'.join("".join('▓' if (i + x, y) in m else ' ' for x in range(6)) for y in range(10))
+            print(f"Unknown Letter with id {v}:\n\n{letter}")
+            raise KeyError
+    return s
+
+
 class PriorityQueue:
     def __init__(self):
         self.items = []
