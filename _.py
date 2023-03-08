@@ -1,15 +1,10 @@
-def solve1(inp):
-    return None
-
-
-def solve2(inp):
-    return None
-
-
 def solve(inp, part1):
     inp = inp.splitlines()
     print(inp)
-    return solve1(inp) if part1 else solve2(inp)
+    if part1:
+        return None
+    else:
+        return None
 
 
 if __name__ == '__main__':
