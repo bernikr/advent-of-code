@@ -36,7 +36,7 @@ class Vec(tuple[int, ...]):
             raise NotImplemented
 
     def __abs__(self):
-        return sqrt(sum(x*x for x in self))
+        return sqrt(sum(x * x for x in self))
 
     def manhatten(self):
         return sum(abs(x) for x in self)
@@ -107,7 +107,7 @@ def ocr10(m: set[tuple[int, int]]):
         try:
             s += {221386771471407201: "A", 1126328852231362686: "B", 549863600932653150: "C", 1144057308981102655: "E",
                   549863601050360029: "G", 603911296530126945: "H", 126672675233474716: "J", 604206430830086305: "K",
-                  585610922974906431: "L", 1126328852214319136:"P", 1126328852281960545: "R", 603844239923161185: "X",
+                  585610922974906431: "L", 1126328852214319136: "P", 1126328852281960545: "R", 603844239923161185: "X",
                   1135193120993052735: "Z"}[v]
         except KeyError:
             letter = '\n'.join("".join('▓' if (i + x, y) in m else ' ' for x in range(6)) for y in range(10))
