@@ -1,0 +1,9 @@
+frozendict~=2.1.1
+tqdm~=4.62.3
+sympy~=1.9
+numpy~=1.21.4
+scipy~=1.8.0
+regex~=2022.10.31
+advent-of-code-data~=1.3.2
+cpmpy~=0.9.10
+setuptools~=57.0.0
