@@ -6,6 +6,7 @@ from aoc_utils import Vec, dirs8
 def solve(inp, part1):
     numbers = []
     symbols = {}
+    pos_to_number_index = {}
     for y, l in enumerate(inp.splitlines()):
         x = 0
         while x < len(l):
@@ -15,6 +16,8 @@ def solve(inp, part1):
                 while nx < len(l) and l[nx].isdigit():
                     coords.append(Vec(nx, y))
                     nx += 1
+                for c in coords:
+                    pos_to_number_index[c] = len(numbers)
                 numbers.append((int(l[x:nx]), coords))
                 x = nx - 1
             elif l[x] != ".":
@@ -25,7 +28,8 @@ def solve(inp, part1):
         return sum(n for n, cs in numbers if any(c + dir in symbols for c, dir in product(cs, dirs8)))
     else:
         gears = [k for k, v in symbols.items() if v == "*"]
-        adjecent = [[n for n, cs in numbers if any(c + dir == g for c, dir in product(cs, dirs8))] for g in gears]
+        adjecent = [[numbers[i][0] for i in
+                     {pos_to_number_index[g + dir] for dir in dirs8 if g + dir in pos_to_number_index}] for g in gears]
         return sum(a[0] * a[1] for a in adjecent if len(a) == 2)
 
 
