@@ -6,11 +6,18 @@ import portion as P
 from more_itertools import batched
 
 
+class IntInterval(P.AbstractDiscreteInterval):
+    _step = 1
+
+
+P = P.create_api(IntInterval)
+
+
 def map_intervals(x, mappings):
     remaining = x
     new = P.empty()
     for dest_start, source_start, length in mappings:
-        source_int = P.closedopen(source_start, source_start + length)
+        source_int = P.closed(source_start, source_start + length - 1)
         remaining -= source_int
         overlap = x & source_int
         shift = dest_start - source_start
@@ -25,7 +32,7 @@ def solve(inp, part1):
     if part1:
         x = reduce(operator.or_, (P.singleton(x) for x in seeds))
     else:
-        x = reduce(operator.or_, (P.closedopen(a, a + b) for a, b in batched(seeds, 2)))
+        x = reduce(operator.or_, (P.closed(a, a + b - 1) for a, b in batched(seeds, 2)))
     for maps in mapss:
         x = map_intervals(x, maps)
     return x.lower
