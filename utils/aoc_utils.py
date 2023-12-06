@@ -59,6 +59,12 @@ class Dir(Enum):
         return Dir((-self.value[1], self.value[0]))
 
 
+DOWN = Dir.DOWN.value
+LEFT = Dir.LEFT.value
+RIGHT = Dir.RIGHT.value
+UP = Dir.UP.value
+
+
 class Rect:
     def __init__(self, *corners):
         self.lower = Vec(*(min(a[i] for a in corners) for i in range(len(corners[0]))))
