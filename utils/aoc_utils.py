@@ -65,6 +65,23 @@ RIGHT = Dir.RIGHT.value
 UP = Dir.UP.value
 
 
+class Matrix(tuple[tuple[int, ...], ...]):
+    def __new__(cls, *args: tuple[int, ...]) -> Matrix:
+        return super().__new__(cls, args)
+
+    def __add__(self, other):
+        raise NotImplementedError()
+
+    def __mul__(self, other):
+        if isinstance(other, Vec):
+            return Vec(*map(lambda row: sum(a * b for a, b in zip(row, other)), self))
+        else:
+            raise NotImplementedError()
+
+    def __rmul__(self, other):
+        raise NotImplementedError()
+
+
 class Rect:
     def __init__(self, *corners):
         self.lower = Vec(*(min(a[i] for a in corners) for i in range(len(corners[0]))))
