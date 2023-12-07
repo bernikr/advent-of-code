@@ -75,6 +75,10 @@ class Matrix(tuple[tuple[int, ...], ...]):
     def __mul__(self, other):
         if isinstance(other, Vec):
             return Vec(*map(lambda row: sum(a * b for a, b in zip(row, other)), self))
+        elif isinstance(other, Matrix):
+            assert len(self[0]) == len(other)
+            return Matrix(*map(lambda s_row: tuple(sum(s_row[i] * other[i][column_i] for i in range(len(other)))
+                                                   for column_i in range(len(other[0]))), self))
         else:
             raise NotImplementedError()
 
