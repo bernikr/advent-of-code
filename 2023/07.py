@@ -1,12 +1,12 @@
 from collections import Counter
 
-cards = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+cards = '23456789TJQKA'
 
 hand_type_1 = lambda x: sorted(Counter(x).values(), reverse=True)
 hand_type_2 = lambda x: max(hand_type_1(x.replace('J', a)) for a in cards)
 
 tie_break_1 = lambda x: [cards.index(c) for c in x]
-tie_break_2 = lambda x: [(['J'] + cards).index(c) for c in x]
+tie_break_2 = lambda x: [('J' + cards).index(c) for c in x]
 
 
 def solve(inp, part1):
