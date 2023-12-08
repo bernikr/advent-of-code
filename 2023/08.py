@@ -46,16 +46,6 @@ def solve(inp, part1):
 if __name__ == '__main__':
     from aocd import data, submit, AocdError
 
-    print(solve("""LR
-
-11A = (11B, XXX)
-11B = (XXX, 11Z)
-11Z = (11B, XXX)
-22A = (22B, XXX)
-22B = (22C, 22C)
-22C = (22Z, 22Z)
-22Z = (22B, 22B)
-XXX = (XXX, XXX)""", False))
     try:
         submit(solve(data, True), part="a")
         submit(solve(data, False), part="b")
