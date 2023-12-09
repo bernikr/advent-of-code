@@ -8,7 +8,7 @@ def predict_next(history):
 
 
 def solve(inp, part1):
-    return sum(predict_next(x[::1 if part1 else -1]) for x in (list(map(int, l.split())) for l in inp.splitlines()))
+    return sum(predict_next(list(map(int, l.split()))[::1 if part1 else -1]) for l in inp.splitlines())
 
 
 if __name__ == '__main__':
