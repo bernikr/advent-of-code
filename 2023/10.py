@@ -1,4 +1,4 @@
-from inpoly_cython import inpoly2
+from itertools import pairwise
 
 from aoc_utils import Vec, dirs4
 
@@ -9,6 +9,7 @@ connections = {
     "J": (Vec(0, -1), Vec(-1, 0)),
     "7": (Vec(0, 1), Vec(-1, 0)),
     "F": (Vec(0, 1), Vec(1, 0)),
+    ".": (),
 }
 
 
@@ -29,8 +30,10 @@ def solve(inp, part1):
     if part1:
         return len(loop) // 2
     else:
-        is_in, is_on = inpoly2(list(mapp.keys()), loop)
-        return int(sum(is_in & ~is_on))
+        # calculate polygon area by Shoelace formula https://en.wikipedia.org/wiki/Shoelace_formula
+        area = abs(sum(a[0] * b[1] - a[1] * b[0] for a, b in pairwise(loop))) / 2
+        # use Pick's Theorem to calculate the number of interior points https://en.wikipedia.org/wiki/Pick%27s_theorem
+        return int(area - (len(loop) - 1) / 2 + 1)
 
 
 if __name__ == '__main__':
