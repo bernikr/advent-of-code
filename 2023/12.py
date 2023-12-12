@@ -10,11 +10,10 @@ def count_arrangements(row, sizes):
             return 0
     if len(row) < sum(sizes):
         return 0
-    first = row[0]
     res = 0
-    if first in ".?":
+    if row[0] in ".?":
         res += count_arrangements(row[1:], sizes)
-    if first in "?#":
+    if row[0] in "?#":
         if all(c in "?#" for c in row[:sizes[0]]) and (len(row) == sizes[0] or row[sizes[0]] in ".?"):
             res += count_arrangements(row[sizes[0] + 1:], sizes[1:])
     return res
