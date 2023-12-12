@@ -21,19 +21,19 @@ class Vec(tuple[int, ...]):
         if isinstance(other, int | float):
             return Vec(*map(lambda x: x * other, self))
         else:
-            raise NotImplemented
+            raise NotImplementedError()
 
     def __rmul__(self, other):
         if isinstance(other, int | float):
             return Vec(*map(lambda x: x * other, self))
         else:
-            raise NotImplemented
+            raise NotImplementedError()
 
     def __truediv__(self, other):
         if isinstance(other, int | float):
             return Vec(*map(lambda x: x // other if x % other == 0 else x / other, self))
         else:
-            raise NotImplemented
+            raise NotImplementedError()
 
     def __abs__(self):
         return sqrt(sum(x * x for x in self))
