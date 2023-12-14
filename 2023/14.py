@@ -1,7 +1,7 @@
 def solve(inp, part1):
     rotate_right = lambda m: tuple(map(lambda x: ''.join(x), zip(*reversed(m))))
     tilt = lambda m: tuple('#'.join("." * x.count(".") + "O" * x.count("O") for x in r.split("#")) for r in m)
-    
+
     mapp = inp.splitlines()
     mapp = rotate_right(mapp)  # we implement tilt to the right, so lets face north to the right
     if part1:
