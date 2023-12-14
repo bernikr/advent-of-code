@@ -10,18 +10,15 @@ def solve(inp, part1):
     else:
         seen = {}
         i = 1000000000
-        shortcut = False
         while i > 0:
             i -= 1
             for _ in range(4):
                 mapp = tilt(mapp)
                 mapp = rotate_right(mapp)
-            if not shortcut:
-                if mapp in seen:
-                    cycle_length = seen[mapp] - i
-                    i = i % cycle_length
-                    shortcut = True
-                seen[mapp] = i
+            if mapp in seen:
+                i = i % (seen[mapp] - i)
+                seen = {}
+            seen[mapp] = i
     return sum(sum(i if c == "O" else 0 for i, c in enumerate(r, 1)) for r in mapp)
 
 
