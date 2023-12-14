@@ -4,6 +4,7 @@ from operator import itemgetter, or_
 from aoc_utils import Vec
 
 
+# todo: this is inefficient (maybe there are faster solutions by doing it rowwise, spliting and sorting)
 def slide(rocks, walls, d):
     for r in rocks.copy():
         rocks.remove(r)
