@@ -1,49 +1,28 @@
-from functools import reduce
-from operator import itemgetter, or_
-
-from aoc_utils import Vec
-
-
-# todo: this is inefficient (maybe there are faster solutions by doing it rowwise, spliting and sorting)
-def slide(rocks, walls, d):
-    for r in rocks.copy():
-        rocks.remove(r)
-        while True:
-            tr = r + d
-            while tr in rocks:
-                tr += d
-            if tr in walls:
-                break
-            r = tr
-        rocks.add(r)
-    return rocks
+rotate_right = lambda mapp: tuple(map(lambda x: ''.join(x), zip(*reversed(mapp))))
+tilt = lambda mapp: tuple('#'.join("." * e.count(".") + "O" * e.count("O") for e in r.split("#")) for r in mapp)
 
 
 def solve(inp, part1):
-    inp = {Vec(x, y): c for y, l in enumerate(reversed(inp.splitlines()), 1) for x, c in enumerate(l, 1)}  # y flip
-    rocks = {p for p, c in inp.items() if c == "O"}
-    xmax, ymax = map(max, zip(*inp.keys()))
-    walls = {p for p, c in inp.items() if c == "#"}
-    walls |= reduce(or_, ({Vec(x, 0), Vec(x, ymax + 1)} for x in range(xmax + 1)))
-    walls |= reduce(or_, ({Vec(0, y), Vec(xmax + 1, y)} for y in range(ymax + 1)))
+    mapp = inp.splitlines()
+    mapp = rotate_right(mapp)  # we implement tilt to the right, so lets face north to the right
     if part1:
-        rocks = slide(rocks, walls, Vec(0, 1))
+        mapp = tilt(mapp)
     else:
         seen = {}
         i = 1000000000
         shortcut = False
         while i > 0:
             i -= 1
-            for d in [Vec(0, 1), Vec(-1, 0), Vec(0, -1), Vec(1, 0)]:
-                rocks = slide(rocks, walls, d)
+            for _ in range(4):
+                mapp = tilt(mapp)
+                mapp = rotate_right(mapp)
             if not shortcut:
-                r = frozenset(rocks)
-                if r in seen:
-                    cycle_length = seen[r] - i
+                if mapp in seen:
+                    cycle_length = seen[mapp] - i
                     i = i % cycle_length
                     shortcut = True
-                seen[r] = i
-    return sum(map(itemgetter(1), rocks))
+                seen[mapp] = i
+    return sum(sum(i if c == "O" else 0 for i, c in enumerate(r, 1)) for r in mapp)
 
 
 if __name__ == '__main__':
