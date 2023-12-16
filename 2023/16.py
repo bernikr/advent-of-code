@@ -1,5 +1,3 @@
-from frozendict import frozendict
-
 from aoc_utils import Vec, dirs4, UP, RIGHT, DOWN, LEFT
 
 dir_change = {
@@ -48,7 +46,6 @@ def build_fastmap(mapp):
             seen1, goal1 = energize_to_split(mapp, p, split_dirs[c][0])
             seen2, goal2 = energize_to_split(mapp, p, split_dirs[c][1])
             seen_by_split[p] = ({p}, {goal1, goal2} - {None}, {p} | seen1 | seen2)
-    visited_by_split = {}
     for split, (resolved, unresolved, visited) in seen_by_split.items():
         while unresolved:
             u = unresolved.pop()
@@ -56,8 +53,8 @@ def build_fastmap(mapp):
             unresolved |= seen_by_split[u][1]
             visited |= seen_by_split[u][2]
             unresolved -= resolved
-        visited_by_split[split] = visited
-    return visited_by_split
+        seen_by_split[split] = (resolved, unresolved, visited)
+    return {a: b for a, (_, _, b) in seen_by_split.items()}
 
 
 def energize_fastmap(mapp, fastmap, pos, dir):
@@ -68,7 +65,7 @@ def energize_fastmap(mapp, fastmap, pos, dir):
 
 
 def solve(inp, part1):
-    mapp = frozendict({Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)})
+    mapp = {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
     if part1:
         return len(energize(mapp, Vec(-1, 0), RIGHT))
     else:
