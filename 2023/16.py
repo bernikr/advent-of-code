@@ -16,8 +16,7 @@ split_dirs = {
 
 def energize_to_split(mapp, pos, dir):
     visited = set()
-    while pos + dir in mapp:
-        pos += dir
+    while (pos := pos + dir) in mapp:
         visited.add(pos)
         dir = dir_change[mapp[pos]][dir]
         if dir is None:
