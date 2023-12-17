@@ -23,8 +23,7 @@ def solve(inp, part1):
     neighbors = get_neighbor_function(mapp, part1)
     d = lambda c, n: mapp[n[0]]
     h = lambda s: (s[0] - goal).manhatten()
-    shortest_path, cost = a_star(starts, is_goal, neighbors, d, h)
-    return cost
+    return a_star(starts, is_goal, neighbors, d, h)[1]
 
 
 if __name__ == '__main__':
