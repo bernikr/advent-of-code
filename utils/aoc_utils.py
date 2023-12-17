@@ -174,10 +174,14 @@ def reconstruct_path(came_from, current):
     return path[::-1]
 
 
-def a_star(start, is_goal, get_neighbors, d, h=lambda s: 0):  # h is 0 by default to use Dijkstra if no h is supplied
+def a_star(start, is_goal, get_neighbors, d=None, h=lambda s: 0):
+    # h is 0 by default to use Dijkstra if no h is supplied
     if not callable(is_goal):  # if goal is not a lambda, create a simple equals lambda
         goal = is_goal
         is_goal = lambda x: x == goal
+    if d is not None:  # if d is not supplied, expect get_neighbors to yield (state, distance)
+        get_neighbors_without_distance = get_neighbors
+        get_neighbors = lambda s: ((n, d(s, n)) for n in get_neighbors_without_distance(s))
     open_set = PriorityQueue()
     g_score = defaultdict(lambda: math.inf)
     came_from = {}
@@ -199,8 +203,8 @@ def a_star(start, is_goal, get_neighbors, d, h=lambda s: 0):  # h is 0 by defaul
         if is_goal(current):
             return reconstruct_path(came_from, current), g_score[current]
 
-        for neighbor in get_neighbors(current):
-            tentative_g_score = g_score[current] + d(current, neighbor)
+        for neighbor, distance in get_neighbors(current):
+            tentative_g_score = g_score[current] + distance
             if tentative_g_score < g_score[neighbor]:
                 came_from[neighbor] = current
                 g_score[neighbor] = tentative_g_score
