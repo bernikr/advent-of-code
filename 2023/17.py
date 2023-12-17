@@ -1,7 +1,10 @@
+from functools import cache
+
 from aoc_utils import a_star
 
 
 def get_neighbor_function(mapp, xmax, ymax, step_min, step_max):
+    @cache
     def n(state):
         x, y, dx, dy = state
         sum_a, sum_b = 0, 0
