@@ -1,10 +1,9 @@
-import math
 import re
-from collections import defaultdict
 from itertools import chain, combinations
 
-from aoc_utils import PriorityQueue
 from frozendict import frozendict
+
+from aoc_utils import a_star
 
 
 def is_unsafe(floor):
@@ -60,21 +59,8 @@ def solve(inp, part1):
         inp[1] = inp[1].union({'EL', 'el', 'DI', 'di'})
 
     start = simplify_state((1, frozendict(inp)))
-    open_set = PriorityQueue()
-    open_set.put(start, 0)
-    g_score = defaultdict(lambda: math.inf, {start: 0})
-
-    while open_set:
-        current = open_set.get()
-        if is_done(current):
-            return g_score[current]
-        for neighbor in possible_moves(current):
-            neighbor = simplify_state(neighbor)
-            tentative_g_score = g_score[current] + 1
-            if tentative_g_score < g_score[neighbor]:
-                g_score[neighbor] = tentative_g_score
-                f_score = tentative_g_score + h(current)
-                open_set.put(neighbor, f_score)
+    neighbors = lambda s: (simplify_state(n) for n in possible_moves(s))
+    return a_star(start, is_done, neighbors, lambda a, b: 1)[1]
 
 
 if __name__ == '__main__':
