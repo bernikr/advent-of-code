@@ -147,18 +147,25 @@ def ocr10(m: set[tuple[int, int]]):
 
 class PriorityQueue:
     def __init__(self):
-        self.items = []
+        self.items = {}
+        self.index = 0
         self.queue = []
 
     def __len__(self):
         return len(self.queue)
 
     def put(self, item, priority):
-        self.items.append(item)
-        heappush(self.queue, (priority, len(self.items) - 1))
+        self.items[self.index] = item
+        heappush(self.queue, (priority, self.index))
+        self.index += 1
 
     def get(self):
-        return self.items[heappop(self.queue)[1]]
+        i = heappop(self.queue)[1]
+        item = self.items[i]
+        del self.items[i]
+        return item
+
+
 def reconstruct_path(came_from, current):
     path = [current]
     while current in came_from:
