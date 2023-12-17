@@ -174,15 +174,23 @@ def reconstruct_path(came_from, current):
     return path[::-1]
 
 
-def a_star(starts, is_goal, get_neighbors, d, h=lambda s: 0):
+def a_star(start, is_goal, get_neighbors, d, h=lambda s: 0):
     open_set = PriorityQueue()
     g_score = defaultdict(lambda: math.inf)
     came_from = {}
     seen = set()
 
-    for s in starts:
-        open_set.put(s, h(s))
-        g_score[s] = 0
+    if isinstance(start, dict):  # if start is a dict, it can supply starting distances
+        for s, g in start.items():
+            g_score[s] = g
+    elif isinstance(start, list) or isinstance(start, set):  # if list or set: multiple starts provided
+        for s in start:
+            g_score[s] = 0
+    else:  # otherwise assume single start
+        g_score[start] = 0
+
+    for s, g in g_score.items():
+        open_set.put(s, g_score[s] + h(s))
 
     while open_set:
         current = open_set.get()
