@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import math
 import operator
+from collections import defaultdict
 from math import sqrt
 from enum import Enum
 from heapq import heappush, heappop
@@ -157,6 +159,38 @@ class PriorityQueue:
 
     def get(self):
         return self.items[heappop(self.queue)[1]]
+def reconstruct_path(came_from, current):
+    path = [current]
+    while current in came_from:
+        current = came_from[current]
+        path.append(current)
+    return path[::-1]
+
+
+def a_star(starts, is_goal, get_neighbors, d, h=lambda s: 0):
+    open_set = PriorityQueue()
+    g_score = defaultdict(lambda: math.inf)
+    came_from = {}
+    seen = set()
+
+    for s in starts:
+        open_set.put(s, h(s))
+        g_score[s] = 0
+
+    while open_set:
+        current = open_set.get()
+        if current in seen:
+            continue
+        seen.add(current)
+        if is_goal(current):
+            return reconstruct_path(came_from, current), g_score[current]
+
+        for neighbor in get_neighbors(current):
+            tentative_g_score = g_score[current] + d(current, neighbor)
+            if tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g_score
+                open_set.put(neighbor, tentative_g_score + h(neighbor))
 
 
 class CircularList(list):
