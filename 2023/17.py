@@ -1,28 +1,30 @@
-from aoc_utils import Vec, Dir, a_star
+from aoc_utils import a_star
 
 
-def get_neighbor_function(mapp, part1):
+def get_neighbor_function(xmax, ymax, step_min, step_max):
     def n(state):
-        pos, dir, moved = state
-        steps = []
-        if moved < (3 if part1 else 10):
-            steps.append((dir, moved + 1))
-        if moved >= (0 if part1 else 4):
-            steps.append((dir.turn_left(), 1))
-            steps.append((dir.turn_right(), 1))
-        return [(pos + d.value, d, m) for d, m in steps if pos + d.value in mapp]
+        x, y, dx, dy, moved = state
+        if moved < step_max:
+            if 0 <= x + dx <= xmax and 0 <= y + dy <= ymax:
+                yield x + dx, y + dy, dx, dy, moved + 1
+        if moved >= step_min:
+            if 0 <= x + dy <= xmax and 0 <= y - dx <= ymax:
+                yield x + dy, y - dx, dy, -dx, 1
+            if 0 <= x - dy <= xmax and 0 <= y + dx <= ymax:
+                yield x - dy, y + dx, -dy, dx, 1
 
     return n
 
 
 def solve(inp, part1):
-    mapp = {Vec(x, y): int(c) for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
-    starts = {(Vec(0, 0), Dir.RIGHT, 0), (Vec(0, 0), Dir.DOWN, 0)}
-    goal = Vec(*map(max, zip(*mapp.keys())))
-    is_goal = lambda s: s[0] == goal and (part1 or s[2] >= 4)
-    neighbors = get_neighbor_function(mapp, part1)
-    d = lambda c, n: mapp[n[0]]
-    h = lambda s: (s[0] - goal).manhatten()
+    step_min, step_max = (0, 3) if part1 else (4, 10)
+    mapp = [[int(x) for x in l] for l in inp.splitlines()]
+    starts = {(0, 0, 1, 0, 0), (0, 0, 0, 1, 0)}  # x, y, dx, dy, moves
+    goal = (len(mapp[0]) - 1, len(mapp) - 1)
+    is_goal = lambda s: s[0] == goal[0] and s[1] == goal[1] and s[4] >= step_min
+    neighbors = get_neighbor_function(*goal, step_min, step_max)
+    d = lambda c, n: mapp[n[1]][n[0]]
+    h = lambda s: goal[0] - s[0] + goal[1] - s[1]
     return a_star(starts, is_goal, neighbors, d, h)[1]
 
 

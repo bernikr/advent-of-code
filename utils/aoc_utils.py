@@ -181,7 +181,6 @@ def a_star(start, is_goal, get_neighbors, d, h=lambda s: 0):  # h is 0 by defaul
     open_set = PriorityQueue()
     g_score = defaultdict(lambda: math.inf)
     came_from = {}
-    seen = set()
 
     if isinstance(start, dict):  # if start is a dict, it can supply starting distances
         for s, g in start.items():
@@ -197,9 +196,6 @@ def a_star(start, is_goal, get_neighbors, d, h=lambda s: 0):  # h is 0 by defaul
 
     while open_set:
         current = open_set.get()
-        if current in seen:
-            continue
-        seen.add(current)
         if is_goal(current):
             return reconstruct_path(came_from, current), g_score[current]
 
