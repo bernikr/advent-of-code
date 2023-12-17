@@ -19,7 +19,7 @@ def solve(inp, part1):
     neighbors = lambda s: (s + dir for dir in dirs4 if (s + dir) in mapp)
     d = lambda c, n: mapp[n]
     h = lambda s: (s - goal).manhatten()
-    return a_star(start, goal, neighbors, d, h)[1]
+    return a_star(start, goal, neighbors, h, d)[1]
 
 
 if __name__ == '__main__':

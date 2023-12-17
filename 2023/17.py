@@ -26,8 +26,7 @@ def solve(inp, part1):
     is_goal = lambda s: s[0] == goal[0] and s[1] == goal[1]
     neighbors = get_neighbor_function(mapp, *goal, step_min, step_max)
     h = lambda s: goal[0] - s[0] + goal[1] - s[1]
-    path, cost = a_star(starts, is_goal, neighbors, h=h)
-    return cost
+    return a_star(starts, is_goal, neighbors, h)[1]
 
 
 if __name__ == '__main__':

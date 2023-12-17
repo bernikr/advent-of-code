@@ -59,8 +59,8 @@ def solve(inp, part1):
         inp[1] = inp[1].union({'EL', 'el', 'DI', 'di'})
 
     start = simplify_state((1, frozendict(inp)))
-    neighbors = lambda s: (simplify_state(n) for n in possible_moves(s))
-    return a_star(start, is_done, neighbors, lambda a, b: 1)[1]
+    neighbors = lambda s: ((simplify_state(n), 1) for n in possible_moves(s))
+    return a_star(start, is_done, neighbors)[1]
 
 
 if __name__ == '__main__':

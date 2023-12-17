@@ -174,7 +174,7 @@ def reconstruct_path(came_from, current):
     return path[::-1]
 
 
-def a_star(start, is_goal, get_neighbors, d=None, h=lambda s: 0):
+def a_star(start, is_goal, get_neighbors, h=lambda s: 0, d=None):
     # h is 0 by default to use Dijkstra if no h is supplied
     if not callable(is_goal):  # if goal is not a lambda, create a simple equals lambda
         goal = is_goal
