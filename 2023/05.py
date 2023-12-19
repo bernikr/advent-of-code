@@ -2,15 +2,8 @@ import operator
 import re
 from functools import reduce
 
-import portion as P
 from more_itertools import batched
-
-
-class IntInterval(P.AbstractDiscreteInterval):
-    _step = 1
-
-
-P = P.create_api(IntInterval)
+from aoc_utils import portion_integer as P
 
 
 def map_intervals(x, mappings):

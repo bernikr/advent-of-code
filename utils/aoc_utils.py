@@ -7,6 +7,7 @@ from math import sqrt
 from enum import Enum
 from heapq import heappush, heappop
 from itertools import product, islice
+import portion
 
 
 class Vec(tuple[int, ...]):
@@ -253,3 +254,10 @@ class CircularList(list):
 
 def sign(x):
     return x and (1, -1)[x < 0]
+
+
+class IntInterval(portion.AbstractDiscreteInterval):
+    _step = 1
+
+
+portion_integer = portion.create_api(IntInterval)
