@@ -89,7 +89,7 @@ class Matrix(tuple[tuple[int, ...], ...]):
         raise NotImplementedError()
 
 
-class Rect:
+class Box:
     def __init__(self, *corners):
         self.lower = Vec(*(min(a[i] for a in corners) for i in range(len(corners[0]))))
         self.upper = Vec(*(max(a[i] for a in corners) for i in range(len(corners[0]))))
@@ -98,7 +98,7 @@ class Rect:
         return all(mi <= i <= ma for mi, ma, i in zip(self.lower, self.upper, item))
 
     def __repr__(self):
-        return f"Rect{{{self.lower}...{self.upper}}}"
+        return f"Box{{{self.lower}...{self.upper}}}"
 
     @property
     def center(self):

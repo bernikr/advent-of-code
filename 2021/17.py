@@ -1,6 +1,6 @@
 import re
 
-from aoc_utils import Vec, sign, Rect
+from aoc_utils import Vec, sign, Box
 
 
 def step(pos, vel):
@@ -68,7 +68,7 @@ def part2(inp):
 
 def solve(inp, ispart1):
     inp = tuple(map(int, re.match(r'^target area: x=(-?\d+)..(-?\d+), y=(-?\d+)..(-?\d+)$', inp).groups()))
-    inp = Rect(Vec(inp[0], inp[2]), Vec(inp[1], inp[3]))
+    inp = Box(Vec(inp[0], inp[2]), Vec(inp[1], inp[3]))
     return part1(inp) if ispart1 else part2(inp)
 
 

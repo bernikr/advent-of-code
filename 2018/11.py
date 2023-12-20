@@ -1,13 +1,13 @@
 import math
 
 import numpy as np
-from aoc_utils import Rect
+from aoc_utils import Box
 from scipy.signal import convolve2d
 from tqdm import tqdm
 
 
 def power(c, serial):
-    if c not in Rect((1, 1), (300, 300)):
+    if c not in Box((1, 1), (300, 300)):
         raise ValueError
     x, y = c
     rackid = x + 10
