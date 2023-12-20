@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 import operator
 from collections import defaultdict
+from functools import reduce
 from math import sqrt
 from enum import Enum
 from heapq import heappush, heappop
@@ -91,8 +92,16 @@ class Matrix(tuple[tuple[int, ...], ...]):
 
 class Box:
     def __init__(self, *corners):
-        self.lower = Vec(*(min(a[i] for a in corners) for i in range(len(corners[0]))))
-        self.upper = Vec(*(max(a[i] for a in corners) for i in range(len(corners[0]))))
+        corners = [tuple(c) for c in corners]
+        self.lower = Vec(*map(min, zip(*corners)))
+        self.upper = Vec(*map(max, zip(*corners)))
+
+    @classmethod
+    def empty(cls, dim):
+        b = cls()
+        b.lower = Vec(*(math.inf,) * dim)
+        b.upper = Vec(*(-math.inf,) * dim)
+        return b
 
     def __contains__(self, item):
         return all(mi <= i <= ma for mi, ma, i in zip(self.lower, self.upper, item))
@@ -100,9 +109,24 @@ class Box:
     def __repr__(self):
         return f"Box{{{self.lower}...{self.upper}}}"
 
-    @property
-    def center(self):
-        return Vec(*((mi + ma) / 2 for mi, ma in zip(self.lower, self.upper)))
+    def overlaps(self, other):
+        return all(sl <= ol <= su or sl <= ou <= su or ol <= sl <= ou or ol <= su <= ou
+                   for sl, su, ol, ou in zip(self.lower, self.upper, other.lower, other.upper))
+
+    def is_empty(self):
+        return all(sl == math.inf and su == -math.inf for sl, su in zip(self.lower, self.upper))
+
+    def __and__(self, other):
+        if isinstance(other, Box):
+            if self.overlaps(other):
+                return Box(map(max, zip(self.lower, other.lower)), map(min, zip(self.upper, other.upper)))
+            else:
+                return Box.empty(len(self.lower))
+        else:
+            raise NotImplementedError()
+
+    def size(self):
+        return reduce(operator.mul, map(lambda l, u: u - l + 1, self.lower, self.upper))
 
 
 def nth(iterable, n):
