@@ -32,7 +32,9 @@ def solve(inp, part1):
             count[i % 2] += len(front)
             counts[i] = count[i % 2]
             seen |= front
-            front = {(p + d) for p in front for d in dirs4 if (p + d).pos_mod(n) not in walls and p + d not in seen}
+            front = {(p[0] + d[0], p[1] + d[1]) for p in front for d in dirs4
+                     if (((p[0] + d[0]) % n + n) % n, ((p[1] + d[1]) % n + n) % n) not in walls
+                     and (p[0] + d[0], p[1] + d[1]) not in seen}
 
         poly = np.polyfit([0, 1, 2], [counts[a * n + r] for a in [0, 1, 2]], 2)
         x = (steps - r) // n
