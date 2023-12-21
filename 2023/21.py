@@ -18,11 +18,9 @@ def solve(inp, part1):
             front = {p + d for p in front for d in dirs4 if p + d not in walls and p + d not in seen}
         return count
     else:
-        xmax, ymax = map(max, zip(*mapp))
-        assert xmax == ymax  # assert quadratic input
-        n = xmax + 1
+        n, _ = Vec(1, 1) + map(max, zip(*mapp))
         steps = 26501365
-        a, r = steps // n, steps % n  # repeats and remainder
+        x, r = steps // n, steps % n  # repeats and remainder
 
         seen = set()
         front = {start}
@@ -36,9 +34,8 @@ def solve(inp, part1):
                      if (((p[0] + d[0]) % n + n) % n, ((p[1] + d[1]) % n + n) % n) not in walls
                      and (p[0] + d[0], p[1] + d[1]) not in seen}
 
-        poly = np.polyfit([0, 1, 2], [counts[a * n + r] for a in [0, 1, 2]], 2)
-        x = (steps - r) // n
-        return round(poly[0]) * x * x + round(poly[1]) * x + round(poly[2])
+        poly = tuple(map(round, np.polyfit([0, 1, 2], [counts[a * n + r] for a in [0, 1, 2]], 2)))
+        return poly[0] * x * x + poly[1] * x + poly[2]
 
 
 if __name__ == '__main__':
