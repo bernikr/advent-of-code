@@ -42,6 +42,14 @@ class Vec(tuple[int, ...]):
     def __abs__(self):
         return sqrt(sum(x * x for x in self))
 
+    def pos_mod(self, other):
+        if isinstance(other, int):
+            other = Vec(*((other,) * len(self)))
+        if isinstance(other, Vec):
+            return Vec(*map(lambda s, o: (s % o + o) % o, self, other))
+        else:
+            raise NotImplementedError()
+
     def manhatten(self):
         return sum(abs(x) for x in self)
 
