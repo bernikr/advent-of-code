@@ -42,27 +42,30 @@ def settle_bricks(inp):
     return supported_by
 
 
-def calculate_fallen(supported_by, disintegrate):
-    supports = {a: list(b) for a, b in supported_by.items()}
+def calculate_fallen(supported_by, supports, disintegrate):
+    supported_by = {a: list(b) for a, b in supported_by.items()}
     fallen = 0
     to_destroy = {disintegrate}
     while to_destroy:
         b = to_destroy.pop()
-        for i, l in supports.items():
-            if b in l:
-                l.remove(b)
-                if not l:
-                    fallen += 1
-                    to_destroy.add(i)
+        for i in supports[b]:
+            supported_by[i].remove(b)
+            if not supported_by[i]:
+                fallen += 1
+                to_destroy.add(i)
     return fallen
 
 
 def solve(inp, part1):
     supported_by = settle_bricks(inp)
+    supports = defaultdict(list)
+    for i, l in supported_by.items():
+        for j in l:
+            supports[j].append(i)
     if part1:
-        return sum(calculate_fallen(supported_by, i) == 0 for i in range(1, len(supported_by) + 1))
+        return sum(calculate_fallen(supported_by, supports, i) == 0 for i in range(1, len(supported_by) + 1))
     else:
-        return sum(calculate_fallen(supported_by, i) for i in range(1, len(supported_by) + 1))
+        return sum(calculate_fallen(supported_by, supports, i) for i in range(1, len(supported_by) + 1))
 
 
 if __name__ == '__main__':
