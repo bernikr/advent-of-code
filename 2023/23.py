@@ -49,12 +49,8 @@ def solve(inp, part1):
     simplify(g)
     if not part1:
         g = g.to_undirected()
-    longest = 0
-    for path in nx.all_simple_paths(g, start, end):
-        length = sum(g[a][b]['distance'] for a, b in pairwise(path))
-        if length > longest:
-            longest = length
-    return longest
+
+    return max(sum(g[a][b]['distance'] for a, b in pairwise(path)) for path in nx.all_simple_paths(g, start, end))
 
 
 if __name__ == '__main__':
