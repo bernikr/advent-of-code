@@ -1,18 +1,17 @@
 from collections import Counter
 
-def solve(inp: str, part1: bool) -> str | int:
+
+def solve(inp: str) -> str | int:
     inp = tuple(zip(*(map(int, l.split("   ")) for l in inp.splitlines())))
-    if part1:
-        return sum(abs(a - b) for a, b in zip(*map(sorted, inp)))
-    else:
-        return sum(Counter(inp[1])[i] * i for i in inp[0])
+    yield 1, sum(abs(a - b) for a, b in zip(*map(sorted, inp)))
+    yield 2, sum(Counter(inp[1])[i] * i for i in inp[0])
 
 
 if __name__ == "__main__":
     from aocd import data, submit, AocdError
 
     try:
-        submit(solve(data, True), part="a")
-        submit(solve(data, False), part="b")
+        for part, solution in solve(data):
+            submit(solution, part=("a", "b")[part - 1])
     except AocdError as e:
         print(e)

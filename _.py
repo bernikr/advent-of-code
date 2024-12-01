@@ -1,17 +1,15 @@
-def solve(inp: str, part1: bool) -> str | int:
+def solve(inp: str) -> str | int:
     inp = inp.splitlines()
     print(inp)
-    if part1:
-        return ""
-    else:
-        return ""
+    yield 1, ""
+    yield 2, ""
 
 
 if __name__ == "__main__":
     from aocd import data, submit, AocdError
 
     try:
-        submit(solve(data, True), part="a")
-        submit(solve(data, False), part="b")
+        for part, solution in solve(data):
+            submit(solution, part=("a", "b")[part - 1])
     except AocdError as e:
         print(e)
