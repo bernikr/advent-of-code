@@ -27,7 +27,11 @@ dependencies = [
 ]
 
 [tool.ruff.lint]
-select = ["Q"]
+preview = true
+select = ["E", "F", "Q"]
+ignore = [
+    "E741", # Ambiguous variable name (want to use "l" for line)
+]
 
 [tool.uv]
 dev-dependencies = [
