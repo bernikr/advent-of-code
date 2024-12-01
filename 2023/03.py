@@ -2,7 +2,6 @@ from itertools import product
 
 from aoc_utils import Vec, dirs8
 
-
 def solve(inp, part1):
     numbers = []
     symbols = {}
@@ -33,7 +32,7 @@ def solve(inp, part1):
         return sum(a[0] * a[1] for a in adjecent if len(a) == 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from aocd import data, submit, AocdError
 
     try:

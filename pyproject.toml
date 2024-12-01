@@ -16,7 +16,14 @@ dependencies = [
     "portion>=2.4.1",
     "cpmpy>=0.9.23",
     "ruff>=0.8.1",
+    "aoc-utils",
 ]
 
 [tool.ruff.lint]
 select = ["Q"]
+
+[tool.uv.sources]
+aoc-utils = { workspace = true }
+
+[tool.uv.workspace]
+members = ["aoc_utils"]

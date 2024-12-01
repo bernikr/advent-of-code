@@ -1,6 +1,5 @@
 from collections import Counter
 
-
 def solve(inp: str, part1: bool) -> str | int:
     inp = tuple(zip(*(map(int, l.split("   ")) for l in inp.splitlines())))
     if part1:

@@ -10,7 +10,6 @@ from heapq import heappush, heappop
 from itertools import product, islice
 import portion
 
-
 class Vec(tuple[int, ...]):
     def __new__(cls, *args: int | float) -> Vec:
         return super().__new__(cls, args)
@@ -147,13 +146,13 @@ def ocr(m: set[tuple[int, int]]):
     assert my == 5, "Letters need to be 6 rows high"
     s = ""
     for i in range(0, mx + 1, 5):
-        v = int("".join('1' if (i + x, y) in m else '0' for y in range(6) for x in range(4)), 2)
+        v = int("".join("1" if (i + x, y) in m else "0" for y in range(6) for x in range(4)), 2)
         try:
-            s += {6922137: "A", 15329694: "B", 6916246: "C", 16312463: "E", 16312456: 'F', 6917015: "G", 10090905: "H",
+            s += {6922137: "A", 15329694: "B", 6916246: "C", 16312463: "E", 16312456: "F", 6917015: "G", 10090905: "H",
                   7479847: "I", 3215766: "J", 10144425: "K", 8947855: "L", 6920598: "O", 15310472: "P", 15310505: "R",
                   7898654: "S", 10066326: "U", 8933922: "Y", 15803535: "Z"}[v]
         except KeyError:
-            letter = '\n'.join("".join('▓' if (i + x, y) in m else ' ' for x in range(4)) for y in range(6))
+            letter = "\n".join("".join("▓" if (i + x, y) in m else " " for x in range(4)) for y in range(6))
             print(f"Unknown Letter with id {v}:\n\n{letter}")
             raise KeyError
     return s
@@ -165,14 +164,14 @@ def ocr10(m: set[tuple[int, int]]):
     assert my == 9, "Letters need to be 10 rows high"
     s = ""
     for i in range(0, mx + 1, 8):
-        v = int("".join('1' if (i + x, y) in m else '0' for y in range(10) for x in range(6)), 2)
+        v = int("".join("1" if (i + x, y) in m else "0" for y in range(10) for x in range(6)), 2)
         try:
             s += {221386771471407201: "A", 1126328852231362686: "B", 549863600932653150: "C", 1144057308981102655: "E",
                   549863601050360029: "G", 603911296530126945: "H", 126672675233474716: "J", 604206430830086305: "K",
                   585610922974906431: "L", 1126328852214319136: "P", 1126328852281960545: "R", 603844239923161185: "X",
                   1135193120993052735: "Z"}[v]
         except KeyError:
-            letter = '\n'.join("".join('▓' if (i + x, y) in m else ' ' for x in range(6)) for y in range(10))
+            letter = "\n".join("".join("▓" if (i + x, y) in m else " " for x in range(6)) for y in range(10))
             print(f"Unknown Letter with id {v}:\n\n{letter}")
             raise KeyError
     return s
