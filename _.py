@@ -1,4 +1,4 @@
-def solve(inp: str, part1: bool) -> str:
+def solve(inp: str, part1: bool) -> str | int:
     inp = inp.splitlines()
     print(inp)
     if part1:
