@@ -19,7 +19,7 @@ wheels = [
 [[package]]
 name = "advent-of-code"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "advent-of-code-data" },
     { name = "aoc-utils" },
@@ -50,6 +50,9 @@ requires-dist = [
     { name = "sympy", specifier = ">=1.9" },
     { name = "tqdm", specifier = ">=4.62.3" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "advent-of-code", editable = "." }]
 
 [[package]]
 name = "advent-of-code-data"
