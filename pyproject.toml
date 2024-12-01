@@ -15,4 +15,8 @@ dependencies = [
     "setuptools>=57.0.0",
     "portion>=2.4.1",
     "cpmpy>=0.9.23",
+    "ruff>=0.8.1",
 ]
+
+[tool.ruff.lint]
+select = ["Q"]

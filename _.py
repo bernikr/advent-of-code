@@ -1,13 +1,13 @@
-def solve(inp, part1):
+def solve(inp: str, part1: bool) -> str:
     inp = inp.splitlines()
     print(inp)
     if part1:
-        return None
+        return ""
     else:
-        return None
+        return ""
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from aocd import data, submit, AocdError
 
     try:
