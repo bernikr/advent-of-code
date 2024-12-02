@@ -26,6 +26,9 @@ dependencies = [
     "aoc-utils",
 ]
 
+[tool.ruff]
+line-length = 120
+
 [tool.ruff.lint]
 preview = true
 select = ["E", "F", "Q"]
