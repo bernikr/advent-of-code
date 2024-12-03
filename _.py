@@ -1,4 +1,7 @@
-def solve(inp: str) -> str | int:
+from typing import Iterable
+
+
+def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     inp = inp.splitlines()
     print(inp)
     yield 1, ""

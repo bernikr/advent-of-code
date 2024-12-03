@@ -8,7 +8,7 @@ def is_safe(seq: Iterable[int]) -> bool:
             and all(1 <= abs(d) <= 3 for d in diff))
 
 
-def solve(inp: str) -> str | int:
+def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     inp = [tuple(map(int, l.split())) for l in inp.splitlines()]
     yield 1, sum(is_safe(l) for l in inp)
     yield 2, sum(any(is_safe(l[:i] + l[i + 1:]) for i in range(len(l) + 1)) for l in inp)
