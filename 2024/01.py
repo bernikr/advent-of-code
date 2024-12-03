@@ -1,5 +1,5 @@
 from collections import Counter
-from typing import Iterable
+from collections.abc import Iterable
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
@@ -9,7 +9,7 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
 
 
 if __name__ == "__main__":
-    from aocd import data, submit, AocdError
+    from aocd import AocdError, data, submit
 
     try:
         for part, solution in solve(data):

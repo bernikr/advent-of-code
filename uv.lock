@@ -28,11 +28,15 @@ dependencies = [
     { name = "numpy" },
     { name = "portion" },
     { name = "regex" },
-    { name = "ruff" },
     { name = "scipy" },
     { name = "setuptools" },
     { name = "sympy" },
     { name = "tqdm" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "ruff" },
 ]
 
 [package.metadata]
@@ -44,7 +48,6 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26.0" },
     { name = "portion", specifier = ">=2.4.1" },
     { name = "regex", specifier = ">=2022.10.31" },
-    { name = "ruff", specifier = ">=0.8.1" },
     { name = "scipy", specifier = ">=1.11.0" },
     { name = "setuptools", specifier = ">=57.0.0" },
     { name = "sympy", specifier = ">=1.9" },
@@ -52,7 +55,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "advent-of-code", editable = "." }]
+dev = [
+    { name = "advent-of-code", editable = "." },
+    { name = "ruff", specifier = ">=0.8.1" },
+]
 
 [[package]]
 name = "advent-of-code-data"

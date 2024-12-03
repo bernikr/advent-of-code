@@ -22,7 +22,6 @@ dependencies = [
     "setuptools>=57.0.0",
     "portion>=2.4.1",
     "cpmpy>=0.9.23",
-    "ruff>=0.8.1",
     "aoc-utils",
 ]
 
@@ -31,16 +30,22 @@ line-length = 120
 
 [tool.ruff.lint]
 preview = true
-select = ["E", "W", "F", "Q", "A", "COM", "C4", "DTZ", "EM", "ISC", "ICN", "PIE", "RSE", "RET", "SIM", "TC", "ARG",
-    "PTH", "PD", "NPY", "RUF"]
+select = ["ALL"]
 ignore = [
     "E741", # Ambiguous variable name (want to use "l" for line)
     "E731", # lambda assigning to a variable
+    "INP001", # Implicit namespace package
+    "D", # pydocstyle
+    "CPY", # flake8-copyright
+    "T20", # flake8-print
+    "B905", # zip without explicit `strict=` parameter
+    "PLR2004", # Magic value used in comparison
 ]
 
 [tool.uv]
 dev-dependencies = [
     "advent-of-code",
+    "ruff>=0.8.1",
 ]
 
 [tool.uv.sources]
