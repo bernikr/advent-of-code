@@ -34,6 +34,7 @@ preview = true
 select = ["E", "F", "Q"]
 ignore = [
     "E741", # Ambiguous variable name (want to use "l" for line)
+    "E731", # lambda assigning to a variable
 ]
 
 [tool.uv]
