@@ -31,7 +31,8 @@ line-length = 120
 
 [tool.ruff.lint]
 preview = true
-select = ["E", "F", "Q"]
+select = ["E", "W", "F", "Q", "A", "COM", "C4", "DTZ", "EM", "ISC", "ICN", "PIE", "RSE", "RET", "SIM", "TC", "ARG",
+    "PTH", "PD", "NPY", "RUF"]
 ignore = [
     "E741", # Ambiguous variable name (want to use "l" for line)
     "E731", # lambda assigning to a variable
