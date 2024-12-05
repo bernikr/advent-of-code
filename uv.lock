@@ -25,6 +25,7 @@ dependencies = [
     { name = "aoc-utils" },
     { name = "cpmpy" },
     { name = "frozendict" },
+    { name = "networkx" },
     { name = "numpy" },
     { name = "portion" },
     { name = "regex" },
@@ -45,6 +46,7 @@ requires-dist = [
     { name = "aoc-utils", editable = "aoc_utils" },
     { name = "cpmpy", specifier = ">=0.9.23" },
     { name = "frozendict", specifier = ">=2.1.1" },
+    { name = "networkx", specifier = ">=3.4.2" },
     { name = "numpy", specifier = ">=1.26.0" },
     { name = "portion", specifier = ">=2.4.1" },
     { name = "regex", specifier = ">=2022.10.31" },
@@ -157,6 +159,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e0/47/dd32fa426cc72114383ac549964eecb20ecfd886d1e5ccf5340b55b02f57/mpmath-1.3.0.tar.gz", hash = "sha256:7a28eb2a9774d00c7bc92411c19a89209d5da7c4c9a9e227be8330a23a25b91f", size = 508106 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl", hash = "sha256:a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c", size = 536198 },
+]
+
+[[package]]
+name = "networkx"
+version = "3.4.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/fd/1d/06475e1cd5264c0b870ea2cc6fdb3e37177c1e565c43f56ff17a10e3937f/networkx-3.4.2.tar.gz", hash = "sha256:307c3669428c5362aab27c8a1260aa8f47c4e91d3891f48be0141738d8d053e1", size = 2151368 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b9/54/dd730b32ea14ea797530a4479b2ed46a6fb250f682a9cfb997e968bf0261/networkx-3.4.2-py3-none-any.whl", hash = "sha256:df5d4365b724cf81b8c6a7312509d0c22386097011ad1abe274afd5e9d3bbc5f", size = 1723263 },
 ]
 
 [[package]]

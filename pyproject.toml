@@ -23,6 +23,7 @@ dependencies = [
     "portion>=2.4.1",
     "cpmpy>=0.9.23",
     "aoc-utils",
+    "networkx>=3.4.2",
 ]
 
 [tool.ruff]
