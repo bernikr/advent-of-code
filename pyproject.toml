@@ -24,6 +24,7 @@ dependencies = [
     "cpmpy>=0.9.23",
     "aoc-utils",
     "networkx>=3.4.2",
+    "more-itertools>=10.5.0",
 ]
 
 [tool.ruff]

@@ -17,7 +17,7 @@ def parse_rule(r):
     return state, tuple(zip(vals, moves, new_states))
 
 
-def solve(inp):
+def solve(inp, _):
     start, *rules = inp.split("\n\n")
     state = re.search(r"Begin in state ([A-Z])\.", start).group(1)
     steps = int(re.search(r"Perform a diagnostic checksum after (\d+) steps\.", start).group(1))
@@ -34,6 +34,6 @@ if __name__ == '__main__':
     from aocd import AocdError, data, submit
 
     try:
-        submit(solve(data), part="a")
+        submit(solve(data, None), part="a")
     except AocdError as e:
         print(e)
