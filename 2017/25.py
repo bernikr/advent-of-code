@@ -31,9 +31,9 @@ def solve(inp):
 
 
 if __name__ == '__main__':
-    from aocd import data, submit, AocdError
+    from aocd import AocdError, data, submit
 
-try:
-    submit(solve(data), part="a")
-except AocdError as e:
-    print(e)
+    try:
+        submit(solve(data), part="a")
+    except AocdError as e:
+        print(e)

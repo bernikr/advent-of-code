@@ -285,8 +285,8 @@ class CircularList[T](UserList[T]):
 
     def __setitem__(self, key: int | slice, value: T | list[T]) -> None:
         if isinstance(key, int):
-            return super().__setitem__(key % len(self), value)
-        if isinstance(key, slice):
+            super().__setitem__(key % len(self), value)
+        elif isinstance(key, slice):
             keys = list(range(
                 key.start if key.start is not None else 0,
                 key.stop if key.stop is not None else len(self),
@@ -297,7 +297,8 @@ class CircularList[T](UserList[T]):
                 raise NotImplementedError(msg)
             for k, v in zip(keys, value):
                 self[k] = v
-        raise NotImplementedError
+        else:
+            raise NotImplementedError
 
 
 def sign(x: float) -> Literal[0, 1, -1]:
