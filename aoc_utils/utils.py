@@ -56,28 +56,39 @@ class Vec(tuple[int, ...]):
     def manhatten(self) -> float:
         return sum(abs(x) for x in self)
 
+    def turn_left(self) -> Vec:
+        if len(self) != 2:
+            msg = "Turning left is only defined for 2D vectors"
+            raise ValueError(msg)
+        return Vec(self[1], -self[0])
 
-dirs4 = [Vec(0, -1), Vec(0, 1), Vec(1, 0), Vec(-1, 0)]
+    def turn_right(self) -> Vec:
+        if len(self) != 2:
+            msg = "Turning right is only defined for 2D vectors"
+            raise ValueError(msg)
+        return Vec(-self[1], self[0])
+
+
+UP = Vec(0, -1)
+DOWN = Vec(0, 1)
+LEFT = Vec(-1, 0)
+RIGHT = Vec(1, 0)
+
+dirs4 = [UP, DOWN, LEFT, RIGHT]
 dirs8 = [Vec(*c) for c in product([-1, 0, 1], repeat=2) if c != (0, 0)]
 
 
 class Dir(Enum):
-    UP = Vec(0, -1)
-    DOWN = Vec(0, 1)
-    LEFT = Vec(-1, 0)
-    RIGHT = Vec(1, 0)
+    UP = UP
+    DOWN = DOWN
+    LEFT = LEFT
+    RIGHT = RIGHT
 
     def turn_left(self) -> Dir:
         return Dir((self.value[1], -self.value[0]))
 
     def turn_right(self) -> Dir:
         return Dir((-self.value[1], self.value[0]))
-
-
-DOWN = Dir.DOWN.value
-LEFT = Dir.LEFT.value
-RIGHT = Dir.RIGHT.value
-UP = Dir.UP.value
 
 
 class Matrix(tuple[tuple[int, ...], ...]):
