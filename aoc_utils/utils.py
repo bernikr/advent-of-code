@@ -23,7 +23,8 @@ class Vec(tuple[int, ...]):
         return super().__new__(cls, args)
 
     def __add__(self, other: tuple[float, ...]) -> Vec:
-        return Vec(*map(operator.add, self, other))
+        if self.__len__() == other.__len__() == 2:  # performance optimization for 2D vectors
+            return tuple.__new__(Vec, (self[0] + other[0], self[1] + other[1]))  # type: ignore[return-value]
         if len(self) != len(other):
             msg = "Adding vectors of different dimensions is not supported"
             raise ValueError(msg)
