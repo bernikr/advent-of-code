@@ -24,9 +24,16 @@ class Vec(tuple[int, ...]):
 
     def __add__(self, other: tuple[float, ...]) -> Vec:
         return Vec(*map(operator.add, self, other))
+        if len(self) != len(other):
+            msg = "Adding vectors of different dimensions is not supported"
+            raise ValueError(msg)
+        return Vec(map(operator.add, self, other))
 
     def __sub__(self, other: tuple[float, ...]) -> Vec:
-        return Vec(*map(operator.sub, self, other))
+        if len(self) != len(other):
+            msg = "Subtracting vectors of different dimensions is not supported"
+            raise ValueError(msg)
+        return Vec(map(operator.sub, self, other))
 
     def __mul__(self, other: float) -> Vec:
         if isinstance(other, int | float):
@@ -50,6 +57,9 @@ class Vec(tuple[int, ...]):
         if isinstance(other, int):
             other = Vec((other,) * len(self))
         if isinstance(other, Vec):
+            if len(self) != len(other):
+                msg = "Modulo of vectors of different dimensions is not supported"
+                raise ValueError(msg)
             return Vec(map(lambda s, o: (s % o + o) % o, self, other))
         raise NotImplementedError
 
