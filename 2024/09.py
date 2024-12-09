@@ -33,7 +33,8 @@ def part2(storage: list[int | None]) -> int:
         if storage[fpointer] is None:
             fpointer -= 1
         file_length = get_length(storage, fpointer, -1)
-        while storage[free[file_length]] is not None or get_length(storage, free[file_length], 1) < file_length:
+        while (free[file_length] < fpointer and
+               (storage[free[file_length]] is not None or get_length(storage, free[file_length], 1) < file_length)):
             free[file_length] += get_length(storage, free[file_length], 1)
         if free[file_length] < fpointer:
             storage[free[file_length]:free[file_length] + file_length] \
