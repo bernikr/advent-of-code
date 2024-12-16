@@ -25,7 +25,7 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     variance_record = math.inf
     record_id = 0
     for i in tqdm(count()):
-        if i > record_id + 5000:  # assumes that if no lower variance is found after 5000 iterations, we have found it
+        if i > record_id + 8000:  # assumes that if no lower variance is found after 5000 iterations, we have found it
             break
         poss = [(p + i * v).pos_mod(floor_size) for p, v in inp]
         a = variance(map(operator.itemgetter(0), poss)) * variance(map(operator.itemgetter(1), poss))
