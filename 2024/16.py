@@ -1,28 +1,25 @@
 from collections.abc import Iterable
 
-from aoc_utils import LEFT, Vec, a_star, reconstruct_paths
+import networkx as nx
+
+from aoc_utils import LEFT, Vec, dirs4
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     mapp = {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
     start = next(p for p, c in mapp.items() if c == "S"), LEFT
-    end = next(p for p, c in mapp.items() if c == "E")
-    is_end = lambda s: s[0] == end
-
-    def get_neighbors(s: tuple[Vec, Vec]) -> Iterable[tuple[tuple[Vec, Vec], int]]:
-        p, d = s
-        if mapp.get(p + d, "#") != "#":
-            yield (p + d, d), 1
-        yield (p, d.turn_left()), 1000
-        yield (p, d.turn_right()), 1000
-
-    predecessors, score = a_star(start, is_end, get_neighbors)
-    yield 1, score
-
-    paths = []
-    for end_state in ((a, b) for a, b in predecessors if a == end):
-        paths += list(reconstruct_paths(predecessors, end_state))
-    yield 2, len({p for path in paths for p, _ in path})
+    ends = [(next(p for p, c in mapp.items() if c == "E"), d) for d in dirs4]
+    g = nx.DiGraph()
+    for p, c in mapp.items():
+        if c != "#":
+            g.add_weighted_edges_from(((p, d), (p + d, d), 1) for d in dirs4 if mapp.get(p + d, "#") != "#")
+            g.add_weighted_edges_from(((p, d), (p, d.turn_left()), 1000) for d in dirs4)
+            g.add_weighted_edges_from(((p, d), (p, d.turn_right()), 1000) for d in dirs4)
+    end = object()
+    g.add_weighted_edges_from((e, end, 0) for e in ends)
+    yield 1, nx.shortest_path_length(g, start, end, weight="weight")
+    paths = nx.all_shortest_paths(g, start, end, weight="weight")
+    yield 2, len({p for path in paths for p, _ in path[:-1]})
 
 
 if __name__ == "__main__":
