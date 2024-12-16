@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import operator
 from collections import UserList, defaultdict
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Collection, Iterable
 from enum import Enum
 from functools import reduce
 from heapq import heappop, heappush
@@ -232,12 +232,22 @@ class PriorityQueue[T]:
         return item
 
 
-def reconstruct_path[T](came_from: dict[T, T], current: T) -> list[T]:
+def reconstruct_path[T](predecessors: dict[T, T], current: T) -> list[T]:
     path = [current]
-    while current in came_from:
-        current = came_from[current]
+    while current in predecessors:
+        current = predecessors[current]
         path.append(current)
     return path[::-1]
+
+
+def reconstruct_paths[T](predecessors: dict[T, Collection[T]], goal: T) -> Iterable[list[T]]:
+    linear_path = reconstruct_path({k: next(iter(v)) for k, v in predecessors.items() if len(v) == 1}, goal)
+    new_goal = linear_path[0]
+    if new_goal not in predecessors or len(predecessors[new_goal]) == 0:
+        yield linear_path
+    else:
+        for pre in predecessors[new_goal]:
+            yield from ([*path, *linear_path] for path in reconstruct_paths(predecessors, pre))
 
 
 def a_star[T](  # noqa: C901, PLR0912
@@ -246,7 +256,7 @@ def a_star[T](  # noqa: C901, PLR0912
         get_neighbors: Callable[[T], Iterable[T | tuple[T, float]]],
         h: Callable[[T], float] = lambda _: 0,  # h is 0 by default to use Dijkstra if no h is supplied
         d: Callable[[T, T], float] | None = None,
-) -> tuple[list[T], float]:
+) -> tuple[dict[T, set[T]], float]:
 
     if not callable(is_goal):  # if goal is not a lambda, create a simple equals lambda
         goal = is_goal
@@ -258,7 +268,7 @@ def a_star[T](  # noqa: C901, PLR0912
 
     open_set = PriorityQueue()
     g_score = defaultdict(lambda: math.inf)
-    came_from = {}
+    predecessors = defaultdict(set)
     seen = set()
 
     if isinstance(start, dict):  # if start is a dict, it can supply starting distances
@@ -281,12 +291,13 @@ def a_star[T](  # noqa: C901, PLR0912
         seen.add(current)
 
         if is_goal(current):
-            return reconstruct_path(came_from, current), g_score[current]
+            return dict(predecessors), g_score[current]
 
         for neighbor, distance in get_neighbors(current):
             tentative_g_score = g_score[current] + distance
+            if tentative_g_score <= g_score[neighbor]:
+                predecessors[neighbor].add(current)
             if tentative_g_score < g_score[neighbor]:
-                came_from[neighbor] = current
                 g_score[neighbor] = tentative_g_score
                 open_set.put(neighbor, tentative_g_score + h(neighbor))
     msg = "No path found"
