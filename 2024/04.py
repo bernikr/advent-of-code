@@ -1,11 +1,11 @@
 from collections.abc import Iterable
 from itertools import product
 
-from aoc_utils import Vec, dirs8
+from aoc_utils import Vec, create_map, dirs8
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    mapp = {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+    mapp = create_map(inp)
     yield 1, sum("".join(mapp.get(pos + d * i, "") for i in range(4)) == "XMAS"
                  for pos, d in product(mapp.keys(), dirs8))
     yield 2, sum((mapp.get(pos) == "A" and

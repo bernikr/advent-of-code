@@ -80,6 +80,10 @@ class Vec(tuple[int, ...]):
         return Vec(-self[1], self[0])
 
 
+def create_map(inp: str) -> dict[Vec, str]:
+    return {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+
+
 UP = Vec(0, -1)
 DOWN = Vec(0, 1)
 LEFT = Vec(-1, 0)

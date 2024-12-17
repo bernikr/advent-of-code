@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from aoc_utils import DOWN, LEFT, RIGHT, UP, Vec
+from aoc_utils import DOWN, LEFT, RIGHT, UP, Vec, create_map
 
 dir_mapping = {"^": UP, "v": DOWN, ">": RIGHT, "<": LEFT}
 
@@ -41,7 +41,7 @@ def solve_part(directions: list[Vec], mapp: str, *, part2: bool = False) -> int:
     if part2:
         for a, b in {"#": "##", "O": "[]", ".": "..", "@": "@."}.items():
             mapp = mapp.replace(a, b)
-    mapp = {Vec(x, y): c for y, l in enumerate(mapp.splitlines()) for x, c in enumerate(l)}
+    mapp = create_map(mapp)
     robot = next(p for p, c in mapp.items() if c == "@")
     boxes = {p for p, c in mapp.items() if c in {"[", "O"}}
     for d in directions:

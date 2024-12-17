@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from aoc_utils import Vec, dirs4
+from aoc_utils import Vec, create_map, dirs4
 
 
 def region_side_count(region: set[Vec]) -> int:
@@ -16,7 +16,7 @@ def region_side_count(region: set[Vec]) -> int:
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    mapp = {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+    mapp = create_map(inp)
     todo = set(mapp.keys())
     price, price2 = 0, 0
     while todo:

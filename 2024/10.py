@@ -1,11 +1,11 @@
 from collections import Counter, defaultdict
 from collections.abc import Iterable
 
-from aoc_utils import Vec, dirs4
+from aoc_utils import create_map, dirs4
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    mapp = {Vec(x, y): int(c) for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+    mapp = {p: int(c) for p, c in create_map(inp).items()}
     peaks = defaultdict(set, {p: {p} for p, c in mapp.items() if c == 9})
     trails = Counter(p for p, c in mapp.items() if c == 9)
     for i in reversed(range(9)):

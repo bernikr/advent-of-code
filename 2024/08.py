@@ -3,11 +3,11 @@ from collections import defaultdict
 from collections.abc import Iterable
 from itertools import product
 
-from aoc_utils import Vec
+from aoc_utils import create_map
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    mapp = {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+    mapp = create_map(inp)
     antennas = defaultdict(set)
     for p, c in mapp.items():
         if c != ".":

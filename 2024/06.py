@@ -2,7 +2,7 @@ from collections.abc import Iterable
 
 from tqdm import tqdm
 
-from aoc_utils import UP, Vec
+from aoc_utils import UP, Vec, create_map
 
 
 def check_loop(mapp: dict[Vec, str]) -> bool:
@@ -19,7 +19,7 @@ def check_loop(mapp: dict[Vec, str]) -> bool:
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    mapp = {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
+    mapp = create_map(inp)
     start = next(p for p, c in mapp.items() if c == "^")
     pos = start
     d = UP
