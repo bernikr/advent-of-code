@@ -2,12 +2,12 @@ from collections.abc import Iterable
 
 import networkx as nx
 
-from aoc_utils import LEFT, Vec, dirs4
+from aoc_utils import RIGHT, Vec, dirs4
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     mapp = {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
-    start = next(p for p, c in mapp.items() if c == "S"), LEFT
+    start = next(p for p, c in mapp.items() if c == "S"), RIGHT
     ends = [(next(p for p, c in mapp.items() if c == "E"), d) for d in dirs4]
     g = nx.DiGraph()
     for p, c in mapp.items():
