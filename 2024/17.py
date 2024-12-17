@@ -1,21 +1,26 @@
 import re
+from collections import deque
 from collections.abc import Iterable
-from itertools import count
-
-from tqdm import tqdm
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     a, b, c, *program = map(int, re.findall(r"(\d+)", inp))
-    yield 1, run(a, b, c, program)
-    for i in tqdm(count()):
-        if res := run(i, b, c, program, expect_quine=True):
-            print(i, res)
-            if res == ",".join(map(str, program)):
-                yield 2, i
+    yield 1, ",".join(map(str, run(a, b, c, program)))
+
+    partials = deque([0])
+    while partials:
+        a = partials.popleft()
+        l = (a.bit_length() - 1) // 3 + 2
+        for i in range(8):
+            na = a * 8 + i
+            if na != 0 and run(na, b, c, program)[-l:] == program[-l:]:
+                if l == len(program):
+                    yield 2, na
+                    return
+                partials.append(na)
 
 
-def run(a: int, b: int, c: int, program: list[int], *, expect_quine: bool = False) -> str | None:  # noqa: C901
+def run(a: int, b: int, c: int, program: list[int]) -> list[int]:  # noqa: C901
     res = []
     ip = 0
     while ip < len(program):
@@ -37,13 +42,11 @@ def run(a: int, b: int, c: int, program: list[int], *, expect_quine: bool = Fals
                 b ^= c
             case 5:
                 res.append(op & 7)
-                if expect_quine and res != program[:len(res)]:
-                    return None
             case 6:
                 b = a >> op
             case 7:
                 c = a >> op
-    return ",".join(map(str, res))
+    return res
 
 
 if __name__ == "__main__":
