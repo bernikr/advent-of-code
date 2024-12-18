@@ -8,18 +8,20 @@ from aoc_utils import Vec, dirs4
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     inp = [Vec(*map(int, l.split(","))) for l in inp.splitlines()]
-    mapp = set(map(Vec, product(range(71), repeat=2))) - set(inp[:1024])
+    mapp = set(map(Vec, product(range(71), repeat=2)))
     start, end = Vec(0, 0), Vec(70, 70)
     g = nx.Graph()
     for p in mapp:
-        g.add_node(p)
         g.add_edges_from((p, p + d) for d in dirs4 if p + d in mapp)
-    yield 1, nx.shortest_path_length(g, start, end)
-    for p in inp[1024:]:
-        g.remove_node(p)
-        if not nx.has_path(g, start, end):
-            yield 2, f"{p.x},{p.y}"
-            return
+    yield 1, nx.shortest_path_length(g.subgraph(mapp - set(inp[:1024])), start, end)
+    l, r = 1024, len(inp)
+    while l < r:
+        m = (l + r) // 2
+        if nx.has_path(g.subgraph(mapp - set(inp[:m])), start, end):
+            l = m + 1
+        else:
+            r = m
+    yield 2, f"{inp[l - 1].x},{inp[l - 1].y}"
 
 
 if __name__ == "__main__":
