@@ -12,6 +12,7 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     start, end = Vec(0, 0), Vec(70, 70)
     g = nx.Graph()
     for p in mapp:
+        g.add_node(p)
         g.add_edges_from((p, p + d) for d in dirs4 if p + d in mapp)
     yield 1, nx.shortest_path_length(g, start, end)
     for p in inp[1024:]:
