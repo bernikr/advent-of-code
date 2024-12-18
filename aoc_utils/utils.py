@@ -79,6 +79,18 @@ class Vec(tuple[int, ...]):
             raise ValueError(msg)
         return Vec(-self[1], self[0])
 
+    @property
+    def x(self) -> int:
+        return self[0]
+
+    @property
+    def y(self) -> int:
+        return self[1]
+
+    @property
+    def z(self) -> int:
+        return self[2]
+
 
 def create_map(inp: str) -> dict[Vec, str]:
     return {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}
