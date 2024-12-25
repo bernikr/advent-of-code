@@ -1,8 +1,8 @@
+import random
 from collections.abc import Iterable
-from itertools import chain, product
+from itertools import chain, combinations, product
 
 import networkx as nx
-from tqdm import tqdm
 
 INPUT_BIT_LENGTH = 45
 
@@ -48,42 +48,59 @@ def build_ripple_carry_adder(input_bit_length: int) -> nx.DiGraph:
     return nx.relabel_nodes(g, {f"c{input_bit_length - 1:02}": f"z{input_bit_length:02}"}, copy=False)
 
 
-def split_gates(g: nx.DiGraph) -> nx.DiGraph:
-    gates = {n for n, attr in g.nodes.items() if "op" in attr}
-    g = nx.relabel_nodes(g, {n: f">{n}" for n in gates}, copy=False)
-    for n in gates:
-        nn = f">{n}"
-        for neigh in list(g.neighbors(nn)):
-            g.add_edge(n, neigh)
-            g.remove_edge(nn, neigh)
-        g.add_edge(nn, n, inner=True)
-    for n in g.nodes:
-        if n.startswith(("x", "y", "z")):
-            g.nodes[n]["name"] = n
-    return g
-
-
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     inputs, gates = inp.split("\n\n")
     inputs = {a[:3]: a[5] == "1" for a in inputs.splitlines()}
     gates = {a[-3:]: (a[4:-11], a[:3], a[-10:-7]) for a in gates.splitlines()}
     yield 1, sum(1 << int(a[1:]) for a in gates if a[0] == "z" and get_gate_value(a, inputs, gates))
 
+    if len(inputs) // 2 != INPUT_BIT_LENGTH:
+        msg = f"Input does not use {INPUT_BIT_LENGTH}-bit inputs"
+        raise ValueError(msg)
+
+    swaps = set()
+    candidates = set(gates)
+    prev_len = len(candidates)
+    while candidates:
+        while True:
+            candidates = narrow_swap_candidates(gates, candidates, 10)
+            print(len(candidates))
+            i = 0
+            while len(candidates) == prev_len:
+                runs = [50, 100, 500, 1000, -1][i]
+                candidates = narrow_swap_candidates(gates, candidates, runs)
+                i += 1
+                if runs == -1:
+                    break
+            if len(candidates) == prev_len:
+                break
+            prev_len = len(candidates)
+        for a, b in combinations(candidates, 2):
+            candidates = narrow_swap_candidates(gates | {a: gates[b], b: gates[a]}, candidates, 100)
+            if len(candidates) < prev_len:
+                print(f"found {a} and {b}")
+                print(len(candidates))
+                prev_len = len(candidates)
+                gates |= {a: gates[b], b: gates[a]}
+                swaps |= {a, b}
+                break
+    yield 2, ",".join(sorted(swaps))
+
+
+def narrow_swap_candidates(gates: dict[str, tuple[str, str, str]], swap_candidates: set[str], runs: int) -> set[str]:
     g1 = nx.DiGraph()
     for a, (op, b, c) in gates.items():
         g1.add_node(a, op=op)
         g1.add_edge(b, a)
         g1.add_edge(c, a)
-
-    input_bit_length = len(inputs) // 2
-    g2 = build_ripple_carry_adder(input_bit_length)
-
+    g2 = build_ripple_carry_adder(INPUT_BIT_LENGTH)
     xs = {x for x in g1.nodes if x.startswith("x")}
     ys = {y for y in g2.nodes if y.startswith("y")}
     zs = {z for z in g2.nodes if z.startswith("z")}
-
-    swap_candidates = set(gates)
-    for xy, z in tqdm(product(chain(xs, ys), zs)):
+    comb = list(product(chain(xs, ys), zs))
+    random.shuffle(comb)
+    for xy, z in comb[:runs]:
+        p1: list[str]
         for p1, p2 in zip(
                 sorted(nx.all_simple_paths(g1, xy, z), key=len),
                 sorted(nx.all_simple_paths(g2, xy, z), key=len),
@@ -92,7 +109,7 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
                 continue
             if all(g1.nodes[n1]["op"] == g2.nodes[n2]["op"] for n1, n2 in zip(p1[1:], p2[1:])):
                 swap_candidates -= set(p1)
-    print(len(swap_candidates))
+    return swap_candidates
 
 
 if __name__ == "__main__":
