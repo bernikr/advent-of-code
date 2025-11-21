@@ -3,10 +3,11 @@ import importlib
 import inspect
 import io
 import sys
+from collections.abc import Generator
 
 
 @contextlib.contextmanager
-def no_output():  # noqa: ANN201
+def no_output() -> Generator[None]:
     save_stdout = sys.stdout
     sys.stdout = io.StringIO()
     save_stderr = sys.stderr
@@ -16,7 +17,7 @@ def no_output():  # noqa: ANN201
     sys.stderr = save_stderr
 
 
-def solve(year: int, day: int, data: str) -> tuple:
+def solve(year: int, day: int, data: str) -> tuple[str | int, str | int]:
     with no_output():
         mod_name = f"{year}.{day:02}"
         mod = importlib.import_module(mod_name)
@@ -30,6 +31,6 @@ def solve(year: int, day: int, data: str) -> tuple:
             for part, solution in mod.solve(data):
                 sol[part - 1] = solution
                 if all(sol):
-                    return tuple(sol)
+                    return tuple(sol)  # type: ignore[return-value]
 
     raise NotImplementedError
