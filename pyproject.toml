@@ -22,14 +22,13 @@ dependencies = [
     "setuptools>=80.9.0",
     "portion>=2.6.1",
     "cpmpy>=0.9.28",
-    "aoc-utils",
     "networkx>=3.5",
     "more-itertools>=10.8.0",
 ]
 
 [dependency-groups]
 dev = [
-    "advent-of-code",
+    "mypy>=1.18.2",
     "ruff>=0.8.1",
 ]
 
@@ -50,12 +49,11 @@ ignore = [
     "PLR2004", # Magic value used in comparison
 ]
 
-[tool.uv.sources]
-aoc-utils = { workspace = true }
-advent-of-code = { workspace = true }
-
-[tool.uv.workspace]
-members = ["aoc_utils"]
-
 [project.entry-points."adventofcode.user"]
 bernikr = "aoc_runner.entrypoint:solve"
+
+[tool.mypy]
+strict = true
+local_partial_types = true
+allow_redefinition = true
+allow_redefinition_new = true
