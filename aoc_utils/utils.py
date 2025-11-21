@@ -11,84 +11,86 @@ from itertools import islice, product
 from math import sqrt
 from typing import Literal, Self
 
-import portion
+import portion  # type: ignore[import-untyped]
 
 
-class Vec(tuple[int, ...]):
+class Vec[T: int | float = int](tuple[T, ...]):
     __slots__ = ()
 
-    def __new__(cls, *args: float | Iterable[float]) -> Self:
+    def __new__(cls, *args: T | Iterable[T]) -> Self:
         if len(args) == 1 and isinstance(args[0], Iterable):
             return super().__new__(cls, args[0])
-        return super().__new__(cls, args)
+        return super().__new__(cls, args)  # type: ignore[arg-type]
 
-    def __add__(self, other: tuple[float, ...]) -> Vec:
+    def __add__(self, other: tuple[T, ...]) -> Vec[T]:  # type: ignore[override]
         if self.__len__() == other.__len__() == 2:  # performance optimization for 2D vectors
-            return tuple.__new__(Vec, (self[0] + other[0], self[1] + other[1]))  # type: ignore[return-value]
+            return tuple.__new__(Vec, (self[0] + other[0], self[1] + other[1]))  # type: ignore[operator]
         if len(self) != len(other):
             msg = "Adding vectors of different dimensions is not supported"
             raise ValueError(msg)
         return Vec(map(operator.add, self, other))
 
-    def __sub__(self, other: tuple[float, ...]) -> Vec:
+    def __sub__(self, other: tuple[float, ...]) -> Vec[T]:
         if len(self) != len(other):
             msg = "Subtracting vectors of different dimensions is not supported"
             raise ValueError(msg)
         return Vec(map(operator.sub, self, other))
 
-    def __mul__(self, other: float) -> Vec:
+    def __mul__(self, other: T) -> Vec[T]:  # type: ignore[override]
         if isinstance(other, int | float):
-            return Vec(x * other for x in self)
+            return Vec(x * other for x in self)  # type: ignore[misc, operator]
         raise NotImplementedError
 
-    def __rmul__(self, other: float) -> Vec:
+    def __rmul__(self, other: T) -> Vec[T]:  # type: ignore[override]
         if isinstance(other, int | float):
-            return Vec(x * other for x in self)
+            return Vec(x * other for x in self)  # type: ignore[misc, operator]
         raise NotImplementedError
 
-    def __truediv__(self, other: float) -> Vec:
-        if isinstance(other, int | float):
+    def __truediv__(self, other: float) -> Vec[float]:
+        if isinstance(other, int):
             return Vec(x // other if x % other == 0 else x / other for x in self)
+        if isinstance(other, float):
+            return Vec(x / other for x in self)
         raise NotImplementedError
 
     def __abs__(self) -> float:
-        return sqrt(sum(x * x for x in self))
+        return sqrt(sum(x * x for x in self))  # type: ignore[misc, operator]
 
-    def pos_mod(self, other: int | Vec) -> Vec:
+    def pos_mod(self, other: int | Vec[int]) -> Vec[int]:
         if isinstance(other, int):
             other = Vec((other,) * len(self))
         if isinstance(other, Vec):
             if len(self) != len(other):
                 msg = "Modulo of vectors of different dimensions is not supported"
                 raise ValueError(msg)
-            return Vec(map(lambda s, o: (s % o + o) % o, self, other))
+            return Vec(map(lambda s, o: (s % o + o) % o, self, other))  # type: ignore[return-value, arg-type]
         raise NotImplementedError
 
-    def manhatten(self) -> float:
-        return sum(abs(x) for x in self)
+    def manhatten(self) -> T:
+        return sum(abs(x) for x in self)  # type: ignore[misc, return-value]
 
-    def turn_left(self) -> Vec:
+    def turn_left(self) -> Vec[T]:
         if len(self) != 2:
             msg = "Turning left is only defined for 2D vectors"
             raise ValueError(msg)
         return Vec(self[1], -self[0])
 
-    def turn_right(self) -> Vec:
+    def turn_right(self) -> Vec[T]:
         if len(self) != 2:
             msg = "Turning right is only defined for 2D vectors"
             raise ValueError(msg)
-        return Vec(-self[1], self[0])
+        return Vec(-self[1], self[0])  # type: ignore[arg-type]
 
     @property
-    def x(self) -> int:
+    def x(self) -> T:
         return self[0]
 
     @property
-    def y(self) -> int:
+    def y(self) -> T:
         return self[1]
 
     @property
-    def z(self) -> int:
+    def z(self) -> T:
         return self[2]
 
 
@@ -123,25 +125,28 @@ class Matrix(tuple[tuple[int, ...], ...]):
 
     def __new__(cls, *args: tuple[int, ...] | Iterable[tuple[int, ...]]) -> Self:
         if len(args) == 1 and isinstance(args[0], Iterable):
-            return super().__new__(cls, args[0])
-        return super().__new__(cls, args)
+            return super().__new__(cls, args[0])  # type: ignore[arg-type]
+        return super().__new__(cls, args)  # type: ignore[arg-type]
 
-    def __add__(self, other: Matrix) -> Matrix:
+    def __add__(self, other: Matrix) -> Matrix:  # type: ignore[override]
         raise NotImplementedError
 
-    def __mul__[T: Vec | Matrix](self, other: T) -> T:
+    def __mul__[T: Vec | Matrix](self, other: T) -> T:  # type: ignore[override]
         if isinstance(other, Vec):
-            return Vec(sum(a * b for a, b in zip(row, other)) for row in self)
+            return Vec(sum(a * b for a, b in zip(row, other)) for row in self)  # type: ignore[return-value]
         if isinstance(other, Matrix):
             if len(self[0]) != len(other):
                 msg = "Matrix dimensions do not match"
                 raise ValueError(msg)
-            return Matrix(tuple(sum(s_row[i] * other[i][column_i] for i in range(len(other)))
-                                for column_i in range(len(other[0])))
-                          for s_row in self)
+            return Matrix(
+                tuple(
+                    sum(s_row[i] * other[i][column_i] for i in range(len(other))) for column_i in range(len(other[0]))
+                )
+                for s_row in self
+            )  # type: ignore[return-value]
         raise NotImplementedError
 
-    def __rmul__(self, other: Matrix) -> Matrix:
+    def __rmul__(self, other: Matrix) -> Matrix:  # type: ignore[override]
         raise NotImplementedError
 
 
@@ -165,8 +170,10 @@ class Box:
         return f"Box{{{self.lower}...{self.upper}}}"
 
     def overlaps(self, other: Box) -> bool:
-        return all(sl <= ol <= su or sl <= ou <= su or ol <= sl <= ou or ol <= su <= ou
-                   for sl, su, ol, ou in zip(self.lower, self.upper, other.lower, other.upper))
+        return all(
+            sl <= ol <= su or sl <= ou <= su or ol <= sl <= ou or ol <= su <= ou
+            for sl, su, ol, ou in zip(self.lower, self.upper, other.lower, other.upper)
+        )
 
     def is_empty(self) -> bool:
         return all(sl == math.inf and su == -math.inf for sl, su in zip(self.lower, self.upper))
@@ -179,7 +186,7 @@ class Box:
         raise NotImplementedError
 
     def size(self) -> float:
-        return reduce(operator.mul, map(lambda l, u: u - l + 1, self.lower, self.upper))
+        return reduce(operator.mul, map(lambda l, u: u - l + 1, self.lower, self.upper))  # type: ignore[no-any-return]
 
 
 def nth[T](iterable: Iterable[T], n: int) -> T:
@@ -196,9 +203,26 @@ def ocr(m: set[tuple[int, int]]) -> str:
     for i in range(0, mx + 1, 5):
         v = int("".join("1" if (i + x, y) in m else "0" for y in range(6) for x in range(4)), 2)
         try:
-            s += {6922137: "A", 15329694: "B", 6916246: "C", 16312463: "E", 16312456: "F", 6917015: "G", 10090905: "H",
-                  7479847: "I", 3215766: "J", 10144425: "K", 8947855: "L", 6920598: "O", 15310472: "P", 15310505: "R",
-                  7898654: "S", 10066326: "U", 8933922: "Y", 15803535: "Z"}[v]
+            s += {
+                6922137: "A",
+                15329694: "B",
+                6916246: "C",
+                16312463: "E",
+                16312456: "F",
+                6917015: "G",
+                10090905: "H",
+                7479847: "I",
+                3215766: "J",
+                10144425: "K",
+                8947855: "L",
+                6920598: "O",
+                15310472: "P",
+                15310505: "R",
+                7898654: "S",
+                10066326: "U",
+                8933922: "Y",
+                15803535: "Z",
+            }[v]
         except KeyError as e:
             letter = "\n".join("".join("▓" if (i + x, y) in m else " " for x in range(4)) for y in range(6))
             print(f"Unknown Letter with id {v}:\n\n{letter}")
@@ -216,10 +240,21 @@ def ocr10(m: set[tuple[int, int]]) -> str:
     for i in range(0, mx + 1, 8):
         v = int("".join("1" if (i + x, y) in m else "0" for y in range(10) for x in range(6)), 2)
         try:
-            s += {221386771471407201: "A", 1126328852231362686: "B", 549863600932653150: "C", 1144057308981102655: "E",
-                  549863601050360029: "G", 603911296530126945: "H", 126672675233474716: "J", 604206430830086305: "K",
-                  585610922974906431: "L", 1126328852214319136: "P", 1126328852281960545: "R", 603844239923161185: "X",
-                  1135193120993052735: "Z"}[v]
+            s += {
+                221386771471407201: "A",
+                1126328852231362686: "B",
+                549863600932653150: "C",
+                1144057308981102655: "E",
+                549863601050360029: "G",
+                603911296530126945: "H",
+                126672675233474716: "J",
+                604206430830086305: "K",
+                585610922974906431: "L",
+                1126328852214319136: "P",
+                1126328852281960545: "R",
+                603844239923161185: "X",
+                1135193120993052735: "Z",
+            }[v]
         except KeyError as e:
             letter = "\n".join("".join("▓" if (i + x, y) in m else " " for x in range(6)) for y in range(10))
             print(f"Unknown Letter with id {v}:\n\n{letter}")
@@ -267,24 +302,23 @@ def reconstruct_paths[T](predecessors: dict[T, Collection[T]], goal: T) -> Itera
 
 
 def a_star[T](  # noqa: C901, PLR0912
-        start: T | dict[T, float] | list[T] | set[T],
-        is_goal: T | Callable[[T], bool],
-        get_neighbors: Callable[[T], Iterable[T | tuple[T, float]]],
-        h: Callable[[T], float] = lambda _: 0,  # h is 0 by default to use Dijkstra if no h is supplied
-        d: Callable[[T, T], float] | None = None,
+    start: T | dict[T, float] | list[T] | set[T],
+    is_goal: T | Callable[[T], bool],
+    get_neighbors: Callable[[T], Iterable[T | tuple[T, float]]],
+    h: Callable[[T], float] = lambda _: 0,  # h is 0 by default to use Dijkstra if no h is supplied
+    d: Callable[[T, T], float] | None = None,
 ) -> tuple[dict[T, set[T]], float]:
-
     if not callable(is_goal):  # if goal is not a lambda, create a simple equals lambda
         goal = is_goal
         is_goal = lambda x: x == goal
 
     if d is not None:  # if d is not supplied, expect get_neighbors to yield (state, distance)
         get_neighbors_without_distance = get_neighbors
-        get_neighbors = lambda x: ((n, d(x, n)) for n in get_neighbors_without_distance(x))
+        get_neighbors = lambda x: ((n, d(x, n)) for n in get_neighbors_without_distance(x))  # type: ignore[misc, arg-type]
 
-    open_set = PriorityQueue()
-    g_score = defaultdict(lambda: math.inf)
-    predecessors = defaultdict(set)
+    open_set = PriorityQueue[T]()
+    g_score = defaultdict[T, float](lambda: math.inf)
+    predecessors = defaultdict[T, set[T]](set)
     seen = set()
 
     if isinstance(start, dict):  # if start is a dict, it can supply starting distances
@@ -309,7 +343,7 @@ def a_star[T](  # noqa: C901, PLR0912
         if is_goal(current):
             return dict(predecessors), g_score[current]
 
-        for neighbor, distance in get_neighbors(current):
+        for neighbor, distance in get_neighbors(current):  # type: ignore[misc]
             tentative_g_score = g_score[current] + distance
             if tentative_g_score <= g_score[neighbor]:
                 predecessors[neighbor].add(current)
@@ -321,40 +355,45 @@ def a_star[T](  # noqa: C901, PLR0912
 
 
 class CircularList[T](UserList[T]):
-    def __getitem__(self, key: int | slice) -> T | list[T]:
+    def __getitem__(self, key: int | slice) -> T | list[T]:  # type: ignore[override]
         if isinstance(key, int):
             return super().__getitem__(key % len(self))
         if isinstance(key, slice):
-            return [self[i] for i in range(
-                key.start if key.start is not None else 0,
-                key.stop if key.stop is not None else len(self),
-                key.step if key.step is not None else 1,
-            )]
+            return [
+                self[i]  # type: ignore[misc]
+                for i in range(
+                    key.start if key.start is not None else 0,
+                    key.stop if key.stop is not None else len(self),
+                    key.step if key.step is not None else 1,
+                )
+            ]
         raise NotImplementedError
 
-    def __setitem__(self, key: int | slice, value: T | list[T]) -> None:
+    def __setitem__(self, key: int | slice, value: T | list[T]) -> None:  # type: ignore[override]
         if isinstance(key, int):
-            super().__setitem__(key % len(self), value)
+            super().__setitem__(key % len(self), value)  # type: ignore[assignment]
         elif isinstance(key, slice):
-            keys = list(range(
-                key.start if key.start is not None else 0,
-                key.stop if key.stop is not None else len(self),
-                key.step if key.step is not None else 1,
-            ))
-            if len(keys) != len(value):
+            keys = list(
+                range(
+                    key.start if key.start is not None else 0,
+                    key.stop if key.stop is not None else len(self),
+                    key.step if key.step is not None else 1,
+                ),
+            )
+            if len(keys) != len(value):  # type: ignore[arg-type]
                 msg = "CircularList: Replacing slices of different length is currently not implemented"
                 raise NotImplementedError(msg)
-            for k, v in zip(keys, value):
+            for k, v in zip(keys, value):  # type: ignore[arg-type]
                 self[k] = v
         else:
             raise NotImplementedError
 
 
 def sign(x: float) -> Literal[0, 1, -1]:
-    return x and (1, -1)[x < 0]
+    return x and (1, -1)[x < 0]  # type: ignore[return-value]
 
 
-class IntInterval(portion.AbstractDiscreteInterval):
+class IntInterval(portion.AbstractDiscreteInterval):  # type: ignore[misc]
     _step = 1
 
 

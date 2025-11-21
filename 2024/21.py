@@ -5,13 +5,13 @@ from functools import cache
 import networkx as nx
 from tqdm import tqdm
 
-from aoc_utils import DOWN, LEFT, RIGHT, UP, create_map
+from aoc_utils import DOWN, LEFT, RIGHT, UP, Vec, create_map
 
 
-def parse_pad(pad: str) -> nx.DiGraph:
+def parse_pad(pad: str) -> nx.DiGraph[str]:
     dirs = {"^": UP, "v": DOWN, "<": LEFT, ">": RIGHT}
-    pad = {p: c for p, c in create_map(pad).items() if c != " "}
-    g = nx.DiGraph()
+    pad: dict[Vec, str] = {p: c for p, c in create_map(pad).items() if c != " "}
+    g = nx.DiGraph[str]()
     for p, c in pad.items():
         for dc, d in dirs.items():
             if (np := p + d) in pad:

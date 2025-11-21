@@ -2,14 +2,14 @@ from collections.abc import Iterable
 
 import networkx as nx
 
-from aoc_utils import RIGHT, create_map, dirs4
+from aoc_utils import RIGHT, Vec, create_map, dirs4
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     mapp = create_map(inp)
     start = next(p for p, c in mapp.items() if c == "S"), RIGHT
     ends = [(next(p for p, c in mapp.items() if c == "E"), d) for d in dirs4]
-    g = nx.DiGraph()
+    g = nx.DiGraph[tuple[Vec, Vec] | object]()
     for p, c in mapp.items():
         if c != "#":
             g.add_weighted_edges_from(((p, d), (p + d, d), 1) for d in dirs4 if mapp.get(p + d, "#") != "#")
@@ -17,9 +17,9 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
             g.add_weighted_edges_from(((p, d), (p, d.turn_right()), 1000) for d in dirs4)
     end = object()
     g.add_weighted_edges_from((e, end, 0) for e in ends)
-    yield 1, nx.shortest_path_length(g, start, end, weight="weight")
+    yield 1, int(nx.shortest_path_length(g, start, end, weight="weight"))
     paths = nx.all_shortest_paths(g, start, end, weight="weight")
-    yield 2, len({p for path in paths for p, _ in path[:-1]})
+    yield 2, len({p for path in paths for p, _ in path[:-1]})  # type: ignore[misc, has-type]
 
 
 if __name__ == "__main__":

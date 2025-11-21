@@ -16,16 +16,16 @@ def step(x: int) -> int:
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    inp = [int(x) for x in inp.splitlines()]
+    inp: list[int] = [int(x) for x in inp.splitlines()]
     sequences = [list(accumulate(range(2000), lambda x, _: step(x), initial=i)) for i in tqdm(inp)]
     yield 1, sum(s[-1] for s in sequences)
 
-    c = Counter()
+    c = Counter[tuple[int, ...]]()
     for s in tqdm(sequences):
         prices = [x % 10 for x in s]
         diffs = [b - a for a, b in pairwise(prices)]
         found = set()
-        for w, p in zip(windowed(diffs, 4), prices[4:], strict=True):
+        for w, p in zip(windowed(diffs, 4, fillvalue=0), prices[4:], strict=True):
             if w not in found:
                 found.add(w)
                 c[w] += p

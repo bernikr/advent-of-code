@@ -21,8 +21,8 @@ def get_gate_value(wire: str, inputs: dict[str, bool], gate: dict[str, tuple[str
     raise NotImplementedError(msg)
 
 
-def build_ripple_carry_adder(input_bit_length: int) -> nx.DiGraph:
-    g = nx.DiGraph()
+def build_ripple_carry_adder(input_bit_length: int) -> nx.DiGraph[str]:
+    g = nx.DiGraph[str]()
 
     # half-adder for bit 0
     g.add_node("z00", op="XOR")
@@ -88,7 +88,7 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
 
 
 def narrow_swap_candidates(gates: dict[str, tuple[str, str, str]], swap_candidates: set[str], runs: int) -> set[str]:
-    g1 = nx.DiGraph()
+    g1 = nx.DiGraph[str]()
     for a, (op, b, c) in gates.items():
         g1.add_node(a, op=op)
         g1.add_edge(b, a)
@@ -102,8 +102,8 @@ def narrow_swap_candidates(gates: dict[str, tuple[str, str, str]], swap_candidat
     for xy, z in comb[:runs]:
         p1: list[str]
         for p1, p2 in zip(
-                sorted(nx.all_simple_paths(g1, xy, z), key=len),
-                sorted(nx.all_simple_paths(g2, xy, z), key=len),
+            sorted(nx.all_simple_paths(g1, xy, z), key=len),
+            sorted(nx.all_simple_paths(g2, xy, z), key=len),
         ):
             if len(p1) != len(p2):
                 continue

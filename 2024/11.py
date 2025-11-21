@@ -5,13 +5,13 @@ from collections.abc import Iterable
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     state = Counter(int(x) for x in inp.split())
     for i in range(75):
-        new_state = Counter()
+        new_state: Counter[int] = Counter()
         for num, count in state.items():
             if num == 0:
                 new_state[1] += count
             elif (l := len(str(num))) % 2 == 0:
-                new_state[int(str(num)[:l // 2])] += count
-                new_state[int(str(num)[l // 2:])] += count
+                new_state[int(str(num)[: l // 2])] += count
+                new_state[int(str(num)[l // 2 :])] += count
             else:
                 new_state[num * 2024] += count
         state = new_state

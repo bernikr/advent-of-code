@@ -11,12 +11,15 @@ def is_valid(rules: Sequence[Sequence[int]], pages: Sequence[int]) -> bool:
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    rules, pages = ([tuple(map(int, l.replace("|", ",").split(","))) for l in s.splitlines()]
-                    for s in inp.split("\n\n"))
+    rules, pages = (
+        [tuple(map(int, l.replace("|", ",").split(","))) for l in s.splitlines()] for s in inp.split("\n\n")
+    )
     yield 1, sum(x[len(x) // 2] for x in pages if is_valid(rules, x))
     rules_graph = nx.DiGraph(rules)
-    yield 2, sum(list(nx.topological_sort(rules_graph.subgraph(x)))[len(x) // 2]
-                 for x in pages if not is_valid(rules, x))
+    yield (
+        2,
+        sum(list(nx.topological_sort(rules_graph.subgraph(x)))[len(x) // 2] for x in pages if not is_valid(rules, x)),
+    )
 
 
 if __name__ == "__main__":

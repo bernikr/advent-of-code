@@ -1,9 +1,11 @@
 import re
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    part1 = lambda x: sum(int(a) * int(b) for a, b in re.findall(r"mul\((\d{1,3}),(\d{1,3})\)", x))
+    part1: Callable[[str], int] = lambda x: sum(
+        int(a) * int(b) for a, b in re.findall(r"mul\((\d{1,3}),(\d{1,3})\)", x)
+    )
     yield 1, part1(inp)
     yield 2, part1(" ".join(a.split("don't()")[0] for a in inp.split("do()")))
 

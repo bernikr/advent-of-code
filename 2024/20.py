@@ -13,7 +13,7 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     mapp = create_map(inp)
     start = next(p for p, c in mapp.items() if c == "S")
     end = next(p for p, c in mapp.items() if c == "E")
-    g = nx.Graph()
+    g = nx.Graph[Vec]()
     for p, c in mapp.items():
         if c != "#":
             g.add_edges_from((p, p + d) for d in dirs4 if mapp.get(p + d, "#") != "#")
@@ -28,7 +28,7 @@ def dists(dist: int) -> list[Vec]:
 
 
 def count_cheats(path: list[Vec], cheat_time: int) -> int:
-    counts = Counter()
+    counts = Counter[float]()
     indecies = {p: i for i, p in enumerate(path)}
     for i, p in enumerate(tqdm(path)):
         for d in dists(cheat_time):

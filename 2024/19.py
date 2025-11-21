@@ -1,4 +1,4 @@
-from collections.abc import Collection, Iterable
+from collections.abc import Iterable
 from functools import cache
 
 
@@ -11,10 +11,10 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
 
 
 @cache
-def check_pattern(pattern: str, towels: Collection[str]) -> int:
+def check_pattern(pattern: str, towels: frozenset[str]) -> int:
     if len(pattern) == 0:
         return 1
-    return sum(pattern.startswith(t) and check_pattern(pattern[len(t):], towels) for t in towels)
+    return sum(check_pattern(pattern[len(t) :], towels) for t in towels if pattern.startswith(t))
 
 
 if __name__ == "__main__":

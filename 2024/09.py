@@ -4,7 +4,7 @@ from typing import Literal
 from more_itertools import grouper
 
 
-def get_length(store: list[int], pointer: int, direction: Literal[-1, 1]) -> int:
+def get_length(store: list[int | None], pointer: int, direction: Literal[-1, 1]) -> int:
     c = store[pointer]
     i = 0
     while 0 <= pointer + direction * i < len(store) and store[pointer + direction * i] == c:
@@ -33,13 +33,15 @@ def part2(storage: list[int | None]) -> int:
         if storage[fpointer] is None:
             fpointer -= 1
         file_length = get_length(storage, fpointer, -1)
-        while (free[file_length] < fpointer and
-               (storage[free[file_length]] is not None or get_length(storage, free[file_length], 1) < file_length)):
+        while free[file_length] < fpointer and (
+            storage[free[file_length]] is not None or get_length(storage, free[file_length], 1) < file_length
+        ):
             free[file_length] += get_length(storage, free[file_length], 1)
         if free[file_length] < fpointer:
-            storage[free[file_length]:free[file_length] + file_length] \
-                = storage[fpointer - file_length + 1:fpointer + 1]
-            storage[fpointer - file_length + 1:fpointer + 1] = [None] * file_length
+            storage[free[file_length] : free[file_length] + file_length] = storage[
+                fpointer - file_length + 1 : fpointer + 1
+            ]
+            storage[fpointer - file_length + 1 : fpointer + 1] = [None] * file_length
         fpointer -= file_length
     return sum(i * x for i, x in enumerate(storage) if x is not None)
 
