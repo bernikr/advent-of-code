@@ -12,19 +12,25 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "frozendict>=2.1.1",
-    "tqdm>=4.62.3",
-    "sympy>=1.9",
-    "numpy>=1.26.0",
-    "scipy>=1.11.0",
-    "regex>=2022.10.31",
-    "advent-of-code-data>=1.3.2",
-    "setuptools>=57.0.0",
-    "portion>=2.4.1",
-    "cpmpy>=0.9.23",
+    "frozendict>=2.4.7",
+    "tqdm>=4.67.1",
+    "sympy>=1.14.0",
+    "numpy>=2.3.5",
+    "scipy>=1.16.3",
+    "regex>=2025.11.3",
+    "advent-of-code-data>=2.1.0",
+    "setuptools>=80.9.0",
+    "portion>=2.6.1",
+    "cpmpy>=0.9.28",
     "aoc-utils",
-    "networkx>=3.4.2",
-    "more-itertools>=10.5.0",
+    "networkx>=3.5",
+    "more-itertools>=10.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "advent-of-code",
+    "ruff>=0.8.1",
 ]
 
 [tool.ruff]
@@ -42,12 +48,6 @@ ignore = [
     "T20", # flake8-print
     "B905", # zip without explicit `strict=` parameter
     "PLR2004", # Magic value used in comparison
-]
-
-[tool.uv]
-dev-dependencies = [
-    "advent-of-code",
-    "ruff>=0.8.1",
 ]
 
 [tool.uv.sources]
