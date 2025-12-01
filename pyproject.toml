@@ -15,15 +15,15 @@ dependencies = [
     "setuptools>=80.9.0",
     "portion>=2.6.1",
     "cpmpy>=0.9.28",
-    "networkx>=3.5",
+    "networkx>=3.6",
     "more-itertools>=10.8.0",
 ]
 
 [dependency-groups]
 dev = [
-    "mypy>=1.18.2",
-    "ruff>=0.8.1",
-    "types-networkx>=3.5.0.20251106",
+    "mypy>=1.19.0",
+    "ruff>=0.14.7",
+    "types-networkx>=3.6.0.20251127",
     "types-tqdm>=4.67.0.20250809",
 ]
 
