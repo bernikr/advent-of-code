@@ -9,7 +9,7 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     mapp = create_map(inp)
     start = next(p for p, c in mapp.items() if c == "S"), RIGHT
     ends = [(next(p for p, c in mapp.items() if c == "E"), d) for d in dirs4]
-    g = nx.DiGraph[tuple[Vec, Vec] | object]()
+    g: nx.DiGraph[tuple[Vec, Vec] | object] = nx.DiGraph()
     for p, c in mapp.items():
         if c != "#":
             g.add_weighted_edges_from(((p, d), (p + d, d), 1) for d in dirs4 if mapp.get(p + d, "#") != "#")

@@ -7,6 +7,7 @@ from functools import reduce
 from itertools import count
 from statistics import variance
 
+from aocd import extra
 from more_itertools import grouper
 from tqdm import tqdm
 
@@ -14,12 +15,24 @@ from aoc_utils import Vec, sign
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    inp = [tuple(Vec(p) for p in grouper(map(int, x), 2))
-           for x in re.findall(r"p=(-?\d+),(-?\d+) v=(-?\d+),(-?\d+)", inp)]
-    floor_size = Vec(101, 103)
+    inp = [
+        tuple(Vec(p) for p in grouper(map(int, x), 2)) for x in re.findall(r"p=(-?\d+),(-?\d+) v=(-?\d+),(-?\d+)", inp)
+    ]
+    floor_size = Vec(extra.get("width", 101), extra.get("height", 103))
     middle = (floor_size - Vec(1, 1)) / 2
-    yield 1, reduce(operator.mul, (c for d, c in Counter(tuple(map(sign, (p + 100 * v).pos_mod(floor_size) - middle))
-                                                         for p, v in inp).items() if all(x != 0 for x in d)))
+    yield (
+        1,
+        reduce(
+            operator.mul,
+            (
+                c
+                for d, c in Counter(
+                    tuple(map(sign, (p + 100 * v).pos_mod(floor_size) - middle)) for p, v in inp
+                ).items()
+                if all(x != 0 for x in d)
+            ),
+        ),
+    )
 
     # assumes that the tree is the configuration with the smallest variance
     variance_record = math.inf

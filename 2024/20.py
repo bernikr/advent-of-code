@@ -4,16 +4,19 @@ from functools import cache
 from itertools import product
 
 import networkx as nx
+from aocd import extra
 from tqdm import tqdm
 
 from aoc_utils import Vec, create_map, dirs4
+
+dt_min = extra.get("dt_min", 100)
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     mapp = create_map(inp)
     start = next(p for p, c in mapp.items() if c == "S")
     end = next(p for p, c in mapp.items() if c == "E")
-    g = nx.Graph[Vec]()
+    g: nx.Graph[Vec] = nx.Graph()
     for p, c in mapp.items():
         if c != "#":
             g.add_edges_from((p, p + d) for d in dirs4 if mapp.get(p + d, "#") != "#")
@@ -34,7 +37,7 @@ def count_cheats(path: list[Vec], cheat_time: int) -> int:
         for d in dists(cheat_time):
             if (a := indecies.get(p + d, -1) - i - d.manhatten()) > 0:
                 counts[a] += 1
-    return sum(c for x, c in counts.items() if x >= 100)
+    return sum(c for x, c in counts.items() if x >= dt_min)
 
 
 if __name__ == "__main__":
