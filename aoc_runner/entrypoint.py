@@ -17,20 +17,30 @@ def no_output() -> Generator[None]:
     sys.stderr = save_stderr
 
 
-def solve(year: int, day: int, data: str) -> tuple[str | int, str | int]:
+def solve(year: int, day: int, data: str) -> tuple[str | int | None, str | int | None]:
     with no_output():
         mod_name = f"{year}.{day:02}"
         mod = importlib.import_module(mod_name)
 
         if len(inspect.signature(mod.solve).parameters) == 2:
-            a = mod.solve(data, True)  # noqa: FBT003
-            b = mod.solve(data, False)  # noqa: FBT003
+            try:
+                a = mod.solve(data, True)  # noqa: FBT003
+            except:  # noqa: E722
+                a = None
+            try:
+                b = mod.solve(data, False)  # noqa: FBT003
+            except:  # noqa: E722
+                b = None
             return a, b
         if len(inspect.signature(mod.solve).parameters) == 1:
             sol = [None, None]
-            for part, solution in mod.solve(data):
-                sol[part - 1] = solution
-                if all(sol):
-                    return tuple(sol)  # type: ignore[return-value]
+            try:
+                for part, solution in mod.solve(data):
+                    sol[part - 1] = solution
+                    if all(sol):
+                        break
+            except:  # noqa: E722, S110
+                pass
+            return tuple(sol)  # type: ignore[return-value]
 
     raise NotImplementedError
