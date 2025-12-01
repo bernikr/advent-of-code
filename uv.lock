@@ -40,6 +40,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "advent-of-code" },
     { name = "advent-of-code-data", specifier = ">=2.1.0" },
     { name = "cpmpy", specifier = ">=0.9.28" },
     { name = "frozendict", specifier = ">=2.4.7" },

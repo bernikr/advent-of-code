@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "advent-of-code",
     "frozendict>=2.4.7",
     "tqdm>=4.67.1",
     "sympy>=1.14.0",
@@ -33,9 +34,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages]
 find = { }
-
-[tool.uv]
-package = true
 
 [tool.ruff]
 line-length = 120
