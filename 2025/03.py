@@ -5,8 +5,7 @@ def max_jolts(bank: list[int], digits: int) -> int:
     if digits == 1:
         return max(bank)
     digit = max(bank[: -(digits - 1)])
-    index = bank[: -(digits - 1)].index(digit)
-    return (digit * int(10 ** (digits - 1))) + max_jolts(bank[index + 1 :], digits - 1)
+    return (digit * int(10 ** (digits - 1))) + max_jolts(bank[bank.index(digit) + 1 :], digits - 1)
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
