@@ -398,3 +398,20 @@ class IntInterval(portion.AbstractDiscreteInterval):  # type: ignore[misc]
 
 
 portion_integer = portion.create_api(IntInterval)
+
+
+# helpers for typechecking tuples
+def tuple2[T](x: Iterable[T]) -> tuple[T, T]:
+    x = tuple(x)
+    if len(x) != 2:
+        msg = "Expected a tuple of length 2"
+        raise ValueError(msg)
+    return x
+
+
+def tuple3[T](x: Iterable[T]) -> tuple[T, T, T]:
+    x = tuple(x)
+    if len(x) != 3:
+        msg = "Expected a tuple of length 3"
+        raise ValueError(msg)
+    return x

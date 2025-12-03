@@ -1,5 +1,6 @@
 from collections.abc import Iterable
-from typing import cast
+
+from aoc_utils import tuple2
 
 
 def is_valid(x: int) -> bool:
@@ -19,7 +20,7 @@ def is_valid2(x: int) -> bool:
 
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
-    inp: list[tuple[int, int]] = [cast("tuple[int, int]", tuple(map(int, a.split("-")))) for a in inp.split(",")]
+    inp: list[tuple[int, int]] = [tuple2(map(int, a.split("-"))) for a in inp.split(",")]
     yield 1, sum(i for a, b in inp for i in range(a, b + 1) if not is_valid(i))
     yield 2, sum(i for a, b in inp for i in range(a, b + 1) if not is_valid2(i))
 
