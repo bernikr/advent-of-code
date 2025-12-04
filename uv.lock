@@ -81,11 +81,11 @@ wheels = [
 
 [[package]]
 name = "aocd-example-parser"
-version = "2025.12.1"
+version = "2025.12.4"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ce/99/a7b5f6920c4c37c4ab1e3a7f1e08232be5fae7270849e8b07e16d85ed729/aocd_example_parser-2025.12.1.tar.gz", hash = "sha256:a553fb0ed619d3328245d64d0e439ade8fcef2184b3f4a08360716ec5a401dc3", size = 14790, upload-time = "2025-12-01T06:13:01.377Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d3/c9/95240e094c82e240c5b4beb849755fec753e79f1cccfdb46a3467b38fc90/aocd_example_parser-2025.12.4.tar.gz", hash = "sha256:6f809bf1ba7220516d1d5bfda69e036df6aea5301878b33f13a8aa9e20b8671b", size = 14787, upload-time = "2025-12-04T05:27:19.877Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/21/014ae4ab7ec0bb661b05c314f1b9c4782c09ee8106454a8c1324954ce9c3/aocd_example_parser-2025.12.1-py3-none-any.whl", hash = "sha256:9180ef01a9962e9783a67dffe3a197fb9d708c95c7768ba435b4c5f6e73f45a2", size = 13195, upload-time = "2025-12-01T06:13:00.204Z" },
+    { url = "https://files.pythonhosted.org/packages/04/d8/857e1a8bfeab9738e8cd686b56dcd3617c1e2caef03319ada644876703b2/aocd_example_parser-2025.12.4-py3-none-any.whl", hash = "sha256:e031f030940e9919f29b4236ec8800eb3ac6677da06de49d0ee5a3249b10cc7c", size = 13199, upload-time = "2025-12-04T05:27:18.98Z" },
 ]
 
 [[package]]
