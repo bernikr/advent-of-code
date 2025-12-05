@@ -10,14 +10,14 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
 
     yield 1, sum(1 for i in items if any(a <= i <= b for a, b in ranges))
 
-    s, minn, maxx = 0, 0, -1
-    for a, b in sorted(ranges):
-        if a > maxx:
-            s += maxx - minn + 1
-            minn, maxx = a, b
-        else:
-            maxx = max(maxx, b)
-    s += maxx - minn + 1
+    s, minn, maxx = 0, 0, -1  # max set to -1 to prevent adding initial 0
+    for a, b in sorted(ranges):  # intervals sorted by start
+        if a > maxx:  # if next interval does not overlap with current
+            s += maxx - minn + 1  # add length of current interval
+            minn, maxx = a, b  # start new interval
+        else:  # if next interval overlaps with current
+            maxx = max(maxx, b)  # extend current interval if needed
+    s += maxx - minn + 1  # add last interval
     yield 2, s
 
 
