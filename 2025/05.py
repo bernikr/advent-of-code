@@ -1,9 +1,4 @@
-import operator
 from collections.abc import Iterable
-from functools import reduce
-from itertools import starmap
-
-import portion  # type: ignore[import-untyped]
 
 from aoc_utils import tuple2
 
@@ -14,7 +9,16 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     items: list[int] = list(map(int, items.splitlines()))
 
     yield 1, sum(1 for i in items if any(a <= i <= b for a, b in ranges))
-    yield 2, sum(r.upper - r.lower + 1 for r in reduce(operator.or_, starmap(portion.closed, ranges)))
+
+    s, minn, maxx = 0, 0, -1
+    for a, b in sorted(ranges):
+        if a > maxx:
+            s += maxx - minn + 1
+            minn, maxx = a, b
+        else:
+            maxx = max(maxx, b)
+    s += maxx - minn + 1
+    yield 2, s
 
 
 if __name__ == "__main__":
