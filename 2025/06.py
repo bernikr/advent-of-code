@@ -5,13 +5,13 @@ from functools import reduce
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     inp1 = [l.split() for l in inp.splitlines()]
-    numbers: list[list[int]] = [list(map(int, l)) for l in inp1[:-1]]
+    numbers: list[tuple[int, ...]] = list(zip(*(list(map(int, l)) for l in inp1[:-1])))
     operators: list[str] = inp1[-1]
     yield (
         1,
         sum(
             reduce(operator.add if op == "+" else operator.mul, nums)
-            for *nums, op in zip(*numbers, operators, strict=True)
+            for nums, op in zip(numbers, operators, strict=True)
         ),
     )
     new_inp = [
