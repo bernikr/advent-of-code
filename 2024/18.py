@@ -1,16 +1,17 @@
 from collections.abc import Iterable
 from itertools import product
+from typing import Any
 
 import networkx as nx
-from aocd import extra
 
 from aoc_utils import Vec, dirs4
-
-width = extra.get("width", 71)
-n_bytes = extra.get("n_bytes", 1024)
+from aocd_runner import NO_EXTRA, aocd_run_solver
 
 
-def solve(inp: str) -> Iterable[tuple[int, int | str]]:
+def solve(inp: str, extra: dict[str, Any] = NO_EXTRA) -> Iterable[tuple[int, int | str]]:
+    width = extra.get("width", 71)
+    n_bytes = extra.get("n_bytes", 1024)
+
     inp = [Vec(*map(int, l.split(","))) for l in inp.splitlines()]
     mapp = set(map(Vec, product(range(width), repeat=2)))
     start, end = Vec(0, 0), Vec(width - 1, width - 1)
@@ -28,10 +29,4 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
 
 
 if __name__ == "__main__":
-    from aocd import AocdError, data, submit
-
-    try:
-        for part, solution in solve(data):
-            submit(solution, part=("a", "b")[part - 1])
-    except AocdError as e:
-        print(e)
+    aocd_run_solver(solve)

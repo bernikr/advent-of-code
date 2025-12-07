@@ -1,7 +1,10 @@
 from collections.abc import Iterable
+from typing import Any
+
+from aocd_runner import NO_EXTRA, aocd_run_solver
 
 
-def solve(inp: str) -> Iterable[tuple[int, int | str]]:
+def solve(inp: str, extra: dict[str, Any] = NO_EXTRA) -> Iterable[tuple[int, int | str]]:
     inp = inp.splitlines()
     print(inp)
     yield 1, ""
@@ -9,10 +12,4 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
 
 
 if __name__ == "__main__":
-    from aocd import AocdError, data, submit
-
-    try:
-        for part, solution in solve(data):
-            submit(solution, part=("a", "b")[part - 1])
-    except AocdError as e:
-        print(e)
+    aocd_run_solver(solve)

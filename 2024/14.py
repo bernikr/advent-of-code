@@ -6,15 +6,18 @@ from collections.abc import Iterable
 from functools import reduce
 from itertools import count
 from statistics import variance
+from typing import Any
 
-from aocd import extra
 from more_itertools import grouper
 from tqdm import tqdm
 
 from aoc_utils import Vec, sign
+from aocd_runner import NO_EXTRA, aocd_run_solver
 
 
-def solve(inp: str) -> Iterable[tuple[int, int | str]]:
+def solve(inp: str, extra: dict[str, Any] = NO_EXTRA) -> Iterable[tuple[int, int | str]]:
+    if extra is None:
+        extra = {}
     inp = [
         tuple(Vec(p) for p in grouper(map(int, x), 2)) for x in re.findall(r"p=(-?\d+),(-?\d+) v=(-?\d+),(-?\d+)", inp)
     ]
@@ -49,10 +52,4 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
 
 
 if __name__ == "__main__":
-    from aocd import AocdError, data, submit
-
-    try:
-        for part, solution in solve(data):
-            submit(solution, part=("a", "b")[part - 1])
-    except AocdError as e:
-        print(e)
+    aocd_run_solver(solve)
