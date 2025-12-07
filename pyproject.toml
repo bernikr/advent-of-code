@@ -23,7 +23,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "mypy>=1.19.0",
-    "ruff>=0.14.7",
+    "ruff>=0.14.8",
     "types-networkx>=3.6.0.20251127",
     "types-tqdm>=4.67.0.20250809",
 ]
