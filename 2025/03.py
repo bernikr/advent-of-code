@@ -15,10 +15,6 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
 
 
 if __name__ == "__main__":
-    from aocd import AocdError, data, submit
+    from aocd_runner import aocd_run_solver
 
-    try:
-        for part, solution in solve(data):
-            submit(solution, part=("a", "b")[part - 1])
-    except AocdError as e:
-        print(e)
+    aocd_run_solver(solve)
