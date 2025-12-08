@@ -93,6 +93,9 @@ class Vec[T: int | float = int](tuple[T, ...]):
     def z(self) -> T:
         return self[2]
 
+    def distance_squared(self) -> T:
+        return sum(x * x for x in self)  # type: ignore[misc, return-value, operator]
+
 
 def create_map(inp: str) -> dict[Vec, str]:
     return {Vec(x, y): c for y, l in enumerate(inp.splitlines()) for x, c in enumerate(l)}

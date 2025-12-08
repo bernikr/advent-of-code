@@ -5,11 +5,9 @@ from aocd_runner import NO_EXTRA, aocd_run_solver
 
 
 def solve(inp: str, extra: dict[str, Any] = NO_EXTRA) -> Iterable[tuple[int, int | str]]:
-    print(extra)
     inp = inp.splitlines()
     print(inp)
     yield 1, ""
-    yield 2, ""
 
 
 if __name__ == "__main__":
