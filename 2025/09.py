@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from heapq import heapify, heappop
 from itertools import combinations
 
-from shapely import Polygon, box, contains
+from shapely import Polygon, box, contains, prepare
 
 from aoc_utils import Vec
 from aocd_runner import aocd_run_solver
@@ -14,6 +14,7 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     heapify(candidates)
     yield 1, -candidates[0][0]
     polygon = Polygon(inp)
+    prepare(polygon)
     while True:
         s, a, b = heappop(candidates)
         if contains(polygon, box(a.x, a.y, b.x, b.y)):
