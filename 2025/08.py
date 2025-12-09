@@ -1,7 +1,7 @@
 import operator
 from collections.abc import Iterable
 from functools import reduce
-from heapq import heappop, heappush
+from heapq import heapify, heappop
 from itertools import combinations, count
 from typing import Any
 
@@ -13,9 +13,8 @@ from aocd_runner import NO_EXTRA, aocd_run_solver
 
 def solve(inp: str, extra: dict[str, Any] = NO_EXTRA) -> Iterable[tuple[int, int | str]]:
     boxes: set[Vec] = {Vec(*map(int, line.split(","))) for line in inp.splitlines()}
-    distances: list[tuple[int, Vec, Vec]] = []
-    for a, b in combinations(boxes, 2):
-        heappush(distances, ((b - a).distance_squared(), a, b))
+    distances: list[tuple[int, Vec, Vec]] = [((b - a).distance_squared(), a, b) for a, b in combinations(boxes, 2)]
+    heapify(distances)
     g: nx.Graph[Vec] = nx.Graph()
     g.add_nodes_from(boxes)
     for i in count(1):
