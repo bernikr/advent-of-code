@@ -1,5 +1,5 @@
 from collections.abc import Callable, Iterable
-from typing import Any, Concatenate
+from typing import Any
 
 from aocd import AocdError, submit
 from aocd.models import Puzzle
@@ -7,7 +7,9 @@ from frozendict import frozendict
 
 NO_EXTRA: dict[str, Any] = frozendict()  # type: ignore[assignment]
 
-type SolveFunc = Callable[Concatenate[str, ...], Iterable[tuple[int, str | int]]]
+type SolveFunc = (
+    Callable[[str], Iterable[tuple[int, str | int]]] | Callable[[str, dict[str, Any]], Iterable[tuple[int, str | int]]]
+)
 
 
 # "aocd" is needed as part of function name so that the aocd day/year detection works
@@ -23,7 +25,7 @@ def aocd_run_solver(
         run_examples(solve, puzzle, only_example=only_example)
     if not only_example:
         try:
-            for part, solution in solve(puzzle.input_data):
+            for part, solution in solve(puzzle.input_data):  # type: ignore[call-arg]
                 submit(solution, part=("a", "b")[part - 1], day=puzzle.day, year=puzzle.year)
         except AocdError as e:
             print(e)
@@ -40,7 +42,7 @@ def run_examples(
             continue
         if example.extra is not None:
             print(f"Example {i} has extra parameters: {example.extra}")
-        solver = solve(example.input_data) if example.extra is None else solve(example.input_data, example.extra)
+        solver = solve(example.input_data) if example.extra is None else solve(example.input_data, example.extra)  # type: ignore[call-arg]
         for part, solution in solver:
             if example.answers[part - 1] is None:
                 continue
