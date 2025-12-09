@@ -18,6 +18,7 @@ dependencies = [
     "cpmpy>=0.9.28",
     "networkx>=3.6.1",
     "more-itertools>=10.8.0",
+    "shapely>=2.1.2",
 ]
 
 [dependency-groups]
@@ -25,6 +26,7 @@ dev = [
     "mypy>=1.19.0",
     "ruff>=0.14.8",
     "types-networkx>=3.6.0.20251127",
+    "types-shapely>=2.1.0.20250917",
     "types-tqdm>=4.67.0.20250809",
 ]
 
