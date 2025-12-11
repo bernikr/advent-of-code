@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "advent-of-code",
+    "advent-of-code>=0.1.0",
     "frozendict>=2.4.7",
     "tqdm>=4.67.1",
     "sympy>=1.14.0",
@@ -25,7 +25,7 @@ dependencies = [
 dev = [
     "mypy>=1.19.0",
     "ruff>=0.14.8",
-    "types-networkx>=3.6.0.20251127",
+    "types-networkx>=3.6.1.20251210",
     "types-shapely>=2.1.0.20250917",
     "types-tqdm>=4.67.0.20250809",
 ]
