@@ -10,8 +10,8 @@ from aocd_runner import aocd_run_solver
 
 def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     machines = [parse_line(line) for line in inp.splitlines()]
-    yield 1, sum(solve_machine1(state, buttons) for state, buttons, _ in machines)
-    yield 2, sum(solve_machine2(buttons, joltages) for _, buttons, joltages in machines)
+    yield 1, solve_machines1(machines)
+    yield 2, solve_machines2(machines)
 
 
 def parse_line(line: str) -> tuple[list[bool], list[list[int]], list[int]]:
@@ -26,22 +26,28 @@ def parse_line(line: str) -> tuple[list[bool], list[list[int]], list[int]]:
     return a, b, c
 
 
-def solve_machine1(state: list[bool], buttons: list[list[int]]) -> int:
+def solve_machines1(machines: list[tuple[list[bool], list[list[int]], list[int]]]) -> int:
     m = cp.Model()
-    b = cp.boolvar(shape=len(buttons), name="b")
-    for i, s in enumerate(state):
-        m.add(s == reduce(operator.xor, (b[j] for j, button in enumerate(buttons) if i in button)))
-    m.minimize(sum(b))
+    total = 0
+    for state, buttons, _ in machines:
+        b = cp.boolvar(shape=len(buttons))
+        for i, s in enumerate(state):
+            m.add(s == reduce(operator.xor, (b[j] for j, button in enumerate(buttons) if i in button)))
+        total += sum(b)
+    m.minimize(total)
     m.solve()
     return m.objective_value()  # type: ignore[no-any-return]
 
 
-def solve_machine2(buttons: list[list[int]], joltages: list[int]) -> int:
+def solve_machines2(machines: list[tuple[list[bool], list[list[int]], list[int]]]) -> int:
     m = cp.Model()
-    b = cp.intvar(shape=len(buttons), name="b", lb=0, ub=max(joltages))
-    for i, jolt in enumerate(joltages):
-        m.add(jolt == sum(b[j] for j, button in enumerate(buttons) if i in button))
-    m.minimize(sum(b))
+    total = 0
+    for _, buttons, joltages in machines:
+        b = cp.intvar(shape=len(buttons), lb=0, ub=max(joltages))
+        for i, jolt in enumerate(joltages):
+            m.add(jolt == sum(b[j] for j, button in enumerate(buttons) if i in button))
+        total += sum(b)
+    m.minimize(total)
     m.solve()
     return m.objective_value()  # type: ignore[no-any-return]
 
