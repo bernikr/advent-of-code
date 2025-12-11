@@ -1,4 +1,5 @@
 import operator
+from collections import defaultdict
 from collections.abc import Iterable
 from functools import reduce
 from itertools import pairwise
@@ -17,7 +18,6 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
     if "you" in g:
         yield 1, count_paths(g, "you", "out")
     if "svr" in g:
-        assert nx.is_directed_acyclic_graph(g), "graph is not acyclic"
         if nx.has_path(g, "fft", "dac"):
             order = ["svr", "fft", "dac", "out"]
         else:
@@ -26,9 +26,14 @@ def solve(inp: str) -> Iterable[tuple[int, int | str]]:
         yield 2, reduce(operator.mul, (count_paths(g, a, b) for a, b in pairwise(order)), 1)
 
 
-# This needs to be optimized for part 2
 def count_paths[T](g: "nx.DiGraph[T]", start: T, end: T) -> int:
-    return len(list(nx.all_simple_paths(g, start, end)))
+    assert nx.is_directed_acyclic_graph(g), "graph is not acyclic"
+    order = list(nx.topological_sort(g))
+    order = order[order.index(start) : order.index(end)]
+    path_count = defaultdict(int, {end: 1})
+    for n in reversed(order):
+        path_count[n] = sum(path_count[v] for v in g[n])
+    return path_count[start]
 
 
 if __name__ == "__main__":
